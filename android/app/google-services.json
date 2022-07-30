@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "321759360039",
+    "project_id": "memcolis-a5592",
+    "storage_bucket": "memcolis-a5592.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321759360039:android:70de90c6172a315c304a02",
+        "android_client_info": {
+          "package_name": "com.memcolis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "321759360039-9d3mkli5l4o6qdo22fn6e1q78hvt6e8o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG-wydZaqfwWAdnxIlin_HVNA9tzzWEiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "321759360039-9d3mkli5l4o6qdo22fn6e1q78hvt6e8o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
