@@ -3,29 +3,49 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native"
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer"
 import { UserContext } from "../utils/UserContext"
 import auth from "@react-native-firebase/auth"
+import AntDesign from "react-native-vector-icons/AntDesign"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { MainStackParamList } from "../navigation/Main"
 
 
+type CustomDrawerNavigationProp = {
+    navigation: NativeStackNavigationProp<MainStackParamList, "Connection">
+}
 
-const CustomDrawer = (props: any) => {
-    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext)
+const CustomDrawer = (props: any, { navigation }: CustomDrawerNavigationProp) => {
+    const { isLoggedIn, setIsLoggedIn, setUserEmail, setUserUID, setUserPassword } = useContext(UserContext)
     enum STACKCHOICE { SIGN_IN, LOGGED }
-
-
 
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView
                 {...props} >
-                <View style={styles.logo}>
-                    <Image source={require("../assets/logo_Memcolis.png")} style={styles.image} />
-                    <Text style={styles.memcolis}>Memcolis</Text>
+                <View style={styles.logoContainer}>
+                    <View style={styles.logo}>
+                        <Image source={require("../assets/logo_Memcolis.png")} style={styles.image} />
+                        <Text style={styles.memcolis}>Memcolis</Text>
+                    </View>
+                    <View>
+                        <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
+                    </View>
                 </View>
                 <DrawerItemList {...props} />
             </DrawerContentScrollView>
-            <View style={styles.btn}>
-                <TouchableOpacity onPress={() => {
 
+            <View style={styles.btn}>
+                <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {
+                    auth()
+                        .signOut()
+                        .then(() => {
+                            isLoggedIn === STACKCHOICE.LOGGED && setIsLoggedIn(STACKCHOICE.SIGN_IN)
+                            setUserEmail("")
+                            setUserPassword("")
+                            setUserUID("")
+                            navigation.navigate("Connection")
+                            console.log('User signed out!')
+                        })
                 }}>
+                    <AntDesign name="logout" size={22} color="black" />
                     <Text style={styles.text}>Déconnexion</Text>
                 </TouchableOpacity>
             </View>
@@ -35,21 +55,28 @@ const CustomDrawer = (props: any) => {
 }
 
 const styles = StyleSheet.create({
+    logoContainer: {
+        height: 150
+    },
+
     logo: {
-        alignItems: "center",
-        padding: 20
+        flexDirection: "row",
+        alignItems: "flex-end",
+        margin: 5,
+        backgroundColor: "#2c3e50",
+        padding: 5,
+        borderRadius: 5
     },
 
     image: {
-        width: 55,
-        height: 55,
-        margin: 20
+        width: 30,
+        height: 30
     },
 
     memcolis: {
         color: "white",
         marginStart: 5,
-        fontSize: 17
+        fontSize: 12
     },
 
     btn: {
@@ -57,7 +84,18 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: "black"
+        color: "black",
+        marginStart: 10
+    },
+
+    userLogo: {
+        width: 80,
+        height: 80,
+        alignSelf: "center",
+        marginTop: 15,
+        borderWidth: 1,
+        borderColor: "#bdc3c7",
+        borderRadius: 5
     }
 })
 

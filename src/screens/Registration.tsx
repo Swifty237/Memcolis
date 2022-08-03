@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { ScrollView, StyleSheet, Text, View, StatusBar, Image } from "react-native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { MainStackParamList } from "../components/Main"
+import { MainStackParamList } from "../navigation/Main"
 import Input from "../components/Input"
 import Btn from "../components/Btn"
 import { Formik } from "formik"

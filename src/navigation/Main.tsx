@@ -9,6 +9,7 @@ import MainDrawer from "./MainDrawer"
 import { MainDrawerParamList } from "./MainDrawer"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import Help from "../screens/Help"
+import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage"
 
 
 export type MainStackParamList = {
@@ -19,7 +20,7 @@ export type MainStackParamList = {
     MainDrawer: NavigatorScreenParams<MainDrawerParamList>
 }
 
-
+const storage = new MMKVLoader().initialize()
 
 const Main: React.FunctionComponent<MainStackParamList> = () => {
 
@@ -27,10 +28,16 @@ const Main: React.FunctionComponent<MainStackParamList> = () => {
 
     enum STACKCHOICE { SIGN_IN, LOGGED }
     const { Navigator, Screen, Group } = createNativeStackNavigator<MainStackParamList>()
-    const [isLoggedIn, setIsLoggedIn] = useState<STACKCHOICE.SIGN_IN | STACKCHOICE.LOGGED>(STACKCHOICE.SIGN_IN)
-    const [userEmail, setUserEmail] = useState<string>("")
-    const [userPassword, setUserPassword] = useState<string>("")
-    const [userUID, setUserUID] = useState<string>("")
+    const [isLoggedIn, setIsLoggedIn] = useMMKVStorage<STACKCHOICE.SIGN_IN | STACKCHOICE.LOGGED>("isLoggedIn", storage, STACKCHOICE.SIGN_IN)
+    const [userEmail, setUserEmail] = useMMKVStorage<string>("Email", storage, "")
+    const [userPassword, setUserPassword] = useMMKVStorage<string>("Password", storage, "")
+    const [userUID, setUserUID] = useMMKVStorage<string>("UID", storage, "")
+
+
+    // const [isLoggedIn, setIsLoggedIn] = useState<STACKCHOICE.SIGN_IN | STACKCHOICE.LOGGED>(STACKCHOICE.SIGN_IN)
+    // const [userEmail, setUserEmail] = useState<string>("")
+    // const [userPassword, setUserPassword] = useState<string>("")
+    // const [userUID, setUserUID] = useState<string>("")
 
     console.log("isLoggedIn: ", isLoggedIn)
 

@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { StyleSheet, Text, ScrollView, StatusBar, View, Image, Pressable } from "react-native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { MainStackParamList } from "../components/Main"
+import { MainStackParamList } from "../navigation/Main"
 import Input from "../components/Input"
 import Btn from "../components/Btn"
 import { Formik } from "formik"
@@ -58,11 +58,10 @@ const Connection: React.FunctionComponent<ConnectionProp> = ({ navigation }) => 
                             isLoggedIn !== STACKCHOICE.LOGGED && setIsLoggedIn(STACKCHOICE.LOGGED)
 
                             navigation.navigate("MainDrawer", {
-                                screen: "UserHome",
+                                screen: "Summary",
                                 params: { email: values.email, userID: userAuth.user.uid }
                             })
 
-                            // navigation.navigate("MainDrawer", { email: values.email, userID: userAuth.user.uid })
                             setUserEmail(values.email)
                             setUserPassword(values.password)
                             setUserUID(userAuth.user.uid)

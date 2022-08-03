@@ -12,7 +12,7 @@ import "react-native-gesture-handler"
 import "react-native-reanimated"
 import React from "react"
 import { NavigationContainer } from "@react-navigation/native"
-import Main from "./src/components/Main"
+import Main from "./src/navigation/Main"
 
 
 const App: React.FunctionComponent = (): JSX.Element => {

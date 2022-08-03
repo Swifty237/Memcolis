@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { MainDrawerParamList } from "../components/MainDrawer"
+import { MainDrawerParamList } from "../navigation/MainDrawer"
 import TopBar from "../components/TopBar"
 
 

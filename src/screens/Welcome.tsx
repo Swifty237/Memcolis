@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { MainStackParamList } from "../components/Main"
+import { MainStackParamList } from "../navigation/Main"
 import TopBar from "../components/TopBar"
 import Btn from "../components/Btn"
 import Video from "react-native-video"
@@ -17,7 +17,7 @@ const Welcome: React.FunctionComponent<WelcomeProps> = ({ navigation, route }) =
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
-            <TopBar title={"Bienvenue " + email + " !"} />
+            <TopBar />
             <ScrollView>
                 <Text style={styles.titleTxt}>Présentation</Text>
                 <View style={styles.videoBox}>

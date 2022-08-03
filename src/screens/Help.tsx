@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { MainStackParamList } from "../components/Main"
+import { MainStackParamList } from "../navigation/Main"
 import TopBar from "../components/TopBar"
 import Btn from "../components/Btn"
 import Video from "react-native-video"
