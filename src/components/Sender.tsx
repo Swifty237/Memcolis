@@ -20,11 +20,6 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
             <View style={styles.previsionContent}>
 
             </View>
-
-            <Text style={styles.historyText}>Historique</Text>
-            <View style={styles.historyContent}>
-
-            </View>
         </View>
     )
 }
@@ -68,25 +63,7 @@ const styles = StyleSheet.create({
         height: 200,
         backgroundColor: "#bdc3c7",
         marginBottom: 20
-    },
-
-
-    historyText: {
-        marginTop: 50,
-        marginBottom: 10,
-        width: "90%",
-        color: "black",
-        fontSize: 17,
-        fontWeight: "bold",
-        textAlign: "left",
-        paddingStart: 20
-    },
-
-    historyContent: {
-        width: "100%",
-        height: 200,
-        backgroundColor: "#bdc3c7"
-    },
+    }
 })
 
 export default Sender

@@ -8,7 +8,7 @@ const Transporter = ({ email, userID }: { email: string, userID: string }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Carrier</Text>
+            <Text style={styles.text}>Transporter</Text>
         </View>
     )
 }
