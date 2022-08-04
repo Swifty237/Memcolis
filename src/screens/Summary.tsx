@@ -43,7 +43,6 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
             <StatusBar backgroundColor="#2c3e50" />
 
             <ScrollView contentContainerStyle={{ marginTop: 20, alignItems: "center" }}>
-                <Text style={styles.profilText}>Profil </Text>
                 <View style={styles.pickerBox}>
                     <Picker
                         dropdownIconColor="white"

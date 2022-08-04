@@ -11,14 +11,14 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.transporterText}>Transporteurs à proximité</Text>
-            <View style={styles.transporterContent}>
-                <MapComponent />
-            </View>
-
             <Text style={styles.previsionText}>Prévisions Voyages</Text>
             <View style={styles.previsionContent}>
 
+            </View>
+
+            <Text style={styles.transporterText}>Transporteurs à proximité</Text>
+            <View style={styles.transporterContent}>
+                <MapComponent />
             </View>
         </View>
     )

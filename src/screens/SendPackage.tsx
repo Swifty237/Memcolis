@@ -10,6 +10,8 @@ import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 
 const SendPackage = () => {
     const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo[]>([])
+    const [destination, setDestination] = useState<string>("Douala")
+    const [weight, setWeight] = useState<string>("0")
 
     const takePhotoFromCamera = () => {
 
@@ -48,22 +50,22 @@ const SendPackage = () => {
             <View style={styles.pickerBox}>
                 <Picker
                     dropdownIconColor="white"
-                    //selectedValue={ }
-                    onValueChange={() => { }}>
+                    selectedValue={destination}
+                    onValueChange={(value) => setDestination(value)}>
 
-                    <Picker.Item style={{ color: "#f39c12" }} label="Douala" value="douala" />
-                    <Picker.Item style={{ color: "#f39c12" }} label="Yaoundé" value="yaounde" />
-                    <Picker.Item style={{ color: "#f39c12" }} label="Paris" value="paris" />
+                    <Picker.Item style={{ color: "#f39c12" }} label="Douala" value="Douala" />
+                    <Picker.Item style={{ color: "#f39c12" }} label="Yaoundé" value="Yaoundé" />
+                    <Picker.Item style={{ color: "#f39c12" }} label="Paris" value="Paris" />
 
                 </Picker>
             </View>
 
             <Input
                 label="Poids"
-                placeholder="Mettez le poids de votre colis ici !"
-                onChangeText={() => { }}
+                placeholder="Entrer le poids du colis ici !"
+                value={weight}
+                onChangeText={(value) => setWeight(value)}
                 onBlur={() => { }}
-                onFocus={() => { }}
                 keyBoardNumeric
                 error="" />
 
@@ -77,7 +79,17 @@ const SendPackage = () => {
             <Text style={styles.recapTxt}>Récapitulatif demande</Text>
             <View style={styles.separator}></View>
 
-            <Text style={styles.destination}>Photos colis</Text>
+            <View style={{ flexDirection: "row", width: "90%" }}>
+                <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
+                <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
+            </View>
+
+            <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
+                <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Poids: </Text>
+                <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
+            </View>
+
+            <Text style={styles.destination}>Images colis</Text>
             <View style={styles.photoBox}>
                 <FlatList
                     data={photosFromCamera}
@@ -87,6 +99,16 @@ const SendPackage = () => {
                     keyExtractor={item => item.path}
                     ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
                 />
+            </View>
+
+            <View style={{ flexDirection: "row", width: 350, justifyContent: "space-around" }}>
+                <View style={styles.validation}>
+                    <Btn label="Valider" textStyle={styles.btnLabel} onPress={() => { }} />
+                </View>
+
+                <View style={styles.annulation}>
+                    <Btn label="Annuler" textStyle={styles.btnLabel2} onPress={() => { }} />
+                </View>
             </View>
 
             <View style={styles.footer}></View>
@@ -107,6 +129,13 @@ const styles = StyleSheet.create({
 
     btnLabel: {
         color: "white",
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 15
+    },
+
+    btnLabel2: {
+        color: "#f39c12",
         textAlign: "center",
         fontWeight: "bold",
         fontSize: 15
@@ -165,12 +194,35 @@ const styles = StyleSheet.create({
     },
 
     photoBox: {
-        width: 310
+        width: 350,
     },
 
     photo: {
         width: 200,
         height: 200
+    },
+
+    validation: {
+        backgroundColor: "#f39c12",
+        marginTop: 25,
+        width: 150,
+        height: 50,
+        padding: 15,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+
+    annulation: {
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        marginTop: 25,
+        width: 150,
+        height: 50,
+        padding: 12,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center"
     },
 
     footer: {
