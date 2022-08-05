@@ -4,22 +4,18 @@ import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawe
 import { UserContext } from "../utils/UserContext"
 import auth from "@react-native-firebase/auth"
 import AntDesign from "react-native-vector-icons/AntDesign"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { MainStackParamList } from "../navigation/Main"
 
 
-type CustomDrawerNavigationProp = {
-    navigation: NativeStackNavigationProp<MainStackParamList, "Connection">
-}
 
-const CustomDrawer = (props: any, { navigation }: CustomDrawerNavigationProp) => {
+
+const CustomDrawer = (props: any) => {
     const { isLoggedIn, setIsLoggedIn, setUserEmail, setUserUID, setUserPassword } = useContext(UserContext)
     enum STACKCHOICE { SIGN_IN, LOGGED }
 
+
     return (
         <View style={{ flex: 1 }}>
-            <DrawerContentScrollView
-                {...props} >
+            <DrawerContentScrollView {...props} >
                 <View style={styles.logoContainer}>
                     <View style={styles.logo}>
                         <Image source={require("../assets/logo_Memcolis.png")} style={styles.image} />
@@ -41,7 +37,7 @@ const CustomDrawer = (props: any, { navigation }: CustomDrawerNavigationProp) =>
                             setUserEmail("")
                             setUserPassword("")
                             setUserUID("")
-                            navigation.navigate("Connection")
+                            props.navigation.navigate("Connection")
                             console.log('User signed out!')
                         })
                 }}>

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, View, StatusBar, ScrollView, PermissionsAndroid, Image, FlatList } from "react-native"
+import { StyleSheet, Text, View, StatusBar, ScrollView, Image, FlatList, Modal } from "react-native"
 import Input from "../components/Input"
 import Btn from "../components/Btn"
 import { Picker } from "@react-native-picker/picker"
@@ -9,9 +9,10 @@ import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 
 
 const SendPackage = () => {
+    const [visible, setVisible] = useState<boolean>(false)
     const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo[]>([])
     const [destination, setDestination] = useState<string>("Douala")
-    const [weight, setWeight] = useState<string>("0")
+    const [weight, setWeight] = useState<string>("")
 
     const takePhotoFromCamera = () => {
 
@@ -43,62 +44,105 @@ const SendPackage = () => {
         <ScrollView contentContainerStyle={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
 
-            <Text style={styles.recapTxt}>Demande d'envoi</Text>
-            <View style={styles.separator}></View>
-
-            <Text style={styles.destination}>Destination</Text>
-            <View style={styles.pickerBox}>
-                <Picker
-                    dropdownIconColor="white"
-                    selectedValue={destination}
-                    onValueChange={(value) => setDestination(value)}>
-
-                    <Picker.Item style={{ color: "#f39c12" }} label="Douala" value="Douala" />
-                    <Picker.Item style={{ color: "#f39c12" }} label="Yaoundé" value="Yaoundé" />
-                    <Picker.Item style={{ color: "#f39c12" }} label="Paris" value="Paris" />
-
-                </Picker>
+            <View style={styles.sendButton}>
+                <Btn label="Nouvel envoi" textStyle={styles.btnLabel} onPress={() => setVisible(true)} />
             </View>
 
-            <Input
-                label="Poids"
-                placeholder="Entrer le poids du colis ici !"
-                value={weight}
-                onChangeText={(value) => setWeight(value)}
-                onBlur={() => { }}
-                keyBoardNumeric
-                error="" />
+            <View style={styles.modalContainer}>
+                <Modal visible={visible} style={{ alignItems: "center" }}>
+                    <Text style={{ color: "black", fontWeight: "bold", marginTop: 25, marginBottom: 7, paddingStart: 25 }}>Destination</Text>
+                    <View style={styles.pickerBox}>
+                        <Picker
+                            dropdownIconColor="#f39c12"
+                            selectedValue={destination}
+                            onValueChange={(value) => setDestination(value)}>
 
-            <View style={styles.button}>
-                <View style={{ marginEnd: 10 }}>
-                    <Icon name="photo-camera" size={20} color="white" />
+                            <Picker.Item style={{ color: "#f39c12" }} label="Douala" value="Douala" />
+                            <Picker.Item style={{ color: "#f39c12" }} label="Yaoundé" value="Yaoundé" />
+                            <Picker.Item style={{ color: "#f39c12" }} label="Paris" value="Paris" />
+
+                        </Picker>
+                    </View>
+
+                    <Input
+                        label="Poids"
+                        placeholder="Entrer le poids du colis ici !"
+                        value={weight}
+                        onChangeText={(value) => setWeight(value)}
+                        onBlur={() => { }}
+                        keyBoardNumeric
+                        error="" />
+
+                    <View style={{ flexDirection: "row", width: 350, justifyContent: "space-around", marginVertical: 25 }}>
+                        <View style={styles.validation}>
+                            <Btn label="Terminer" textStyle={styles.btnLabel} onPress={() => setVisible(false)} />
+                        </View>
+
+                        <View style={styles.annulation}>
+                            <Btn label="Annuler" textStyle={styles.btnLabel2} onPress={() => setVisible(false)} />
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+
+            <Text style={styles.recapTxt}>Récapitulatif</Text>
+            <View style={styles.separator}>
+                <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
+                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
+                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
                 </View>
-                <Btn label="Prendre une photo" textStyle={styles.btnLabel} onPress={() => takePhotoFromCamera()} />
-            </View>
 
-            <Text style={styles.recapTxt}>Récapitulatif demande</Text>
-            <View style={styles.separator}></View>
 
-            <View style={{ flexDirection: "row", width: "90%" }}>
-                <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
-                <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
-            </View>
+                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                    <View>
+                        <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}> Destinataire: </Text>
+                        <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Nom et prénom)</Text>
+                    </View>
+                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
+                </View>
 
-            <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
-                <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Poids: </Text>
-                <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
-            </View>
+                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Adresse: </Text>
+                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
+                </View>
 
-            <Text style={styles.destination}>Images colis</Text>
-            <View style={styles.photoBox}>
-                <FlatList
-                    data={photosFromCamera}
-                    horizontal
-                    initialNumToRender={20}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.path}
-                    ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
-                />
+                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Téléphone: </Text>
+                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
+                </View>
+
+                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Nombre d'articles: </Text>
+                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
+                </View>
+
+                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Poids Total: </Text>
+                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
+                </View>
+
+                <View style={{ marginBottom: 7, width: "90%" }}>
+                    <Text style={styles.destination}>Images colis: </Text>
+                    <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Minimum 3 images par colis)</Text>
+                </View>
+
+                <View style={styles.photoBox}>
+                    <FlatList
+                        data={photosFromCamera}
+                        horizontal
+                        initialNumToRender={20}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.path}
+                        ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
+                    />
+                </View>
+
+                <View style={styles.button}>
+                    <View style={{ marginEnd: 10 }}>
+                        <Icon name="photo-camera" size={20} color="white" />
+                    </View>
+                    <Btn label="Prendre une photo" textStyle={styles.btnLabel} onPress={() => takePhotoFromCamera()} />
+                </View>
             </View>
 
             <View style={{ flexDirection: "row", width: 350, justifyContent: "space-around" }}>
@@ -111,6 +155,7 @@ const SendPackage = () => {
                 </View>
             </View>
 
+
             <View style={styles.footer}></View>
         </ScrollView>
     )
@@ -121,6 +166,10 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         justifyContent: "center"
+    },
+
+    modalContainer: {
+        flex: 1
     },
 
     text: {
@@ -143,8 +192,19 @@ const styles = StyleSheet.create({
 
     button: {
         backgroundColor: "#f39c12",
-        marginVertical: 15,
-        width: 300,
+        marginVertical: 25,
+        width: 250,
+        height: 50,
+        padding: 15,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+
+    sendButton: {
+        backgroundColor: "#f39c12",
+        marginVertical: 25,
+        width: 200,
         height: 50,
         padding: 15,
         borderRadius: 30,
@@ -158,12 +218,12 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: "center",
         paddingStart: 20,
-        borderRadius: 5
+        borderRadius: 5,
+        alignSelf: "center"
     },
 
     destination: {
-        marginTop: 25,
-        marginBottom: 7,
+        marginTop: 15,
         width: "90%",
         color: "black",
         fontWeight: "bold",
@@ -173,9 +233,12 @@ const styles = StyleSheet.create({
 
     separator: {
         marginVertical: 15,
-        width: 340,
-        borderWidth: 4,
-        borderColor: "#2c3e50"
+        width: "100%",
+        borderTopWidth: 4,
+        borderBottomWidth: 4,
+        borderRadius: 15,
+        borderColor: "#2c3e50",
+        alignItems: "center"
     },
 
     flatListSeparator: {
@@ -184,12 +247,11 @@ const styles = StyleSheet.create({
     },
 
     recapTxt: {
-        marginTop: 70,
+        marginTop: 25,
         width: "90%",
         color: "#2c3e50",
         fontWeight: "bold",
-        textAlign: "left",
-        paddingStart: 20,
+        textAlign: "center",
         fontSize: 18
     },
 

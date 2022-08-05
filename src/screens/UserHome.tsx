@@ -27,15 +27,15 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                 </View>
 
                 <View style={styles.logoTxtBox}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30, backgroundColor: "#2c3e50" }}>
                         <Text style={styles.text}>Expéditeur</Text>
                         <Text style={styles.text2}>A compléter</Text>
                     </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30, backgroundColor: "#2c3e50" }}>
                         <Text style={styles.text}>Tansporteur</Text>
                         <Text style={styles.text2}>A compléter</Text>
                     </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30, backgroundColor: "#2c3e50" }}>
                         <Text style={styles.text}>Voyageur</Text>
                         <Text style={styles.text2}>A compléter</Text>
                     </View>
@@ -43,15 +43,15 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
 
                 <View style={styles.infoBox}>
                     <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text}>Date de naissance:</Text>
+                        <Text style={styles.text3}>Date de naissance:</Text>
                         <Text></Text>
                     </View>
                     <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text}>Adresse:</Text>
+                        <Text style={styles.text3}>Adresse:</Text>
                         <Text></Text>
                     </View>
                     <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text}>Tel:</Text>
+                        <Text style={styles.text3}>Tel:</Text>
                         <Text></Text>
                     </View>
                 </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: "black",
+        color: "#f39c12",
         fontWeight: "bold",
         marginStart: 5,
         textAlignVertical: "center"
@@ -104,6 +104,13 @@ const styles = StyleSheet.create({
         fontSize: 10,
         textAlignVertical: "center",
         marginEnd: 5
+    },
+
+    text3: {
+        color: "black",
+        fontWeight: "bold",
+        marginStart: 5,
+        textAlignVertical: "center"
     },
 
     userName: {

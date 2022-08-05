@@ -51,16 +51,16 @@ const Main: React.FunctionComponent<MainStackParamList> = () => {
                     </Group>
                     :
                     <Group>
-                        <Screen name="Help" component={Help} options={{
-                            title: "Help",
+                        <Screen name="Connection" component={Connection} options={{ headerShown: false }} />
+                        <Screen name="Registration" component={Registration} options={{
+                            title: "Inscription",
                             headerTintColor: "white",
                             headerTitleAlign: "center",
                             headerStyle: { backgroundColor: "#2c3e50" },
                             headerTitleStyle: { color: "white" }
                         }} />
-                        <Screen name="Connection" component={Connection} options={{ headerShown: false }} />
-                        <Screen name="Registration" component={Registration} options={{
-                            title: "Inscription",
+                        <Screen name="Help" component={Help} options={{
+                            title: "Help",
                             headerTintColor: "white",
                             headerTitleAlign: "center",
                             headerStyle: { backgroundColor: "#2c3e50" },
