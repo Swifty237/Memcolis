@@ -24,3 +24,38 @@ export const UserContext = createContext<contextType>({
     userUID: "",
     setUserUID: () => { }
 })
+
+
+export type NewSendContextType = {
+    visible: boolean
+    setVisible: (param: boolean) => void
+    destination: string
+    setDestination: (param: string) => void
+    destinataire: string
+    setDestinataire: (param: string) => void
+    adresse: string
+    setAdresse: (param: string) => void
+    tel: string
+    setTel: (param: string) => void
+    weight: string
+    setWeight: (param: string) => void
+    numberArticle: string
+    setNumberArticle: (param: string) => void
+}
+
+export const NewSendContext = createContext<NewSendContextType>({
+    visible: false,
+    setVisible: () => { },
+    destination: "Choisissez une destination",
+    setDestination: () => { },
+    destinataire: "",
+    setDestinataire: () => { },
+    adresse: "",
+    setAdresse: () => { },
+    tel: "",
+    setTel: () => { },
+    weight: "",
+    setWeight: () => { },
+    numberArticle: "",
+    setNumberArticle: () => { }
+})

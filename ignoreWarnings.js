@@ -10,13 +10,13 @@ if (__DEV__) {
         "exported from 'deprecated-react-native-prop-types'.",
         "Non-serializable values were found in the navigation state.",
         "VirtualizedLists should never be nested inside plain ScrollViews",
-    ];
+    ]
 
     const warn = console.warn;
     console.warn = (...arg) => {
         for (const warning of ignoreWarns) {
             if (arg[0].startsWith(warning)) {
-                return;
+                return
             }
         }
         warn(...arg)

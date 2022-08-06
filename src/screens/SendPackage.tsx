@@ -1,18 +1,23 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, View, StatusBar, ScrollView, Image, FlatList, Modal } from "react-native"
-import Input from "../components/Input"
+import { StyleSheet, Text, View, StatusBar, ScrollView, Image, FlatList, SafeAreaView } from "react-native"
 import Btn from "../components/Btn"
-import { Picker } from "@react-native-picker/picker"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
+import NewSendModal from "../components/NewSendModal"
+import { NewSendContext } from "../utils/UserContext"
 
 
 
 const SendPackage = () => {
-    const [visible, setVisible] = useState<boolean>(false)
     const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo[]>([])
-    const [destination, setDestination] = useState<string>("Douala")
+    const [visible, setVisible] = useState<boolean>(false)
+    const [destination, setDestination] = useState<string>("")
+    const [destinataire, setDestinataire] = useState<string>("")
+    const [adresse, setAdresse] = useState<string>("")
+    const [tel, setTel] = useState<string>("")
     const [weight, setWeight] = useState<string>("")
+    const [numberArticle, setNumberArticle] = useState<string>("")
+
 
     const takePhotoFromCamera = () => {
 
@@ -28,7 +33,7 @@ const SendPackage = () => {
         }).catch(err => console.error(err))
     }
 
-    console.log("photosFromCamera", photosFromCamera)
+    // console.log("photosFromCamera", photosFromCamera)
 
     const renderItem = ({ item }: { item: ImageOrVideo }) => {
 
@@ -41,123 +46,115 @@ const SendPackage = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <StatusBar backgroundColor="#2c3e50" />
+        <NewSendContext.Provider value={{ visible, setVisible, destination, setDestination, destinataire, setDestinataire, adresse, setAdresse, tel, setTel, weight, setWeight, numberArticle, setNumberArticle }}>
+            <SafeAreaView>
+                <ScrollView contentContainerStyle={styles.container}>
+                    <StatusBar backgroundColor="#2c3e50" />
 
-            <View style={styles.sendButton}>
-                <Btn label="Nouvel envoi" textStyle={styles.btnLabel} onPress={() => setVisible(true)} />
-            </View>
-
-            <View style={styles.modalContainer}>
-                <Modal visible={visible} style={{ alignItems: "center" }}>
-                    <Text style={{ color: "black", fontWeight: "bold", marginTop: 25, marginBottom: 7, paddingStart: 25 }}>Destination</Text>
-                    <View style={styles.pickerBox}>
-                        <Picker
-                            dropdownIconColor="#f39c12"
-                            selectedValue={destination}
-                            onValueChange={(value) => setDestination(value)}>
-
-                            <Picker.Item style={{ color: "#f39c12" }} label="Douala" value="Douala" />
-                            <Picker.Item style={{ color: "#f39c12" }} label="Yaoundé" value="Yaoundé" />
-                            <Picker.Item style={{ color: "#f39c12" }} label="Paris" value="Paris" />
-
-                        </Picker>
+                    <View style={styles.sendButton}>
+                        <Btn label="Nouvel envoi" textStyle={styles.btnLabel} onPress={() => {
+                            setDestination("")
+                            setDestinataire("")
+                            setAdresse("")
+                            setTel("")
+                            setNumberArticle("")
+                            setWeight("")
+                            setVisible(true)
+                        }} />
                     </View>
 
-                    <Input
-                        label="Poids"
-                        placeholder="Entrer le poids du colis ici !"
-                        value={weight}
-                        onChangeText={(value) => setWeight(value)}
-                        onBlur={() => { }}
-                        keyBoardNumeric
-                        error="" />
+                    {destination != "" || destinataire != "" || adresse != "" || tel != "" || weight != "" || numberArticle != "" ?
+                        <View style={styles.modifButton}>
+                            <Btn label="Modifier" textStyle={styles.btnLabel2} onPress={() => {
+                                setVisible(true)
+                            }} />
+                        </View>
+                        :
+                        null
+                    }
 
-                    <View style={{ flexDirection: "row", width: 350, justifyContent: "space-around", marginVertical: 25 }}>
+                    <NewSendModal />
+
+                    <Text style={styles.recapTxt}>Récapitulatif</Text>
+                    <View style={styles.separator}>
+                        <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
+                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
+                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
+                        </View>
+
+
+                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                            <View>
+                                <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}> Destinataire: </Text>
+                                <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Nom et prénom)</Text>
+                            </View>
+                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destinataire}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Adresse: </Text>
+                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{adresse}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Téléphone: </Text>
+                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{tel}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Nombre d'articles: </Text>
+                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{numberArticle}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Poids Total: </Text>
+                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
+                        </View>
+
+                        <View style={{ marginBottom: 7, width: "90%" }}>
+                            <Text style={styles.destination}>Images colis: </Text>
+                            <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Minimum 3 images par colis)</Text>
+                        </View>
+
+                        <View style={styles.photoBox}>
+                            <FlatList
+                                data={photosFromCamera}
+                                horizontal
+                                initialNumToRender={20}
+                                renderItem={renderItem}
+                                keyExtractor={item => item.path}
+                                ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
+                            />
+                        </View>
+
+                        <View style={styles.button}>
+                            <View style={{ marginEnd: 10 }}>
+                                <Icon name="photo-camera" size={20} color="white" />
+                            </View>
+                            <Btn label="Prendre une photo" textStyle={styles.btnLabel} onPress={() => takePhotoFromCamera()} />
+                        </View>
+                    </View>
+
+                    <View style={{ flexDirection: "row", width: "100%", height: 122, justifyContent: "space-around", backgroundColor: "#2c3e50", alignItems: "center", marginTop: 30 }}>
                         <View style={styles.validation}>
-                            <Btn label="Terminer" textStyle={styles.btnLabel} onPress={() => setVisible(false)} />
+                            <Btn label="Valider" textStyle={styles.btnLabel} onPress={() => { }} />
                         </View>
 
                         <View style={styles.annulation}>
-                            <Btn label="Annuler" textStyle={styles.btnLabel2} onPress={() => setVisible(false)} />
+                            <Btn label="Annuler" textStyle={styles.btnLabel2} onPress={() => {
+                                setDestination("")
+                                setDestinataire("")
+                                setAdresse("")
+                                setTel("")
+                                setNumberArticle("")
+                                setWeight("")
+                                setPhotosFromCamera([])
+                            }} />
                         </View>
                     </View>
-                </Modal>
-            </View>
-
-            <Text style={styles.recapTxt}>Récapitulatif</Text>
-            <View style={styles.separator}>
-                <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
-                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
-                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
-                </View>
-
-
-                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                    <View>
-                        <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}> Destinataire: </Text>
-                        <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Nom et prénom)</Text>
-                    </View>
-                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
-                </View>
-
-                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Adresse: </Text>
-                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
-                </View>
-
-                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Téléphone: </Text>
-                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
-                </View>
-
-                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Nombre d'articles: </Text>
-                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}></Text>
-                </View>
-
-                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Poids Total: </Text>
-                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
-                </View>
-
-                <View style={{ marginBottom: 7, width: "90%" }}>
-                    <Text style={styles.destination}>Images colis: </Text>
-                    <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Minimum 3 images par colis)</Text>
-                </View>
-
-                <View style={styles.photoBox}>
-                    <FlatList
-                        data={photosFromCamera}
-                        horizontal
-                        initialNumToRender={20}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.path}
-                        ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
-                    />
-                </View>
-
-                <View style={styles.button}>
-                    <View style={{ marginEnd: 10 }}>
-                        <Icon name="photo-camera" size={20} color="white" />
-                    </View>
-                    <Btn label="Prendre une photo" textStyle={styles.btnLabel} onPress={() => takePhotoFromCamera()} />
-                </View>
-            </View>
-
-            <View style={{ flexDirection: "row", width: 350, justifyContent: "space-around" }}>
-                <View style={styles.validation}>
-                    <Btn label="Valider" textStyle={styles.btnLabel} onPress={() => { }} />
-                </View>
-
-                <View style={styles.annulation}>
-                    <Btn label="Annuler" textStyle={styles.btnLabel2} onPress={() => { }} />
-                </View>
-            </View>
-
-
-            <View style={styles.footer}></View>
-        </ScrollView>
+                </ScrollView>
+            </SafeAreaView>
+        </NewSendContext.Provider>
     )
 }
 
@@ -166,10 +163,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         justifyContent: "center"
-    },
-
-    modalContainer: {
-        flex: 1
     },
 
     text: {
@@ -203,7 +196,7 @@ const styles = StyleSheet.create({
 
     sendButton: {
         backgroundColor: "#f39c12",
-        marginVertical: 25,
+        marginVertical: 15,
         width: 200,
         height: 50,
         padding: 15,
@@ -212,14 +205,17 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
 
-    pickerBox: {
-        backgroundColor: "#2c3e50",
-        width: "90%",
+    modifButton: {
+        backgroundColor: "transparent",
+        marginVertical: 15,
+        width: 200,
         height: 50,
-        justifyContent: "center",
-        paddingStart: 20,
-        borderRadius: 5,
-        alignSelf: "center"
+        padding: 12,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        flexDirection: "row",
+        justifyContent: "center"
     },
 
     destination: {
@@ -247,7 +243,7 @@ const styles = StyleSheet.create({
     },
 
     recapTxt: {
-        marginTop: 25,
+        marginTop: 15,
         width: "90%",
         color: "#2c3e50",
         fontWeight: "bold",
@@ -266,7 +262,6 @@ const styles = StyleSheet.create({
 
     validation: {
         backgroundColor: "#f39c12",
-        marginTop: 25,
         width: 150,
         height: 50,
         padding: 15,
@@ -278,17 +273,12 @@ const styles = StyleSheet.create({
     annulation: {
         borderWidth: 2,
         borderColor: "#f39c12",
-        marginTop: 25,
         width: 150,
         height: 50,
         padding: 12,
         borderRadius: 30,
         flexDirection: "row",
         justifyContent: "center"
-    },
-
-    footer: {
-        height: 50
     }
 })
 
