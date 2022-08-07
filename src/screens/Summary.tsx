@@ -59,15 +59,20 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
                     </TouchableOpacity>
                 </View>
 
+                <Text style={styles.actuText}>Actualités & Offres promotionelles</Text>
+                <View style={styles.actuContent}>
+
+                </View>
+
                 <View style={styles.pickerBox}>
                     <Picker
                         dropdownIconColor="white"
                         selectedValue={profil}
                         onValueChange={(e) => setProfil(e)}>
 
-                        <Picker.Item style={{ color: "#f39c12" }} label="Mode expéditeur" value="expéditeur" />
-                        <Picker.Item style={{ color: "#f39c12" }} label="Mode transporteur" value="transporteur" />
-                        <Picker.Item style={{ color: "#f39c12" }} label="Mode voyageur" value="voyageur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Expéditeur home" value="expéditeur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Transporteur home" value="transporteur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Voyageur home" value="voyageur" />
 
                     </Picker>
                 </View>
@@ -84,6 +89,22 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+
+    actuText: {
+        marginBottom: 10,
+        width: "100%",
+        color: "black",
+        fontSize: 17,
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+
+    actuContent: {
+        width: "100%",
+        height: 300,
+        backgroundColor: "#bdc3c7",
+        marginBottom: 20
     },
 
     picker: {
@@ -108,7 +129,10 @@ const styles = StyleSheet.create({
     },
 
     footer: {
-        height: 100
+        width: "100%",
+        height: 20,
+        backgroundColor: "#2c3e50",
+        marginTop: 5
     },
 
     pickerBox: {
@@ -117,7 +141,8 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: "center",
         paddingStart: 20,
-        borderRadius: 5
+        borderRadius: 5,
+        marginTop: 20
     }
 })
 

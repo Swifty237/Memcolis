@@ -1,9 +1,13 @@
 import React from "react"
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar } from "react-native"
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar, TouchableOpacity } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import Btn from "../components/Btn"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import Entypo from "react-native-vector-icons/Entypo"
+import FontAwesome from "react-native-vector-icons/FontAwesome"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+
 // import TopBar from "../components/TopBar"
 
 
@@ -21,11 +25,51 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
             <ScrollView>
                 <View style={styles.logoBox}>
                     <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
-                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}>
+
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                         <Text style={styles.userName}>The username here !</Text>
                         <Text style={styles.dateSubscription}>Inscris depuis le...</Text>
-                        <Text style={styles.stars}>Nombre d'étoiles...</Text>
+
+                        <View style={{ flexDirection: "row", justifyContent: "space-around", width: "80%", marginTop: 10 }}>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <Text style={styles.text}>2</Text>
+                                <MaterialCommunityIcons name="cube-send" size={15} color="#2c3e50" />
+                            </View>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <Text style={styles.text}>0</Text>
+                                <MaterialCommunityIcons name="truck" size={15} color="#2c3e50" />
+                            </View>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <Text style={styles.text}>0</Text>
+                                <MaterialCommunityIcons name="airplane-takeoff" size={15} color="#2c3e50" />
+                            </View>
+                        </View>
                     </View>
+                </View>
+
+                <View style={styles.infosBox}>
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                        <FontAwesome style={{ marginEnd: 10 }} name="birthday-cake" size={18} color="#2c3e50" />
+                        <Text style={styles.text3}>Birthdate here !</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                        <Entypo style={{ marginEnd: 10 }} name="location" size={18} color="#2c3e50" />
+                        <Text style={styles.text3}>Adresse here !</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="phone" size={18} color="#2c3e50" />
+                        <Text style={styles.text3}>Phone here !</Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                        <FontAwesome style={{ marginEnd: 10 }} name="credit-card-alt" size={18} color="#2c3e50" />
+                        <Text style={styles.text3}>Credit card infos number here !</Text>
+                    </View>
+
+                    <TouchableOpacity style={{ flexDirection: "row", backgroundColor: "#2c3e50", height: 50, justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
+                        <FontAwesome5 style={{ marginEnd: 10 }} name="user-cog" size={18} color="#f39c12" />
+                        <Text style={styles.text2}>Réglages profil</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.logoTxtBox}>
@@ -43,26 +87,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                     </View>
                 </View>
 
-                <View style={styles.infoBox}>
-                    <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text3}>Date de naissance:</Text>
-                        <Text></Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text3}>Adresse:</Text>
-                        <Text></Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text3}>Tel:</Text>
-                        <Text></Text>
-                    </View>
-                </View>
-
-                <Text style={styles.historyText}>Derniers envois effectués</Text>
-                <View style={styles.historyContent}>
-
-                </View>
-
+                {/* <View style={styles.footer}></View> */}
             </ScrollView>
         </SafeAreaView>
     )
@@ -75,12 +100,13 @@ const styles = StyleSheet.create({
     },
 
     logoBox: {
+        flex: 1,
         flexDirection: "row"
     },
 
     userLogo: {
-        width: 100,
-        height: 100,
+        width: 150,
+        height: 150,
         marginTop: 15,
         marginLeft: 15,
         borderWidth: 1,
@@ -89,15 +115,19 @@ const styles = StyleSheet.create({
     },
 
     logoTxtBox: {
-        marginTop: 15,
-        marginHorizontal: 15,
+        flex: 1,
+        width: "100%",
+        borderTopWidth: 4,
+        borderRadius: 15,
+        borderColor: "#2c3e50",
         alignItems: "center"
     },
 
     exportButton: {
+        marginTop: 25,
         backgroundColor: "#f39c12",
         marginVertical: 10,
-        width: "98%",
+        width: "85%",
         height: 50,
         padding: 12,
         borderRadius: 30,
@@ -108,7 +138,7 @@ const styles = StyleSheet.create({
     transportButton: {
         backgroundColor: "#f39c12",
         marginBottom: 10,
-        width: "98%",
+        width: "85%",
         height: 50,
         padding: 12,
         borderRadius: 30,
@@ -119,7 +149,7 @@ const styles = StyleSheet.create({
     saleButton: {
         backgroundColor: "#f39c12",
         marginBottom: 10,
-        width: "98%",
+        width: "85%",
         height: 50,
         padding: 12,
         borderRadius: 30,
@@ -135,30 +165,41 @@ const styles = StyleSheet.create({
     },
 
     text3: {
-        color: "black",
-        fontWeight: "bold",
+        color: "#2c3e50",
         marginStart: 5,
-        textAlignVertical: "center"
+        textAlignVertical: "center",
+        fontSize: 12
+    },
+
+    text2: {
+        color: "#f39c12",
+        marginStart: 5,
+        textAlignVertical: "center",
+        fontSize: 12
     },
 
     userName: {
         color: "black",
         fontWeight: "bold",
-        fontSize: 18
+        fontSize: 15
     },
 
-    infoBox: {
-        margin: 25,
-        height: 80,
+    infosBox: {
+        flex: 1,
+        margin: 50,
         justifyContent: "space-around"
     },
 
     dateSubscription: {
-        color: "black"
+        color: "black",
+        fontSize: 12
     },
 
-    stars: {
-        color: "black"
+    text: {
+        color: "black",
+        fontSize: 15,
+        marginRight: 5,
+        textAlignVertical: "center"
     },
 
 
@@ -175,9 +216,16 @@ const styles = StyleSheet.create({
 
     historyContent: {
         width: "100%",
-        height: 200,
+        height: 400,
         backgroundColor: "#bdc3c7"
     },
+
+    footer: {
+        width: "100%",
+        height: 20,
+        backgroundColor: "#2c3e50",
+        justifyContent: "flex-end"
+    }
 })
 
 export default UserHome

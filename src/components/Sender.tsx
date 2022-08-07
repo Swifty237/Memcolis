@@ -33,12 +33,11 @@ const styles = StyleSheet.create({
     transporterText: {
         marginTop: 50,
         marginBottom: 10,
-        width: "90%",
+        width: Dimensions.get("window").width,
         color: "black",
         fontSize: 17,
         fontWeight: "bold",
-        textAlign: "left",
-        paddingStart: 20
+        textAlign: "center"
 
     },
 
@@ -50,12 +49,11 @@ const styles = StyleSheet.create({
     previsionText: {
         marginTop: 20,
         marginBottom: 10,
-        width: "90%",
+        width: Dimensions.get("window").width,
         color: "black",
         fontSize: 17,
         fontWeight: "bold",
-        textAlign: "left",
-        paddingStart: 20
+        textAlign: "center"
     },
 
     previsionContent: {
