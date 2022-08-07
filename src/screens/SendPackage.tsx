@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { StyleSheet, Text, View, StatusBar, ScrollView, Image, FlatList, SafeAreaView } from "react-native"
 import Btn from "../components/Btn"
 import Icon from "react-native-vector-icons/MaterialIcons"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import NewSendModal from "../components/NewSendModal"
 import { NewSendContext } from "../utils/UserContext"
@@ -51,7 +52,18 @@ const SendPackage = () => {
                 <ScrollView contentContainerStyle={styles.container}>
                     <StatusBar backgroundColor="#2c3e50" />
 
+                    {destination != "" || destinataire != "" || adresse != "" || tel != "" || weight != "" || numberArticle != "" ?
+                        <View style={styles.modifButton}>
+                            <Btn label="Modifier" textStyle={styles.btnLabel2} onPress={() => {
+                                setVisible(true)
+                            }} />
+                        </View>
+                        :
+                        null
+                    }
+
                     <View style={styles.sendButton}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="send" size={20} color="#2c3e50" />
                         <Btn label="Nouvel envoi" textStyle={styles.btnLabel} onPress={() => {
                             setDestination("")
                             setDestinataire("")
@@ -63,19 +75,8 @@ const SendPackage = () => {
                         }} />
                     </View>
 
-                    {destination != "" || destinataire != "" || adresse != "" || tel != "" || weight != "" || numberArticle != "" ?
-                        <View style={styles.modifButton}>
-                            <Btn label="Modifier" textStyle={styles.btnLabel2} onPress={() => {
-                                setVisible(true)
-                            }} />
-                        </View>
-                        :
-                        null
-                    }
-
                     <NewSendModal />
 
-                    <Text style={styles.recapTxt}>Récapitulatif</Text>
                     <View style={styles.separator}>
                         <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
                             <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
@@ -129,15 +130,15 @@ const SendPackage = () => {
 
                         <View style={styles.button}>
                             <View style={{ marginEnd: 10 }}>
-                                <Icon name="photo-camera" size={20} color="white" />
+                                <Icon name="photo-camera" size={20} color="#2c3e50" />
                             </View>
                             <Btn label="Prendre une photo" textStyle={styles.btnLabel} onPress={() => takePhotoFromCamera()} />
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: "row", width: "100%", height: 122, justifyContent: "space-around", backgroundColor: "#2c3e50", alignItems: "center", marginTop: 30 }}>
+                    <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
                         <View style={styles.validation}>
-                            <Btn label="Valider" textStyle={styles.btnLabel} onPress={() => { }} />
+                            <Btn label="Valider" textStyle={styles.btnLabel2} onPress={() => { }} />
                         </View>
 
                         <View style={styles.annulation}>
@@ -170,23 +171,19 @@ const styles = StyleSheet.create({
     },
 
     btnLabel: {
-        color: "white",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        color: "#2c3e50",
+        textAlign: "center"
     },
 
     btnLabel2: {
         color: "#f39c12",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        textAlign: "center"
     },
 
     button: {
         backgroundColor: "#f39c12",
         marginVertical: 25,
-        width: 250,
+        width: 300,
         height: 50,
         padding: 15,
         borderRadius: 30,
@@ -196,24 +193,23 @@ const styles = StyleSheet.create({
 
     sendButton: {
         backgroundColor: "#f39c12",
-        marginVertical: 15,
-        width: 200,
+        marginTop: 10,
+        marginBottom: 25,
+        width: 300,
         height: 50,
-        padding: 15,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     modifButton: {
-        backgroundColor: "transparent",
-        marginVertical: 15,
-        width: 200,
+        backgroundColor: "#2c3e50",
+        marginTop: 25,
+        width: 300,
         height: 50,
         padding: 12,
         borderRadius: 30,
-        borderWidth: 2,
-        borderColor: "#f39c12",
         flexDirection: "row",
         justifyContent: "center"
     },
@@ -231,7 +227,6 @@ const styles = StyleSheet.create({
         marginVertical: 15,
         width: "100%",
         borderTopWidth: 4,
-        borderBottomWidth: 4,
         borderRadius: 15,
         borderColor: "#2c3e50",
         alignItems: "center"
@@ -261,24 +256,26 @@ const styles = StyleSheet.create({
     },
 
     validation: {
-        backgroundColor: "#f39c12",
-        width: 150,
+        backgroundColor: "#2c3e50",
+        width: 300,
         height: 50,
-        padding: 15,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     annulation: {
-        borderWidth: 2,
-        borderColor: "#f39c12",
-        width: 150,
+        backgroundColor: "transparent",
+        width: 300,
         height: 50,
-        padding: 12,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical: 15,
+        borderWidth: 1,
+        borderColor: "#f39c12",
+        alignItems: "center"
     }
 })
 

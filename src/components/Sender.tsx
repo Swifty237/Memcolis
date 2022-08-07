@@ -11,7 +11,7 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.previsionText}>Prévisions Voyages</Text>
+            <Text style={styles.previsionText}>Propositions des voyageurs</Text>
             <View style={styles.previsionContent}>
 
             </View>
@@ -19,6 +19,11 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
             <Text style={styles.transporterText}>Transporteurs à proximité</Text>
             <View style={styles.transporterContent}>
                 <MapComponent />
+            </View>
+
+            <Text style={styles.historyText}>Mes transactions</Text>
+            <View style={styles.historyContent}>
+
             </View>
         </View>
     )
@@ -57,10 +62,27 @@ const styles = StyleSheet.create({
     },
 
     previsionContent: {
-        width: "100%",
+        width: Dimensions.get("window").width,
         height: 200,
         backgroundColor: "#bdc3c7",
         marginBottom: 20
+    },
+
+    historyText: {
+        marginTop: 50,
+        marginBottom: 10,
+        width: Dimensions.get("window").width,
+        color: "black",
+        fontSize: 17,
+        fontWeight: "bold",
+        textAlign: "center",
+        paddingStart: 20
+    },
+
+    historyContent: {
+        width: Dimensions.get("window").width,
+        height: 400,
+        backgroundColor: "#bdc3c7"
     }
 })
 

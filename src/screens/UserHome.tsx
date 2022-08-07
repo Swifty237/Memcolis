@@ -48,25 +48,25 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                 </View>
 
                 <View style={styles.infosBox}>
-                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                    <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <FontAwesome style={{ marginEnd: 10 }} name="birthday-cake" size={18} color="#2c3e50" />
                         <Text style={styles.text3}>Birthdate here !</Text>
                     </View>
-                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                    <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <Entypo style={{ marginEnd: 10 }} name="location" size={18} color="#2c3e50" />
                         <Text style={styles.text3}>Adresse here !</Text>
                     </View>
-                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                    <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="phone" size={18} color="#2c3e50" />
                         <Text style={styles.text3}>Phone here !</Text>
                     </View>
 
-                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                    <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <FontAwesome style={{ marginEnd: 10 }} name="credit-card-alt" size={18} color="#2c3e50" />
                         <Text style={styles.text3}>Credit card infos number here !</Text>
                     </View>
 
-                    <TouchableOpacity style={{ flexDirection: "row", backgroundColor: "#2c3e50", height: 50, justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
+                    <TouchableOpacity style={{ flexDirection: "row", backgroundColor: "#2c3e50", width: 300, height: 50, justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
                         <FontAwesome5 style={{ marginEnd: 10 }} name="user-cog" size={18} color="#f39c12" />
                         <Text style={styles.text2}>Réglages profil</Text>
                     </TouchableOpacity>
@@ -129,10 +129,10 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width: "85%",
         height: 50,
-        padding: 12,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     transportButton: {
@@ -140,10 +140,10 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         width: "85%",
         height: 50,
-        padding: 12,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     saleButton: {
@@ -151,17 +151,15 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         width: "85%",
         height: 50,
-        padding: 12,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     btnLabel2: {
         color: "#2c3e50",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        textAlign: "center"
     },
 
     text3: {
@@ -186,8 +184,9 @@ const styles = StyleSheet.create({
 
     infosBox: {
         flex: 1,
-        margin: 50,
-        justifyContent: "space-around"
+        marginVertical: 50,
+        justifyContent: "space-around",
+        alignItems: "center"
     },
 
     dateSubscription: {
@@ -200,24 +199,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginRight: 5,
         textAlignVertical: "center"
-    },
-
-
-    historyText: {
-        marginTop: 50,
-        marginBottom: 10,
-        width: "90%",
-        color: "black",
-        fontSize: 17,
-        fontWeight: "bold",
-        textAlign: "left",
-        paddingStart: 20
-    },
-
-    historyContent: {
-        width: "100%",
-        height: 400,
-        backgroundColor: "#bdc3c7"
     },
 
     footer: {

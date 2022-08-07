@@ -17,7 +17,7 @@ export type MainDrawerParamList = {
     Summary: { email: string, userID: string }
     UserHome: { email: string, userID: string }
     RegistrationComplete: undefined
-    History: undefined
+    History: { email: string, userID: string }
     SendPackage: undefined
     MakeTransport: undefined
     SaleKg: undefined
@@ -75,7 +75,8 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },
                     headerTitleStyle: { color: "white" }
-                }} />
+                }}
+                initialParams={{ email: "", userID: "" }} />
 
             <Screen
                 name="SendPackage"

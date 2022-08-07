@@ -74,7 +74,7 @@ const NewSendModal: React.FunctionComponent = () => {
                         error="" />
                 </ScrollView>
 
-                <View style={{ flexDirection: "row", width: "100%", height: 122, justifyContent: "space-around", alignItems: "center", marginTop: 30, backgroundColor: "#2c3e50" }}>
+                <View style={{ flexDirection: "row", width: "100%", height: 122, justifyContent: "space-around", alignItems: "center", marginTop: 30 }}>
                     <View style={styles.validation}>
                         <Btn label="Terminer" textStyle={styles.btnLabel} onPress={() => setVisible(false)} />
                     </View>
@@ -122,38 +122,33 @@ const styles = StyleSheet.create({
     },
 
     btnLabel: {
-        color: "white",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        color: "#2c3e50",
+        textAlign: "center"
     },
 
     btnLabel2: {
         color: "#f39c12",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        textAlign: "center"
     },
 
     validation: {
         backgroundColor: "#f39c12",
         width: 150,
         height: 50,
-        padding: 15,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     annulation: {
-        borderWidth: 2,
-        borderColor: "#f39c12",
+        backgroundColor: "#2c3e50",
         width: 150,
         height: 50,
-        padding: 12,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 })
 

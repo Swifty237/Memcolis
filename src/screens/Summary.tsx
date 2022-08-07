@@ -70,16 +70,16 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
                         selectedValue={profil}
                         onValueChange={(e) => setProfil(e)}>
 
-                        <Picker.Item style={{ color: "#f39c12" }} label="Expéditeur home" value="expéditeur" />
-                        <Picker.Item style={{ color: "#f39c12" }} label="Transporteur home" value="transporteur" />
-                        <Picker.Item style={{ color: "#f39c12" }} label="Voyageur home" value="voyageur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Mode expéditeur" value="expéditeur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Mode transporteur" value="transporteur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Mode voyageur" value="voyageur" />
 
                     </Picker>
                 </View>
 
                 {getProfil(profil)}
 
-                <View style={styles.footer}></View>
+                {/* <View style={styles.footer}></View> */}
             </ScrollView>
         </SafeAreaView>
     )
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 300,
         backgroundColor: "#bdc3c7",
-        marginBottom: 20
+        marginBottom: 50
     },
 
     picker: {

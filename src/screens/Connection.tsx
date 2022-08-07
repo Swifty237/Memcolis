@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     },
 
     labelStyle: {
-        color: "white",
+        color: "#2c3e50",
         textAlign: "center",
         fontWeight: "bold",
         fontSize: 15
