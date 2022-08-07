@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { StyleSheet, Text, View, StatusBar, SafeAreaView, ScrollView } from "react-native"
+import { StyleSheet, Text, View, StatusBar, SafeAreaView, ScrollView, TouchableOpacity } from "react-native"
 import { Picker } from "@react-native-picker/picker"
 import Sender from "../components/Sender"
 import Transporter from "../components/Tansporter"
@@ -7,6 +7,7 @@ import Traveler from "../components/Traveler"
 import { UserContext } from "../utils/UserContext"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import type { RouteProp } from "@react-navigation/native"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
 
 
@@ -42,16 +43,31 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
 
-            <ScrollView contentContainerStyle={{ marginTop: 20, alignItems: "center" }}>
+            <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+                <View style={{ flexDirection: "row", width: "95%", marginVertical: 20, justifyContent: "space-around", alignItems: "center" }}>
+                    <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }} onPress={() => { }}>
+                        <MaterialCommunityIcons name="cube-send" size={30} color="#f39c12" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
+                        <MaterialCommunityIcons name="truck" size={30} color="#f39c12" />
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }} onPress={() => { }}>
+                        <MaterialCommunityIcons name="airplane-takeoff" size={30} color="#f39c12" />
+                    </TouchableOpacity>
+                </View>
+
                 <View style={styles.pickerBox}>
                     <Picker
                         dropdownIconColor="white"
                         selectedValue={profil}
                         onValueChange={(e) => setProfil(e)}>
 
-                        <Picker.Item style={{ color: "#f39c12" }} label="Expéditeur" value="expéditeur" />
-                        <Picker.Item style={{ color: "#f39c12" }} label="Transporteur" value="transporteur" />
-                        <Picker.Item style={{ color: "#f39c12" }} label="Voyageur" value="voyageur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Mode expéditeur" value="expéditeur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Mode transporteur" value="transporteur" />
+                        <Picker.Item style={{ color: "#f39c12" }} label="Mode voyageur" value="voyageur" />
 
                     </Picker>
                 </View>

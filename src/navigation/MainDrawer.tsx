@@ -5,6 +5,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 import Summary from "../screens/Summary"
 import History from "../screens/History"
 import SendPackage from "../screens/SendPackage"
+import MakeTransport from "../screens/MakeTransport"
+import SaleKg from "../screens/SaleKg"
 import CustomDrawer from "../components/CustomDrawer"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import AntDesign from "react-native-vector-icons/AntDesign"
@@ -17,6 +19,8 @@ export type MainDrawerParamList = {
     RegistrationComplete: undefined
     History: undefined
     SendPackage: undefined
+    MakeTransport: undefined
+    SaleKg: undefined
 }
 
 
@@ -81,6 +85,34 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                         <MaterialCommunityIcons name="cube-send" size={22} color={color} />
                     ),
                     title: "Envoyer un colis",
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                    headerStyle: { backgroundColor: "#2c3e50" },
+                    headerTitleStyle: { color: "white" }
+                }} />
+
+            <Screen
+                name="MakeTransport"
+                component={MakeTransport}
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="truck" size={22} color={color} />
+                    ),
+                    title: "Transporter des colis",
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                    headerStyle: { backgroundColor: "#2c3e50" },
+                    headerTitleStyle: { color: "white" }
+                }} />
+
+            <Screen
+                name="SaleKg"
+                component={SaleKg}
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="airplane-takeoff" size={22} color={color} />
+                    ),
+                    title: "Vendre mes kg",
                     headerTintColor: "white",
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },

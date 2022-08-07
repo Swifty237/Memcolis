@@ -2,6 +2,8 @@ import React from "react"
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
+import Btn from "../components/Btn"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 // import TopBar from "../components/TopBar"
 
 
@@ -27,17 +29,17 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                 </View>
 
                 <View style={styles.logoTxtBox}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30, backgroundColor: "#2c3e50" }}>
-                        <Text style={styles.text}>Expéditeur</Text>
-                        <Text style={styles.text2}>A compléter</Text>
+                    <View style={styles.exportButton}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
+                        <Btn label="Devenir expéditeur" textStyle={styles.btnLabel2} onPress={() => { }} />
                     </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30, backgroundColor: "#2c3e50" }}>
-                        <Text style={styles.text}>Tansporteur</Text>
-                        <Text style={styles.text2}>A compléter</Text>
+                    <View style={styles.transportButton}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
+                        <Btn label="Devenir transporteur" textStyle={styles.btnLabel2} onPress={() => { }} />
                     </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", borderWidth: 1, borderColor: "#bdc3c7", marginBottom: 15, height: 30, backgroundColor: "#2c3e50" }}>
-                        <Text style={styles.text}>Voyageur</Text>
-                        <Text style={styles.text2}>A compléter</Text>
+                    <View style={styles.saleButton}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
+                        <Btn label="Devenir voyageur" textStyle={styles.btnLabel2} onPress={() => { }} />
                     </View>
                 </View>
 
@@ -88,22 +90,48 @@ const styles = StyleSheet.create({
 
     logoTxtBox: {
         marginTop: 15,
-        marginHorizontal: 15
+        marginHorizontal: 15,
+        alignItems: "center"
     },
 
-    text: {
-        color: "#f39c12",
-        fontWeight: "bold",
-        marginStart: 5,
-        textAlignVertical: "center"
+    exportButton: {
+        backgroundColor: "#f39c12",
+        marginVertical: 10,
+        width: "98%",
+        height: 50,
+        padding: 12,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center"
     },
 
-    text2: {
-        color: "red",
+    transportButton: {
+        backgroundColor: "#f39c12",
+        marginBottom: 10,
+        width: "98%",
+        height: 50,
+        padding: 12,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+
+    saleButton: {
+        backgroundColor: "#f39c12",
+        marginBottom: 10,
+        width: "98%",
+        height: 50,
+        padding: 12,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+
+    btnLabel2: {
+        color: "#2c3e50",
+        textAlign: "center",
         fontWeight: "bold",
-        fontSize: 10,
-        textAlignVertical: "center",
-        marginEnd: 5
+        fontSize: 15
     },
 
     text3: {

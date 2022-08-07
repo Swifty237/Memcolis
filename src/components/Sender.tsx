@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
 
     previsionText: {
-        marginTop: 50,
+        marginTop: 20,
         marginBottom: 10,
         width: "90%",
         color: "black",

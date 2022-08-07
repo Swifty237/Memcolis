@@ -33,12 +33,6 @@ const Main: React.FunctionComponent<MainStackParamList> = () => {
     const [userPassword, setUserPassword] = useMMKVStorage<string>("Password", storage, "")
     const [userUID, setUserUID] = useMMKVStorage<string>("UID", storage, "")
 
-
-    // const [isLoggedIn, setIsLoggedIn] = useState<STACKCHOICE.SIGN_IN | STACKCHOICE.LOGGED>(STACKCHOICE.SIGN_IN)
-    // const [userEmail, setUserEmail] = useState<string>("")
-    // const [userPassword, setUserPassword] = useState<string>("")
-    // const [userUID, setUserUID] = useState<string>("")
-
     console.log("isLoggedIn: ", isLoggedIn)
 
     return (
