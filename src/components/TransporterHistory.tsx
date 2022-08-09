@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native"
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from "react-native"
 import React from "react"
 
 const TransporterHistory = () => {
@@ -6,55 +6,55 @@ const TransporterHistory = () => {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ alignItems: "center" }}>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Envoyé le: date ici !...</Text>
                     <Text style={styles.text3}>... transport inachevé !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Envoyé le: date ici !...</Text>
                     <Text style={styles.text3}>... transport inachevé !</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.box}>
+                <TouchableOpacity style={styles.box}>
                     <Text style={styles.text1}>Date/heure ici !... lieu ici !</Text>
                     <Text style={styles.text2}>... montant recu ici !</Text>
-                </View>
+                </TouchableOpacity>
             </ScrollView>
         </View>
     )
@@ -86,15 +86,15 @@ const styles = StyleSheet.create({
 
     box: {
         flexDirection: "row",
-        backgroundColor: "transparent",
-        borderWidth: 3,
-        borderColor: "white",
-        width: "98%",
+        backgroundColor: "white",
+        width: "96%",
         height: 50,
         justifyContent: "space-between",
         alignItems: "center",
         borderRadius: 5,
-        marginTop: 7
+        marginTop: 7,
+        borderTopWidth: 4,
+        borderColor: "#2c3e50"
     }
 })
 

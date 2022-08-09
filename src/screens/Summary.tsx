@@ -6,14 +6,14 @@ import Transporter from "../components/Tansporter"
 import Traveler from "../components/Traveler"
 import { UserContext } from "../utils/UserContext"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
-import type { RouteProp } from "@react-navigation/native"
+// import type { RouteProp } from "@react-navigation/native"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 
 
+type SummaryProp = NativeStackScreenProps<MainDrawerParamList, "Summary">
 
-type SummaryProp = { route: RouteProp<MainDrawerParamList, "Summary"> }
-
-const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
+const Summary: React.FunctionComponent<SummaryProp> = ({ navigation, route }) => {
     const [profil, setProfil] = useState<"expéditeur" | "transporteur" | "voyageur">("expéditeur")
     const { userEmail, userUID } = useContext(UserContext)
     const { email, userID } = route.params
@@ -43,25 +43,25 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
 
-            <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-                <View style={{ flexDirection: "row", width: "95%", marginVertical: 20, justifyContent: "space-around", alignItems: "center" }}>
-                    <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }} onPress={() => { }}>
-                        <MaterialCommunityIcons name="cube-send" size={30} color="#f39c12" />
+            <View style={{ width: "100%", alignItems: "center", borderBottomWidth: 4, borderRadius: 15, backgroundColor: "white" }}>
+                <View style={{ flexDirection: "row", width: "95%", marginVertical: 10, justifyContent: "space-around", alignItems: "center" }}>
+                    <TouchableOpacity
+                        style={{ width: 100, height: 40, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }}
+                        onPress={() => navigation.navigate("SendPackage")}>
+                        <MaterialCommunityIcons name="cube-send" size={25} color="#f39c12" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
-                        <MaterialCommunityIcons name="truck" size={30} color="#f39c12" />
+                    <TouchableOpacity
+                        style={{ width: 100, height: 40, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }}
+                        onPress={() => navigation.navigate("MakeTransport")}>
+                        <MaterialCommunityIcons name="truck" size={25} color="#f39c12" />
                     </TouchableOpacity>
 
-
-                    <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }} onPress={() => { }}>
-                        <MaterialCommunityIcons name="airplane-takeoff" size={30} color="#f39c12" />
+                    <TouchableOpacity
+                        style={{ width: 100, height: 40, backgroundColor: "#2c3e50", justifyContent: "center", alignItems: "center", borderRadius: 30 }}
+                        onPress={() => navigation.navigate("SaleKg")}>
+                        <MaterialCommunityIcons name="airplane-takeoff" size={25} color="#f39c12" />
                     </TouchableOpacity>
-                </View>
-
-                <Text style={styles.actuText}>Actualités & Offres promotionelles</Text>
-                <View style={styles.actuContent}>
-
                 </View>
 
                 <View style={styles.pickerBox}>
@@ -76,6 +76,15 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
 
                     </Picker>
                 </View>
+            </View>
+
+
+            <ScrollView contentContainerStyle={{ alignItems: "center", marginTop: 20 }}>
+
+                <Text style={styles.actuText}>Actualités & Offres promotionelles</Text>
+                <View style={styles.actuContent}>
+
+                </View>
 
                 {getProfil(profil)}
 
@@ -88,10 +97,12 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        alignItems: "center"
     },
 
     actuText: {
+        marginTop: 40,
         marginBottom: 10,
         width: "100%",
         color: "black",
@@ -102,7 +113,7 @@ const styles = StyleSheet.create({
 
     actuContent: {
         width: "100%",
-        height: 300,
+        height: 200,
         backgroundColor: "#bdc3c7",
         marginBottom: 50
     },
@@ -137,12 +148,13 @@ const styles = StyleSheet.create({
 
     pickerBox: {
         backgroundColor: "#2c3e50",
-        width: "90%",
+        width: "70%",
         height: 50,
         justifyContent: "center",
         paddingStart: 20,
         borderRadius: 5,
-        marginTop: 20
+        marginTop: 5,
+        marginBottom: 20
     }
 })
 

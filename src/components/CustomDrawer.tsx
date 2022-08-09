@@ -52,16 +52,15 @@ const CustomDrawer = (props: any) => {
 
 const styles = StyleSheet.create({
     logoContainer: {
-        height: 150
+        marginTop: -4,
+        height: 200,
+        backgroundColor: "#2c3e50"
     },
 
     logo: {
         flexDirection: "row",
         alignItems: "flex-end",
-        margin: 5,
-        backgroundColor: "#2c3e50",
-        padding: 5,
-        borderRadius: 5
+        padding: 5
     },
 
     image: {

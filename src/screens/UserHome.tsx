@@ -16,8 +16,7 @@ type UserHomeProps = NativeStackScreenProps<MainDrawerParamList, "UserHome">
 
 const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route }) => {
     const { email, userID } = route.params
-    console.log("email: ", email)
-    console.log("userID: ", userID)
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -66,28 +65,28 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                         <Text style={styles.text3}>Credit card infos number here !</Text>
                     </View>
 
-                    <TouchableOpacity style={{ flexDirection: "row", backgroundColor: "#2c3e50", width: 300, height: 50, justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
-                        <FontAwesome5 style={{ marginEnd: 10 }} name="user-cog" size={18} color="#f39c12" />
+                    <TouchableOpacity style={{ flexDirection: "row", backgroundColor: "#2c3e50", width: 250, height: 50, justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
+                        <FontAwesome5 style={{ marginEnd: 10 }} name="user-cog" size={15} color="#f39c12" />
                         <Text style={styles.text2}>Réglages profil</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.logoTxtBox}>
-                    <View style={styles.exportButton}>
+                    <TouchableOpacity style={styles.exportButton} onPress={() => { }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
-                        <Btn label="Devenir expéditeur" textStyle={styles.btnLabel2} onPress={() => { }} />
-                    </View>
-                    <View style={styles.transportButton}>
-                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
-                        <Btn label="Devenir transporteur" textStyle={styles.btnLabel2} onPress={() => { }} />
-                    </View>
-                    <View style={styles.saleButton}>
-                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
-                        <Btn label="Devenir voyageur" textStyle={styles.btnLabel2} onPress={() => { }} />
-                    </View>
-                </View>
+                        <Text style={styles.btnLabel2}>Devenir expéditeur</Text>
+                    </TouchableOpacity>
 
-                {/* <View style={styles.footer}></View> */}
+                    <TouchableOpacity style={styles.transportButton} onPress={() => { }}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
+                        <Text style={styles.btnLabel2}>Devenir transporteur</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.saleButton} onPress={() => { }}>
+                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
+                        <Text style={styles.btnLabel2}>Devenir voyageur</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
@@ -120,7 +119,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 4,
         borderRadius: 15,
         borderColor: "#2c3e50",
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "white"
     },
 
     exportButton: {

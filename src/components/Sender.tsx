@@ -1,6 +1,5 @@
 import React from "react"
 import { StyleSheet, Text, View, Dimensions } from "react-native"
-import MapComponent from "./MapComponent"
 
 
 
@@ -11,14 +10,9 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.previsionText}>Propositions des voyageurs</Text>
+            <Text style={styles.previsionText}>Evolution prix du kg voyageur</Text>
             <View style={styles.previsionContent}>
 
-            </View>
-
-            <Text style={styles.transporterText}>Transporteurs à proximité</Text>
-            <View style={styles.transporterContent}>
-                <MapComponent />
             </View>
 
             <Text style={styles.historyText}>Mes transactions</Text>
@@ -33,22 +27,6 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-
-    transporterText: {
-        marginTop: 50,
-        marginBottom: 10,
-        width: Dimensions.get("window").width,
-        color: "black",
-        fontSize: 17,
-        fontWeight: "bold",
-        textAlign: "center"
-
-    },
-
-    transporterContent: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height / 2
     },
 
     previsionText: {

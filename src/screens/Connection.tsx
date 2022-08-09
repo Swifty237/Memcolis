@@ -100,9 +100,11 @@ const Connection: React.FunctionComponent<ConnectionProp> = ({ navigation }) => 
                                 icon />
                         </View>
                         <View style={styles.buttonBox}>
-                            <View style={styles.button}>
-                                <Btn label="Valider" textStyle={styles.labelStyle} onPress={handleSubmit} />
-                            </View>
+                            <Btn
+                                label="Valider"
+                                textStyle={styles.labelStyle}
+                                buttonStyle={styles.button}
+                                onPress={handleSubmit} />
                         </View>
 
                         <Pressable onPress={() => {
@@ -191,9 +193,7 @@ const styles = StyleSheet.create({
 
     labelStyle: {
         color: "#2c3e50",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        textAlign: "center"
     }
 
 })

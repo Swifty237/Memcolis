@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native"
 import React from "react"
+import { StyleSheet, Text, View, Dimensions } from "react-native"
+import MapComponent from "./MapComponent"
 
 
 const Transporter = ({ email, userID }: { email: string, userID: string }) => {
@@ -8,19 +9,14 @@ const Transporter = ({ email, userID }: { email: string, userID: string }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.transporterText}>Demandes de transport</Text>
-            <View style={styles.transporterContent}>
-
-            </View>
-
-            <Text style={styles.previsionText}>Gestion de mes transports</Text>
-            <View style={styles.previsionContent}>
-
-            </View>
-
             <Text style={styles.historyText}>Mes transports</Text>
             <View style={styles.historyContent}>
 
+            </View>
+
+            <Text style={styles.transporterText}>Demandes de transport à proximité</Text>
+            <View style={styles.transporterContent}>
+                <MapComponent />
             </View>
         </View>
     )
@@ -33,7 +29,7 @@ const styles = StyleSheet.create({
     },
 
     transporterText: {
-        marginTop: 50,
+        marginTop: 40,
         marginBottom: 10,
         width: Dimensions.get("window").width,
         color: "black",
@@ -45,30 +41,11 @@ const styles = StyleSheet.create({
 
     transporterContent: {
         width: Dimensions.get("window").width,
-        height: 350,
-        backgroundColor: "#bdc3c7",
-        marginBottom: 20
-    },
-
-    previsionText: {
-        marginTop: 20,
-        marginBottom: 10,
-        width: Dimensions.get("window").width,
-        color: "black",
-        fontSize: 17,
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-
-    previsionContent: {
-        width: Dimensions.get("window").width,
-        height: 350,
-        backgroundColor: "#bdc3c7",
-        marginBottom: 20
+        height: Dimensions.get("window").height / 2
     },
 
     historyText: {
-        marginTop: 50,
+        marginTop: 30,
         marginBottom: 10,
         width: Dimensions.get("window").width,
         color: "black",
@@ -81,7 +58,8 @@ const styles = StyleSheet.create({
     historyContent: {
         width: Dimensions.get("window").width,
         height: 400,
-        backgroundColor: "#bdc3c7"
+        backgroundColor: "#bdc3c7",
+        marginBottom: 20
     }
 })
 

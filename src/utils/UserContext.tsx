@@ -1,4 +1,5 @@
 import React, { createContext } from "react"
+import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 
 
 enum STACKCHOICE { SIGN_IN, LOGGED }
@@ -58,4 +59,30 @@ export const NewSendContext = createContext<NewSendContextType>({
     setWeight: () => { },
     numberArticle: "",
     setNumberArticle: () => { }
+})
+
+export type NewSaleContextType = {
+    visible: boolean
+    setVisible: (param: boolean) => void
+    destination: string
+    setDestination: (param: string) => void
+    departureDate: string
+    setDepartureDate: (param: string) => void
+    arrivalDate: string
+    setArrivalDate: (param: string) => void
+    weight: string
+    setWeight: (param: string) => void
+}
+
+export const NewSaleContext = createContext<NewSaleContextType>({
+    visible: false,
+    setVisible: () => { },
+    destination: "Choisissez une destination",
+    setDestination: () => { },
+    departureDate: "",
+    setDepartureDate: () => { },
+    arrivalDate: "",
+    setArrivalDate: () => { },
+    weight: "",
+    setWeight: () => { }
 })

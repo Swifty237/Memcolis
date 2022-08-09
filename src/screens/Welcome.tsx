@@ -43,15 +43,14 @@ const Welcome: React.FunctionComponent<WelcomeProps> = ({ navigation, route }) =
                     </Text>
                 </View>
 
-                <View style={styles.button}>
-                    <Btn
-                        label="Continuer"
-                        onPress={() => navigation.navigate("MainDrawer", {
-                            screen: "UserHome",
-                            params: { email: email, userID: userID }
-                        })}
-                        textStyle={styles.label} />
-                </View>
+                <Btn
+                    label="Continuer"
+                    buttonStyle={styles.button}
+                    onPress={() => navigation.navigate("MainDrawer", {
+                        screen: "UserHome",
+                        params: { email: email, userID: userID }
+                    })}
+                    textStyle={styles.label} />
             </ScrollView>
         </SafeAreaView>
 

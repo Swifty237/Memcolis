@@ -3,17 +3,15 @@ import { StyleSheet, Text, SafeAreaView, View, Modal, ScrollView } from "react-n
 import Input from "./Input"
 import Btn from "./Btn"
 import { Picker } from "@react-native-picker/picker"
-import { NewSendContext } from "../utils/UserContext"
+import { NewSaleContext } from "../utils/UserContext"
+import DatePicker from "./DatePicker"
 
-
-
-const NewSendModal: React.FunctionComponent = () => {
-
-    const { visible, setVisible, destination, setDestination, destinataire, setDestinataire, adresse, setAdresse, tel, setTel, weight, setWeight, numberArticle, setNumberArticle } = useContext(NewSendContext)
+const NewSaleModal: React.FunctionComponent = () => {
+    const { visible, setVisible, destination, setDestination, departureDate, setDepartureDate, arrivalDate, setArrivalDate, weight, setWeight } = useContext(NewSaleContext)
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Modal visible={visible}>
+        <SafeAreaView>
+            <Modal visible={visible} style={styles.container}>
                 <Text style={{ color: "black", fontWeight: "bold", marginTop: 25, marginBottom: 7, paddingStart: 25 }}>Destination</Text>
                 <View style={styles.pickerBox}>
                     <Picker
@@ -29,44 +27,15 @@ const NewSendModal: React.FunctionComponent = () => {
                     </Picker>
                 </View>
 
-                <ScrollView contentContainerStyle={{ height: 500, width: "100%", paddingHorizontal: 15 }}>
-                    <Input
-                        label="Destinataire"
-                        placeholder="Entrer le nom et prénom du destinataire"
-                        value={destinataire}
-                        onChangeText={(text) => setDestinataire(text)}
-                        onBlur={() => { }}
-                        error="" />
+                <ScrollView contentContainerStyle={{ height: 320, width: "100%", paddingHorizontal: 15 }}>
+
+                    <DatePicker label="Date/heure départ" date={departureDate} onChangeDate={(date) => setDepartureDate(date)} error="" />
+
+                    <DatePicker label="Date/heure arrivée" date={arrivalDate} onChangeDate={(date) => setArrivalDate(date)} error="" />
 
                     <Input
-                        label="Adresse"
-                        placeholder="Entrer l'adresse du destinataire"
-                        value={adresse}
-                        onChangeText={(text) => setAdresse(text)}
-                        onBlur={() => { }}
-                        error="" />
-
-                    <Input
-                        label="Téléphone"
-                        placeholder="Entrer le numéro de téléphone du destinataire "
-                        value={tel}
-                        onChangeText={(text) => setTel(text)}
-                        onBlur={() => { }}
-                        keyBoardNumeric
-                        error="" />
-
-                    <Input
-                        label="Nombre d'articles"
-                        placeholder="Entrer le nombre d'article à envoyer"
-                        value={numberArticle}
-                        onChangeText={(text) => setNumberArticle(text)}
-                        onBlur={() => { }}
-                        keyBoardNumeric
-                        error="" />
-
-                    <Input
-                        label="Poids Total"
-                        placeholder="Entrer le poids total du colis ici !"
+                        label="Numbre de kg à vendre"
+                        placeholder="Entrer le poids à vendre ici !"
                         value={weight}
                         onChangeText={(text) => setWeight(text)}
                         onBlur={() => { }}
@@ -75,13 +44,11 @@ const NewSendModal: React.FunctionComponent = () => {
                 </ScrollView>
 
                 <View style={{ flexDirection: "row", width: "100%", height: 122, justifyContent: "space-around", alignItems: "center", marginTop: 30, backgroundColor: "white", borderTopWidth: 4, borderColor: "#2c3e50", borderRadius: 15 }}>
-                    <View>
-                        <Btn
-                            label="Terminer"
-                            textStyle={styles.btnLabel}
-                            buttonStyle={styles.validation}
-                            onPress={() => setVisible(false)} />
-                    </View>
+                    <Btn
+                        label="Terminer"
+                        textStyle={styles.btnLabel}
+                        buttonStyle={styles.validation}
+                        onPress={() => setVisible(false)} />
 
                     <Btn
                         label="Annuler"
@@ -89,10 +56,8 @@ const NewSendModal: React.FunctionComponent = () => {
                         buttonStyle={styles.annulation}
                         onPress={() => {
                             setDestination("")
-                            setDestinataire("")
-                            setAdresse("")
-                            setTel("")
-                            setNumberArticle("")
+                            setDepartureDate("")
+                            setArrivalDate("")
                             setWeight("")
                             setVisible(false)
                         }} />
@@ -158,4 +123,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default NewSendModal
+export default NewSaleModal

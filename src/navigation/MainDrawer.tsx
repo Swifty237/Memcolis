@@ -7,6 +7,7 @@ import History from "../screens/History"
 import SendPackage from "../screens/SendPackage"
 import MakeTransport from "../screens/MakeTransport"
 import SaleKg from "../screens/SaleKg"
+import Gallery from "../screens/Gallery"
 import CustomDrawer from "../components/CustomDrawer"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import AntDesign from "react-native-vector-icons/AntDesign"
@@ -21,6 +22,7 @@ export type MainDrawerParamList = {
     SendPackage: undefined
     MakeTransport: undefined
     SaleKg: undefined
+    Gallery: undefined
 }
 
 
@@ -40,7 +42,7 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                     drawerIcon: ({ color }) => (
                         <Ionicons name="home-outline" size={22} color={color} />
                     ),
-                    title: "Home",
+                    title: "Accueil",
                     headerTintColor: "white",
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },
@@ -56,21 +58,6 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                         <AntDesign name="user" size={22} color={color} />
                     ),
                     title: "Profil",
-                    headerTintColor: "white",
-                    headerTitleAlign: "center",
-                    headerStyle: { backgroundColor: "#2c3e50" },
-                    headerTitleStyle: { color: "white" }
-                }}
-                initialParams={{ email: "", userID: "" }} />
-
-            <Screen
-                name="History"
-                component={History}
-                options={{
-                    drawerIcon: ({ color }) => (
-                        <MaterialIcons name="history" size={22} color={color} />
-                    ),
-                    title: "Historique",
                     headerTintColor: "white",
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },
@@ -99,7 +86,7 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                     drawerIcon: ({ color }) => (
                         <MaterialCommunityIcons name="truck" size={22} color={color} />
                     ),
-                    title: "Transporter des colis",
+                    title: "Transporter",
                     headerTintColor: "white",
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },
@@ -119,6 +106,35 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                     headerStyle: { backgroundColor: "#2c3e50" },
                     headerTitleStyle: { color: "white" }
                 }} />
+
+            <Screen
+                name="Gallery"
+                component={Gallery}
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <MaterialIcons name="photo-library" size={22} color={color} />
+                    ),
+                    title: "Gallery",
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                    headerStyle: { backgroundColor: "#2c3e50" },
+                    headerTitleStyle: { color: "white" }
+                }} />
+
+            <Screen
+                name="History"
+                component={History}
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <MaterialIcons name="history" size={22} color={color} />
+                    ),
+                    title: "Historique",
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                    headerStyle: { backgroundColor: "#2c3e50" },
+                    headerTitleStyle: { color: "white" }
+                }}
+                initialParams={{ email: "", userID: "" }} />
 
             <Screen
                 name="RegistrationComplete"

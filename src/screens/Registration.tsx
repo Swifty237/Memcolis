@@ -111,9 +111,11 @@ const Registration: React.FunctionComponent<RegistrationProp> = ({ navigation })
                         </View>
 
                         <View style={styles.buttonBox}>
-                            <View style={styles.button}>
-                                <Btn label="Valider" textStyle={styles.labelStyle} onPress={handleSubmit} />
-                            </View>
+                            <Btn
+                                label="Valider"
+                                textStyle={styles.labelStyle}
+                                buttonStyle={styles.button}
+                                onPress={handleSubmit} />
                         </View>
                     </View>
                 )}
@@ -193,10 +195,8 @@ const styles = StyleSheet.create({
     },
 
     labelStyle: {
-        color: "white",
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize: 15
+        color: "#2c3e50",
+        textAlign: "center"
     }
 })
 

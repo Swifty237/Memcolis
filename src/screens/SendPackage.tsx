@@ -1,15 +1,24 @@
-import React, { useState } from "react"
-import { StyleSheet, Text, View, StatusBar, ScrollView, Image, FlatList, SafeAreaView } from "react-native"
+import React, { useState, useEffect } from "react"
+import { StyleSheet, Text, View, StatusBar, ScrollView, Image, FlatList, SafeAreaView, TouchableOpacity } from "react-native"
 import Btn from "../components/Btn"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import NewSendModal from "../components/NewSendModal"
 import { NewSendContext } from "../utils/UserContext"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { MainDrawerParamList } from "../navigation/MainDrawer"
+import auth from "@react-native-firebase/auth"
+import storage from "@react-native-firebase/storage"
+import uuid from "react-native-uuid"
+
+
+type SendPackageProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "SendPackage"> }
 
 
 
-const SendPackage = () => {
+const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) => {
     const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [destination, setDestination] = useState<string>("")
@@ -18,10 +27,12 @@ const SendPackage = () => {
     const [tel, setTel] = useState<string>("")
     const [weight, setWeight] = useState<string>("")
     const [numberArticle, setNumberArticle] = useState<string>("")
+    const user = auth().currentUser
+
+
 
 
     const takePhotoFromCamera = () => {
-
         ImagePicker.openCamera({
             width: 300,
             height: 300,
@@ -33,8 +44,33 @@ const SendPackage = () => {
 
         }).catch(err => console.error(err))
     }
-
     // console.log("photosFromCamera", photosFromCamera)
+
+
+    const uploadImagesToStorage = (path: string, imageName: string) => {
+
+
+        const imagesRef = storage().ref("images" + "_" + user?.uid + "/" + imageName)
+        const task = imagesRef.putFile(path)
+
+        task.then(() => {
+            console.log('Images uploaded to the bucket!')
+
+        }).catch(err => console.error(err))
+    }
+
+    const storeImages = () => {
+
+        if (photosFromCamera != []) {
+            photosFromCamera.forEach(image => {
+                let path = image.path
+                let imageName = image.modificationDate?.toString() + "_" + uuid.v4().toString()
+
+                uploadImagesToStorage(path, imageName)
+            })
+        }
+    }
+
 
     const renderItem = ({ item }: { item: ImageOrVideo }) => {
 
@@ -51,29 +87,31 @@ const SendPackage = () => {
             <SafeAreaView>
                 <ScrollView contentContainerStyle={styles.container}>
                     <StatusBar backgroundColor="#2c3e50" />
+                    <TouchableOpacity style={styles.annulation} onPress={navigation.goBack}>
+                        <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                        <Text style={styles.btnLabel2}>Accueil</Text>
+                    </TouchableOpacity>
 
                     {destination != "" || destinataire != "" || adresse != "" || tel != "" || weight != "" || numberArticle != "" ?
-                        <View style={styles.modifButton}>
-                            <Btn label="Modifier" textStyle={styles.btnLabel2} onPress={() => {
-                                setVisible(true)
-                            }} />
-                        </View>
+                        <Btn label="Modifier" textStyle={styles.btnLabel2} buttonStyle={styles.modifButton} onPress={() => {
+                            setVisible(true)
+                        }} />
                         :
                         null
                     }
 
-                    <View style={styles.sendButton}>
+                    <TouchableOpacity style={styles.sendButton} onPress={() => {
+                        setDestination("")
+                        setDestinataire("")
+                        setAdresse("")
+                        setTel("")
+                        setNumberArticle("")
+                        setWeight("")
+                        setVisible(true)
+                    }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="send" size={20} color="#2c3e50" />
-                        <Btn label="Nouvel envoi" textStyle={styles.btnLabel} onPress={() => {
-                            setDestination("")
-                            setDestinataire("")
-                            setAdresse("")
-                            setTel("")
-                            setNumberArticle("")
-                            setWeight("")
-                            setVisible(true)
-                        }} />
-                    </View>
+                        <Text style={styles.btnLabel}>Nouvel envoi</Text>
+                    </TouchableOpacity>
 
                     <NewSendModal />
 
@@ -128,30 +166,27 @@ const SendPackage = () => {
                             />
                         </View>
 
-                        <View style={styles.button}>
-                            <View style={{ marginEnd: 10 }}>
-                                <Icon name="photo-camera" size={20} color="#2c3e50" />
-                            </View>
-                            <Btn label="Prendre une photo" textStyle={styles.btnLabel} onPress={() => takePhotoFromCamera()} />
-                        </View>
+                        <TouchableOpacity style={styles.button} onPress={() => takePhotoFromCamera()}>
+                            <Icon style={{ marginEnd: 10 }} name="photo-camera" size={20} color="#2c3e50" />
+                            <Text style={styles.btnLabel}>Prendre une photo</Text>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
-                        <View style={styles.validation}>
-                            <Btn label="Valider" textStyle={styles.btnLabel2} onPress={() => { }} />
-                        </View>
+                        <Btn label="Valider" textStyle={styles.btnLabel2} buttonStyle={styles.validation} onPress={() => {
+                            storeImages()
+                            navigation.navigate("Gallery")
+                        }} />
 
-                        <View style={styles.annulation}>
-                            <Btn label="Annuler" textStyle={styles.btnLabel2} onPress={() => {
-                                setDestination("")
-                                setDestinataire("")
-                                setAdresse("")
-                                setTel("")
-                                setNumberArticle("")
-                                setWeight("")
-                                setPhotosFromCamera([])
-                            }} />
-                        </View>
+                        <Btn label="Annuler" textStyle={styles.btnLabel2} buttonStyle={styles.annulation} onPress={() => {
+                            setDestination("")
+                            setDestinataire("")
+                            setAdresse("")
+                            setTel("")
+                            setNumberArticle("")
+                            setWeight("")
+                            setPhotosFromCamera([])
+                        }} />
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -163,7 +198,8 @@ const SendPackage = () => {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: "transparent"
     },
 
     text: {
@@ -229,7 +265,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 4,
         borderRadius: 15,
         borderColor: "#2c3e50",
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "white"
     },
 
     flatListSeparator: {
@@ -273,7 +310,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         marginVertical: 15,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#f39c12",
         alignItems: "center"
     }
