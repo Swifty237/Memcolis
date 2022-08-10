@@ -17,7 +17,6 @@ import uuid from "react-native-uuid"
 type SendPackageProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "SendPackage"> }
 
 
-
 const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) => {
     const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo[]>([])
     const [visible, setVisible] = useState<boolean>(false)
@@ -28,6 +27,8 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     const [weight, setWeight] = useState<string>("")
     const [numberArticle, setNumberArticle] = useState<string>("")
     const user = auth().currentUser
+    const imagesListRef = storage().ref("images" + "_" + user?.uid + "/")
+    const [databaseImagesList, setDatabaseImagesList] = useState<string[]>([])
 
 
 
@@ -83,7 +84,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
 
     return (
-        <NewSendContext.Provider value={{ visible, setVisible, destination, setDestination, destinataire, setDestinataire, adresse, setAdresse, tel, setTel, weight, setWeight, numberArticle, setNumberArticle }}>
+        <NewSendContext.Provider value={{ visible, setVisible, destination, setDestination, destinataire, setDestinataire, adresse, setAdresse, tel, setTel, weight, setWeight, numberArticle, setNumberArticle, databaseImagesList, setDatabaseImagesList }}>
             <SafeAreaView>
                 <ScrollView contentContainerStyle={styles.container}>
                     <StatusBar backgroundColor="#2c3e50" />

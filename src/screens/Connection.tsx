@@ -38,7 +38,7 @@ const Connection: React.FunctionComponent<ConnectionProp> = ({ navigation }) => 
             </View>
 
             <Pressable
-                onPress={() => navigation.navigate("Help")}
+                onPress={() => navigation.navigate("HelpCenter")}
                 style={{ backgroundColor: "#2c3e50", width: "100%", alignItems: "flex-end" }}>
                 <Text style={{ color: "white", fontSize: 12, marginBottom: 10 }}>Besoin d'aide ?</Text>
             </Pressable>

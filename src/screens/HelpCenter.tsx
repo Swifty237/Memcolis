@@ -1,19 +1,21 @@
 import React from "react"
-import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView } from "react-native"
-import type { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { MainStackParamList } from "../navigation/Main"
-import TopBar from "../components/TopBar"
-import Btn from "../components/Btn"
+import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView, TouchableOpacity } from "react-native"
 import Video from "react-native-video"
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { MainStackParamList } from "../navigation/Main"
 
 
+type HelpCenterProp = { navigation: NativeStackNavigationProp<MainStackParamList, "HelpCenter"> }
 
-
-const Help: React.FunctionComponent = () => {
-
+const HelpCenter: React.FunctionComponent<HelpCenterProp> = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
+            <TouchableOpacity style={styles.annulation} onPress={navigation.goBack}>
+                <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                <Text style={styles.btnLabel2}>Connection</Text>
+            </TouchableOpacity>
             <ScrollView>
                 <Text style={styles.titleTxt}>Présentation</Text>
                 <View style={styles.videoBox}>
@@ -38,9 +40,18 @@ const Help: React.FunctionComponent = () => {
                         Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.
                     </Text>
                 </View>
+
+                <View>
+                    <Text style={styles.titleTxt}>Contactez nous</Text>
+                    <View style={{ width: "80%", alignSelf: "center", marginBottom: 20 }}>
+                        {/* formulaire de contact */}
+                        <Text style={styles.text}>Tel</Text>
+                        <Text style={styles.text}>email</Text>
+                        <Text style={styles.text}>Adresse</Text>
+                    </View>
+                </View>
             </ScrollView>
         </SafeAreaView>
-
     )
 }
 
@@ -48,20 +59,20 @@ const Help: React.FunctionComponent = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "center"
     },
 
     titleTxt: {
         color: "black",
         fontSize: 20,
         fontWeight: "bold",
-        marginTop: 20,
+        marginVertical: 20,
         marginStart: 20
     },
 
     text: {
         color: "black",
-        marginTop: 20,
         marginHorizontal: 5,
         textAlign: "justify"
     },
@@ -77,7 +88,25 @@ const styles = StyleSheet.create({
         marginStart: 35,
         width: "100%",
         height: "100%"
+    },
+
+    btnLabel2: {
+        color: "#f39c12",
+        textAlign: "center"
+    },
+
+    annulation: {
+        backgroundColor: "transparent",
+        width: 300,
+        height: 50,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "center",
+        marginVertical: 15,
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        alignItems: "center"
     }
 })
 
-export default Help
+export default HelpCenter

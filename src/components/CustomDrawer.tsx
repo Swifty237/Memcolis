@@ -15,16 +15,17 @@ const CustomDrawer = (props: any) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <DrawerContentScrollView {...props} >
-                <View style={styles.logoContainer}>
-                    <View style={styles.logo}>
-                        <Image source={require("../assets/logo_Memcolis.png")} style={styles.image} />
-                        <Text style={styles.memcolis}>Memcolis</Text>
-                    </View>
-                    <View>
-                        <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
-                    </View>
+            <View style={styles.logoContainer}>
+                <View style={styles.logo}>
+                    <Image source={require("../assets/logo_Memcolis.png")} style={styles.image} />
+                    <Text style={styles.memcolis}>Memcolis</Text>
                 </View>
+                <View>
+                    <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
+                </View>
+            </View>
+
+            <DrawerContentScrollView {...props}  >
                 <DrawerItemList {...props} />
             </DrawerContentScrollView>
 
@@ -52,8 +53,7 @@ const CustomDrawer = (props: any) => {
 
 const styles = StyleSheet.create({
     logoContainer: {
-        marginTop: -4,
-        height: 200,
+        height: 170,
         backgroundColor: "#2c3e50"
     },
 

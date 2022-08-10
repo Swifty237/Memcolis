@@ -42,6 +42,8 @@ export type NewSendContextType = {
     setWeight: (param: string) => void
     numberArticle: string
     setNumberArticle: (param: string) => void
+    databaseImagesList: string[]
+    setDatabaseImagesList: (param: string[]) => void
 }
 
 export const NewSendContext = createContext<NewSendContextType>({
@@ -58,7 +60,9 @@ export const NewSendContext = createContext<NewSendContextType>({
     weight: "",
     setWeight: () => { },
     numberArticle: "",
-    setNumberArticle: () => { }
+    setNumberArticle: () => { },
+    databaseImagesList: [],
+    setDatabaseImagesList: () => { }
 })
 
 export type NewSaleContextType = {

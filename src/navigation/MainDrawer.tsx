@@ -1,5 +1,5 @@
 import React from "react"
-import RegistrationComplete from "../screens/RegistrationComplete"
+import Settings from "../screens/Settings"
 import UserHome from "../screens/UserHome"
 import { createDrawerNavigator } from "@react-navigation/drawer"
 import Summary from "../screens/Summary"
@@ -13,16 +13,20 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import AntDesign from "react-native-vector-icons/AntDesign"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import HelpCenter from "../screens/HelpCenter"
+
+
 
 export type MainDrawerParamList = {
     Summary: { email: string, userID: string }
     UserHome: { email: string, userID: string }
-    RegistrationComplete: undefined
+    Settings: undefined
     History: { email: string, userID: string }
     SendPackage: undefined
     MakeTransport: undefined
     SaleKg: undefined
     Gallery: undefined
+    HelpCenter: undefined
 }
 
 
@@ -137,13 +141,27 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                 initialParams={{ email: "", userID: "" }} />
 
             <Screen
-                name="RegistrationComplete"
-                component={RegistrationComplete}
+                name="Settings"
+                component={Settings}
                 options={{
                     drawerIcon: ({ color }) => (
                         <AntDesign name="setting" size={22} color={color} />
                     ),
                     title: "Réglages",
+                    headerTintColor: "white",
+                    headerTitleAlign: "center",
+                    headerStyle: { backgroundColor: "#2c3e50" },
+                    headerTitleStyle: { color: "white" }
+                }} />
+
+            <Screen
+                name="HelpCenter"
+                component={HelpCenter}
+                options={{
+                    drawerIcon: ({ color }) => (
+                        <Ionicons name="globe-outline" size={22} color={color} />
+                    ),
+                    title: "Centre d'aide",
                     headerTintColor: "white",
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },

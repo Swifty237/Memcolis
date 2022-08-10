@@ -6,9 +6,10 @@ import auth from "@react-native-firebase/auth"
 
 
 const Gallery = () => {
-    const user = auth().currentUser
     const [databaseImagesList, setDatabaseImagesList] = useState<string[]>([])
+    const user = auth().currentUser
     const imagesListRef = storage().ref("images" + "_" + user?.uid + "/")
+
 
     useEffect(() => {
         imagesListRef.list()
@@ -28,7 +29,7 @@ const Gallery = () => {
                 })
             })
             .catch(err => console.error(err))
-    })
+    }, [])
 
     // console.log("databaseImagesList: ", databaseImagesList.length)
 
