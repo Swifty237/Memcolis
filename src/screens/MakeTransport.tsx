@@ -130,16 +130,17 @@ const styles = StyleSheet.create({
     },
 
     validation: {
+        backgroundColor: "transparent",
         width: 300,
         height: 50,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        alignSelf: "center",
-        marginTop: 20,
+        justifyContent: "space-around",
+        marginVertical: 15,
         borderWidth: 2,
-        borderColor: "#f39c12"
+        borderColor: "#f39c12",
+        alignItems: "center",
+        alignSelf: "center"
     },
 
     btnLabel: {

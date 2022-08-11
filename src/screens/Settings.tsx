@@ -1,11 +1,15 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from "react-native"
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, StatusBar } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import Btn from "../components/Btn"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { MainDrawerParamList } from "../navigation/MainDrawer"
 
 
-const Settings: React.FunctionComponent = () => {
+type SettingsProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "Settings"> }
+
+const Settings: React.FunctionComponent<SettingsProp> = ({ navigation }) => {
     const [profile, setProfile] = useState<boolean>(false)
     const [sender, setSender] = useState<boolean>(false)
     const [transporter, setTransporter] = useState<boolean>(false)
@@ -19,6 +23,13 @@ const Settings: React.FunctionComponent = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar backgroundColor="#2c3e50" />
+
+            <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
+                <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                <Text style={styles.btnLabel2}>Accueil</Text>
+            </TouchableOpacity>
+
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.annulation} onPress={() => setProfile(prev => !prev)}>
@@ -32,7 +43,6 @@ const Settings: React.FunctionComponent = () => {
                                     <Text style={styles.text}>Incomplet</Text>
                                     <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteProfile(true)}></Btn>
                                 </View>
-
                                 :
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text2}>Complet</Text>
@@ -53,13 +63,12 @@ const Settings: React.FunctionComponent = () => {
                             {!completeSender ?
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text}>Incomplet</Text>
-                                    <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteSender(true)}></Btn>
+                                    <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteSender(true)} />
                                 </View>
-
                                 :
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text2}>Complet</Text>
-                                    <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteSender(false)}></Btn>
+                                    <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteSender(false)} />
                                 </View>
                             }
                         </View>
@@ -77,13 +86,12 @@ const Settings: React.FunctionComponent = () => {
                             {!completeTransporter ?
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text}>Incomplet</Text>
-                                    <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTransporter(true)}></Btn>
+                                    <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTransporter(true)} />
                                 </View>
-
                                 :
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text2}>Complet</Text>
-                                    <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTransporter(false)}></Btn>
+                                    <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTransporter(false)} />
                                 </View>
                             }
                         </View>
@@ -101,20 +109,19 @@ const Settings: React.FunctionComponent = () => {
                             {!completeTraveler ?
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text}>Incomplet</Text>
-                                    <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTraveler(true)}></Btn>
+                                    <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTraveler(true)} />
                                 </View>
-
                                 :
                                 <View style={{ width: "100%" }}>
                                     <Text style={styles.text2}>Complet</Text>
-                                    <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTraveler(false)}></Btn>
+                                    <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTraveler(false)} />
                                 </View>
                             }
                         </View>
                     }
                 </View>
 
-                <View style={{ marginTop: 20 }}></View>
+                <View style={{ margin: 20 }}></View>
             </ScrollView>
         </SafeAreaView>
     )
@@ -123,7 +130,8 @@ const Settings: React.FunctionComponent = () => {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     btnContainer: {
@@ -132,9 +140,7 @@ const styles = StyleSheet.create({
     },
 
     infosContainer: {
-        flex: 1,
         width: 300,
-
         alignItems: "center",
         justifyContent: "space-between"
     },
@@ -175,7 +181,7 @@ const styles = StyleSheet.create({
 
     modification: {
         backgroundColor: "#2c3e50",
-        width: 100,
+        width: 110,
         height: 40,
         borderRadius: 30,
         flexDirection: "row",
@@ -185,6 +191,19 @@ const styles = StyleSheet.create({
         borderColor: "#f39c12",
         alignItems: "center",
         alignSelf: "flex-end"
+    },
+
+    backButton: {
+        backgroundColor: "transparent",
+        width: 300,
+        height: 50,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginVertical: 15,
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        alignItems: "center"
     }
 
 })

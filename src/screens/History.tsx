@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { StyleSheet, Text, View, StatusBar } from "react-native"
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from "react-native"
 import { UserContext } from "../utils/UserContext"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import type { RouteProp } from "@react-navigation/native"
@@ -8,15 +8,14 @@ import SenderHistory from "../components/SenderHistory"
 import TransporterHistory from "../components/TransporterHistory"
 import TravelerWithSaleHistory from "../components/TravelerWithSaleHistory"
 import TravelerWithoutSaleHistory from "../components/TravelerWithoutSaleHistory"
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
+import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 
 
 
+type HistoryProp = NativeStackScreenProps<MainDrawerParamList, "History">
 
-
-
-type HistoryProp = { route: RouteProp<MainDrawerParamList, "History"> }
-
-const History: React.FunctionComponent<HistoryProp> = ({ route }) => {
+const History: React.FunctionComponent<HistoryProp> = ({ navigation, route }) => {
     const [profil, setProfil] = useState<"expéditions" | "transports" | "voyageurWithSales" | "voyageurWithoutSales">("expéditions")
     const { userEmail, userUID } = useContext(UserContext)
     const { email, userID } = route.params
@@ -67,6 +66,11 @@ const History: React.FunctionComponent<HistoryProp> = ({ route }) => {
         <View style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
 
+            <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
+                <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                <Text style={styles.btnLabel2}>Accueil</Text>
+            </TouchableOpacity>
+
             <View style={styles.pickerBox}>
                 <Picker
                     dropdownIconColor="white"
@@ -101,6 +105,24 @@ const styles = StyleSheet.create({
         paddingStart: 20,
         borderRadius: 5,
         marginVertical: 20
+    },
+
+    backButton: {
+        backgroundColor: "transparent",
+        width: 300,
+        height: 50,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginVertical: 15,
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        alignItems: "center"
+    },
+
+    btnLabel2: {
+        color: "#f39c12",
+        textAlign: "center"
     }
 })
 

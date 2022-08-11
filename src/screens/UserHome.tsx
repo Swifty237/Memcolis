@@ -7,6 +7,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Entypo from "react-native-vector-icons/Entypo"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
+
 
 // import TopBar from "../components/TopBar"
 
@@ -21,7 +23,13 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
+
             <ScrollView>
+                <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
+                    <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                    <Text style={styles.backBtnLabel}>Accueil</Text>
+                </TouchableOpacity>
+
                 <View style={styles.logoBox}>
                     <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
 
@@ -199,6 +207,25 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginRight: 5,
         textAlignVertical: "center"
+    },
+
+    backButton: {
+        backgroundColor: "transparent",
+        width: 300,
+        height: 50,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginVertical: 15,
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        alignItems: "center",
+        alignSelf: "center"
+    },
+
+    backBtnLabel: {
+        color: "#f39c12",
+        textAlign: "center"
     },
 
     footer: {

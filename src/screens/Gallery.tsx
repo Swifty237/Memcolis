@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react"
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Image } from "react-native"
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Image, StatusBar, TouchableOpacity } from "react-native"
 import storage from "@react-native-firebase/storage"
 import auth from "@react-native-firebase/auth"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { MainDrawerParamList } from "../navigation/MainDrawer"
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 
 
 
-const Gallery = () => {
+type GalleryProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "Gallery"> }
+
+const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
     const [databaseImagesList, setDatabaseImagesList] = useState<string[]>([])
     const user = auth().currentUser
     const imagesListRef = storage().ref("images" + "_" + user?.uid + "/")
@@ -45,6 +50,13 @@ const Gallery = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar backgroundColor="#2c3e50" />
+
+            <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
+                <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                <Text style={styles.btnLabel2}>Accueil</Text>
+            </TouchableOpacity>
+
             <FlatList
                 data={databaseImagesList}
                 numColumns={3}
@@ -74,6 +86,24 @@ const styles = StyleSheet.create({
     separator: {
         margin: 2,
         borderColor: "transparent"
+    },
+
+    backButton: {
+        backgroundColor: "transparent",
+        width: 300,
+        height: 50,
+        borderRadius: 30,
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginVertical: 15,
+        borderWidth: 2,
+        borderColor: "#f39c12",
+        alignItems: "center"
+    },
+
+    btnLabel2: {
+        color: "#f39c12",
+        textAlign: "center"
     }
 })
 

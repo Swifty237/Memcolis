@@ -1,21 +1,34 @@
-import React from "react"
+import React, { useContext } from "react"
 import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView, TouchableOpacity } from "react-native"
 import Video from "react-native-video"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainStackParamList } from "../navigation/Main"
+import { UserContext } from "../utils/UserContext"
 
 
 type HelpCenterProp = { navigation: NativeStackNavigationProp<MainStackParamList, "HelpCenter"> }
 
 const HelpCenter: React.FunctionComponent<HelpCenterProp> = ({ navigation }) => {
+    enum STACKCHOICE { SIGN_IN, LOGGED }
+    const { isLoggedIn } = useContext(UserContext)
+
+
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
+
             <TouchableOpacity style={styles.annulation} onPress={navigation.goBack}>
                 <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
-                <Text style={styles.btnLabel2}>Connection</Text>
+                {isLoggedIn === STACKCHOICE.LOGGED ?
+                    <Text style={styles.btnLabel2}>Accueil</Text>
+                    :
+                    <Text style={styles.btnLabel2}>Connection</Text>
+                }
             </TouchableOpacity>
+
+
             <ScrollView>
                 <Text style={styles.titleTxt}>Présentation</Text>
                 <View style={styles.videoBox}>
@@ -101,7 +114,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 30,
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-around",
         marginVertical: 15,
         borderWidth: 2,
         borderColor: "#f39c12",
