@@ -40,7 +40,7 @@ const Connection: React.FunctionComponent<ConnectionProp> = ({ navigation }) => 
             <Pressable
                 onPress={() => navigation.navigate("HelpCenter")}
                 style={{ backgroundColor: "#2c3e50", width: "100%", alignItems: "flex-end" }}>
-                <Text style={{ color: "white", fontSize: 12, marginBottom: 10 }}>Besoin d'aide ?</Text>
+                <Text style={{ color: "white", fontSize: 12, marginBottom: 10 }}>Qui sommes nous ?</Text>
             </Pressable>
 
             <Formik

@@ -1,10 +1,11 @@
 import React, { useContext } from "react"
 import { StyleSheet, Text, View, ScrollView, StatusBar, SafeAreaView, TouchableOpacity } from "react-native"
-import Video from "react-native-video"
+import VideoPlayer from "react-native-video-controls"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainStackParamList } from "../navigation/Main"
 import { UserContext } from "../utils/UserContext"
+
 
 
 type HelpCenterProp = { navigation: NativeStackNavigationProp<MainStackParamList, "HelpCenter"> }
@@ -32,7 +33,7 @@ const HelpCenter: React.FunctionComponent<HelpCenterProp> = ({ navigation }) => 
             <ScrollView>
                 <Text style={styles.titleTxt}>Présentation</Text>
                 <View style={styles.videoBox}>
-                    <Video source={require("../assets/presentation.mp4")} style={styles.video} controls={true} />
+                    <VideoPlayer source={require("../assets/presentation.mp4")} style={styles.video} resizeMode={"cover"} />
                 </View>
                 <View>
                     <Text style={styles.titleTxt}>Qu'est-ce que le Lorem Ipsum?</Text>
@@ -91,16 +92,16 @@ const styles = StyleSheet.create({
     },
 
     videoBox: {
-        width: "100%",
         height: 220,
-        marginTop: 10,
-        alignSelf: "center"
+        marginTop: 10
     },
 
     video: {
-        marginStart: 35,
-        width: "100%",
-        height: "100%"
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
     },
 
     btnLabel2: {

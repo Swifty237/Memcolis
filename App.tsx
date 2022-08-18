@@ -27,7 +27,7 @@ const App: React.FunctionComponent = (): JSX.Element => {
           email: "",
           userID: ""
         }}
-        Help={undefined}
+        HelpCenter={undefined}
         MainDrawer={{
           screen: undefined,
           params: undefined,
