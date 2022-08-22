@@ -1,146 +1,126 @@
-import React, { useState } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, StatusBar } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import Btn from "../components/Btn"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
-import { EditerContext } from "../utils/UserContext"
 import EditerProfile from "../components/EditerProfile"
+import EditerIdCard from "../components/EditerIdCard"
+import EditerProofOfAdress from "../components/EditerProofOfAdress"
+import EditerRib from "../components/EditerRib"
+import { EditerContext } from "../utils/UserContext"
 
 
-type SettingsProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "Settings"> }
+type SettingsProp = NativeStackScreenProps<MainDrawerParamList, "Settings">
 
-const Settings: React.FunctionComponent<SettingsProp> = ({ navigation }) => {
-    const [profile, setProfile] = useState<boolean>(false)
-    const [sender, setSender] = useState<boolean>(false)
-    const [transporter, setTransporter] = useState<boolean>(false)
-    const [traveler, setTraveler] = useState<boolean>(false)
-    const [completeProfile, setCompleteProfile] = useState<boolean>(false)
-    const [completeSender, setCompleteSender] = useState<boolean>(false)
-    const [completeTransporter, setCompleteTransporter] = useState<boolean>(false)
-    const [completeTraveler, setCompleteTraveler] = useState<boolean>(false)
+const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) => {
+
+    let { profile, idCard, proofOfAdress, rib } = route.params
+
+
     const [editProfile, setEditProfile] = useState<boolean>(false)
-    const [editSender, setEditSender] = useState<boolean>(false)
-    const [editTransporter, setEditTransporter] = useState<boolean>(false)
-    const [editTraveler, setEditTraveler] = useState<boolean>(false)
+    const [editIdCard, setEditIdCard] = useState<boolean>(false)
+    const [editProofOfAdress, setEditProofOfAdress] = useState<boolean>(false)
+    const [editRib, setEditRib] = useState<boolean>(false)
 
+    useEffect(() => {
 
+        if (profile) {
+            setEditProfile(true)
+            setEditIdCard(false)
+            setEditProofOfAdress(false)
+            setEditRib(false)
+            idCard = false
+            proofOfAdress = false
+            rib = false
+        }
+        if (idCard) {
+            setEditIdCard(true)
+            setEditProfile(false)
+            setEditProofOfAdress(false)
+            setEditRib(false)
+            profile = false
+            proofOfAdress = false
+            rib = false
+        }
+        if (proofOfAdress) {
+            setEditIdCard(false)
+            setEditProfile(false)
+            setEditProofOfAdress(true)
+            setEditRib(false)
+            profile = false
+            idCard = false
+            rib = false
+        }
+        if (rib) {
+            setEditIdCard(false)
+            setEditProfile(false)
+            setEditProofOfAdress(false)
+            setEditRib(true)
+            profile = false
+            idCard = false
+            proofOfAdress = false
+        }
+    }, [profile, idCard, proofOfAdress, rib])
 
     return (
-        <EditerContext.Provider value={{ editProfile, setEditProfile, editSender, setEditSender, editTransporter, setEditTransporter, editTraveler, setEditTraveler }}>
+
+        <EditerContext.Provider value={{ editProfile, setEditProfile, editIdCard, setEditIdCard, editProofOfAdress, setEditProofOfAdress, editRib, setEditRib }}>
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#2c3e50" />
-
-                <EditerProfile />
 
                 <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
                     <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
                     <Text style={styles.btnLabel2}>Accueil</Text>
                 </TouchableOpacity>
 
-                <ScrollView contentContainerStyle={styles.container}>
+                <ScrollView>
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setProfile(prev => !prev)}>
+                        <TouchableOpacity style={styles.annulation} onPress={() => setEditProfile(prev => !prev)}>
                             <Text style={styles.btnLabel2}>Profil</Text>
-                            <SimpleLineIcons name={profile ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
+                            <SimpleLineIcons name={editProfile ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {profile &&
-                            <View style={styles.infosContainer}>
-                                {!completeProfile ?
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text}>Incomplet</Text>
-                                        <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setEditProfile(true)}></Btn>
-                                    </View>
-                                    :
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text2}>Complet</Text>
-                                        <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteProfile(false)}></Btn>
-                                    </View>
-                                }
-                            </View>
-                        }
+                        {editProfile && <EditerProfile />}
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setSender(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Expediteur</Text>
-                            <SimpleLineIcons name={sender ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
+                        <TouchableOpacity style={styles.annulation} onPress={() => setEditIdCard(prev => !prev)}>
+                            <Text style={styles.btnLabel2}>Pièce d'identité</Text>
+                            <SimpleLineIcons name={editIdCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {sender &&
-                            <View style={styles.infosContainer}>
-                                {!completeSender ?
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text}>Incomplet</Text>
-                                        <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteSender(true)} />
-                                    </View>
-                                    :
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text2}>Complet</Text>
-                                        <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteSender(false)} />
-                                    </View>
-                                }
-                            </View>
-                        }
+                        {editIdCard && <EditerIdCard />}
 
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setTransporter(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Transporteur</Text>
-                            <SimpleLineIcons name={transporter ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
+                        <TouchableOpacity style={styles.annulation} onPress={() => setEditProofOfAdress(prev => !prev)}>
+                            <Text style={styles.btnLabel2}>Justificatif de domicile</Text>
+                            <SimpleLineIcons name={editProofOfAdress ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {transporter &&
-                            <View style={styles.infosContainer}>
-                                {!completeTransporter ?
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text}>Incomplet</Text>
-                                        <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTransporter(true)} />
-                                    </View>
-                                    :
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text2}>Complet</Text>
-                                        <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTransporter(false)} />
-                                    </View>
-                                }
-                            </View>
-                        }
+                        {editProofOfAdress && <EditerProofOfAdress />}
 
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setTraveler(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Voyageur</Text>
-                            <SimpleLineIcons name={traveler ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
+                        <TouchableOpacity style={styles.annulation} onPress={() => setEditRib(prev => !prev)}>
+                            <Text style={styles.btnLabel2}>Rib</Text>
+                            <SimpleLineIcons name={editRib ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {traveler &&
-                            <View style={styles.infosContainer}>
-                                {!completeTraveler ?
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text}>Incomplet</Text>
-                                        <Btn label="Completer" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTraveler(true)} />
-                                    </View>
-                                    :
-                                    <View style={{ width: "100%" }}>
-                                        <Text style={styles.text2}>Complet</Text>
-                                        <Btn label="Modifier" textStyle={styles.modifLabel} buttonStyle={styles.modification} onPress={() => setCompleteTraveler(false)} />
-                                    </View>
-                                }
-                            </View>
-                        }
+                        {editRib && <EditerRib />}
                     </View>
 
                     <View style={{ margin: 20 }}></View>
                 </ScrollView>
             </SafeAreaView>
-        </EditerContext.Provider>
+        </EditerContext.Provider >
     )
 }
 
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: "center",
+        flex: 1,
         alignItems: "center"
     },
 

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Settings from "../screens/Settings"
 import UserHome from "../screens/UserHome"
 import { createDrawerNavigator } from "@react-navigation/drawer"
@@ -20,7 +20,7 @@ import HelpCenter from "../screens/HelpCenter"
 export type MainDrawerParamList = {
     Summary: { email: string, userID: string }
     UserHome: { email: string, userID: string }
-    Settings: undefined
+    Settings: { profile?: boolean, idCard?: boolean, proofOfAdress?: boolean, rib?: boolean }
     History: { email: string, userID: string }
     SendPackage: undefined
     MakeTransport: undefined
@@ -32,6 +32,7 @@ export type MainDrawerParamList = {
 
 const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
     const { Navigator, Screen } = createDrawerNavigator<MainDrawerParamList>()
+
 
     return (
         <Navigator
@@ -152,7 +153,8 @@ const MainDrawer: React.FunctionComponent<MainDrawerParamList> = () => {
                     headerTitleAlign: "center",
                     headerStyle: { backgroundColor: "#2c3e50" },
                     headerTitleStyle: { color: "white" }
-                }} />
+                }}
+                initialParams={{ profile: false, idCard: false, proofOfAdress: false, rib: false }} />
 
             <Screen
                 name="HelpCenter"

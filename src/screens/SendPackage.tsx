@@ -12,13 +12,14 @@ import { MainDrawerParamList } from "../navigation/MainDrawer"
 import auth from "@react-native-firebase/auth"
 import storage from "@react-native-firebase/storage"
 import uuid from "react-native-uuid"
+import Entypo from "react-native-vector-icons/Entypo"
 
 
 type SendPackageProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "SendPackage"> }
 
 
 const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) => {
-    const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo[]>([])
+    const [photo, setPhoto] = useState<ImageOrVideo[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [destination, setDestination] = useState<string>("")
     const [destinataire, setDestinataire] = useState<string>("")
@@ -31,7 +32,18 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     const [databaseImagesList, setDatabaseImagesList] = useState<string[]>([])
 
 
+    const takePhotoFromFolder = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 300,
+            cropping: true
 
+        }).then(image => {
+            console.log(image)
+            setPhoto([...photo, image])
+
+        }).catch(err => console.error(err))
+    }
 
     const takePhotoFromCamera = () => {
         ImagePicker.openCamera({
@@ -41,7 +53,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
         }).then(image => {
             console.log(image)
-            setPhotosFromCamera([...photosFromCamera, image])
+            setPhoto([...photo, image])
 
         }).catch(err => console.error(err))
     }
@@ -62,8 +74,8 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
     const storeImages = () => {
 
-        if (photosFromCamera != []) {
-            photosFromCamera.forEach(image => {
+        if (photo != []) {
+            photo.forEach(image => {
                 let path = image.path
                 let imageName = image.modificationDate?.toString() + "_" + uuid.v4().toString()
 
@@ -158,7 +170,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
                         <View style={styles.photoBox}>
                             <FlatList
-                                data={photosFromCamera}
+                                data={photo}
                                 horizontal
                                 initialNumToRender={20}
                                 renderItem={renderItem}
@@ -166,11 +178,16 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
                             />
                         </View>
+                        <View style={{ width: "80%", flexDirection: "row", justifyContent: "space-around" }}>
+                            <TouchableOpacity style={styles.button} onPress={() => takePhotoFromFolder()}>
+                                <Entypo name="download" size={22} color="#2c3e50" />
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.button} onPress={() => takePhotoFromCamera()}>
-                            <Icon style={{ marginEnd: 10 }} name="photo-camera" size={20} color="#2c3e50" />
-                            <Text style={styles.btnLabel}>Prendre une photo</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => takePhotoFromCamera()}>
+                                <Icon name="photo-camera" size={22} color="#2c3e50" />
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
 
                     <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
@@ -186,7 +203,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             setTel("")
                             setNumberArticle("")
                             setWeight("")
-                            setPhotosFromCamera([])
+                            setPhoto([])
                         }} />
                     </View>
                 </ScrollView>
@@ -220,12 +237,11 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: "#f39c12",
         marginVertical: 25,
-        width: 300,
-        height: 50,
-        padding: 15,
+        width: 110,
+        height: 40,
         borderRadius: 30,
-        flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     sendButton: {

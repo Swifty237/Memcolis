@@ -93,22 +93,21 @@ export const NewSaleContext = createContext<NewSaleContextType>({
 export type EditerContextType = {
     editProfile: boolean
     setEditProfile: (param: boolean) => void
-    editSender: boolean
-    setEditSender: (param: boolean) => void
-    editTransporter: boolean
-    setEditTransporter: (param: boolean) => void
-    editTraveler: boolean
-    setEditTraveler: (param: boolean) => void
+    editIdCard: boolean
+    setEditIdCard: (param: boolean) => void
+    editProofOfAdress: boolean
+    setEditProofOfAdress: (param: boolean) => void
+    editRib: boolean
+    setEditRib: (param: boolean) => void
 }
 
 export const EditerContext = createContext<EditerContextType>({
     editProfile: false,
     setEditProfile: () => { },
-    editSender: false,
-    setEditSender: () => { },
-    editTransporter: false,
-    setEditTransporter: () => { },
-    editTraveler: false,
-    setEditTraveler: () => { }
+    editIdCard: false,
+    setEditIdCard: () => { },
+    editProofOfAdress: false,
+    setEditProofOfAdress: () => { },
+    editRib: false,
+    setEditRib: () => { }
 })
-

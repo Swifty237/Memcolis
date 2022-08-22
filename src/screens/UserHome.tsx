@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar, TouchableOpacity } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
@@ -8,9 +8,7 @@ import Entypo from "react-native-vector-icons/Entypo"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
-
-
-// import TopBar from "../components/TopBar"
+import { EditerContext } from "../utils/UserContext"
 
 
 
@@ -18,7 +16,6 @@ type UserHomeProps = NativeStackScreenProps<MainDrawerParamList, "UserHome">
 
 const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route }) => {
     const { email, userID } = route.params
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -73,24 +70,32 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                         <Text style={styles.text3}>Credit card infos number here !</Text>
                     </View>
 
-                    <TouchableOpacity style={{ flexDirection: "row", backgroundColor: "#2c3e50", width: 250, height: 50, justifyContent: "center", alignItems: "center", borderRadius: 30 }}>
+                    <TouchableOpacity style={styles.profileSettings} onPress={() => {
+                        navigation.navigate("Settings", { profile: true })
+                    }}>
                         <FontAwesome5 style={{ marginEnd: 10 }} name="user-cog" size={15} color="#f39c12" />
                         <Text style={styles.text2}>Réglages profil</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.logoTxtBox}>
-                    <TouchableOpacity style={styles.exportButton} onPress={() => { }}>
+                    <TouchableOpacity style={styles.exportButton} onPress={() => {
+                        navigation.navigate("Settings", { idCard: true })
+                    }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
                         <Text style={styles.btnLabel2}>Devenir expéditeur</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.transportButton} onPress={() => { }}>
+                    <TouchableOpacity style={styles.transportButton} onPress={() => {
+                        navigation.navigate("Settings", { proofOfAdress: true })
+                    }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
                         <Text style={styles.btnLabel2}>Devenir transporteur</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.saleButton} onPress={() => { }}>
+                    <TouchableOpacity style={styles.saleButton} onPress={() => {
+                        navigation.navigate("Settings", { rib: true })
+                    }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
                         <Text style={styles.btnLabel2}>Devenir voyageur</Text>
                     </TouchableOpacity>
@@ -119,6 +124,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#bdc3c7",
         borderRadius: 5
+    },
+
+    profileSettings: {
+        flexDirection: "row",
+        backgroundColor: "#2c3e50",
+        width: 250,
+        height: 50,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 30
     },
 
     logoTxtBox: {

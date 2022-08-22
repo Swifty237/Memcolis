@@ -15,17 +15,19 @@ export type InputProps = {
     icon?: boolean
     defaultValue?: string
     onFocus?: () => void
+    containerBox?: {}
+    inputContainerStyle?: {}
 }
 
-const Input: React.FunctionComponent<InputProps> = ({ label, placeholder, value, onChangeText, error, onBlur, keyBoardNumeric, icon, defaultValue, onFocus }) => {
+const Input: React.FunctionComponent<InputProps> = ({ label, placeholder, value, onChangeText, error, onBlur, keyBoardNumeric, icon, defaultValue, onFocus, inputContainerStyle, containerBox }) => {
 
     const [eyeOff, setEyeOff] = useState<boolean>(true)
 
     return (
-        <View style={styles.container}>
+        <View style={containerBox ? containerBox : styles.container}>
             <Text style={styles.labelStyle}>{label}</Text>
 
-            <View style={styles.inputContainer}>
+            <View style={inputContainerStyle ? inputContainerStyle : styles.inputContainer}>
                 <TextInput
                     onFocus={onFocus}
                     defaultValue={defaultValue}
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#bdc3c7",
         borderRadius: 7,
-        //paddingEnd: 10,
         backgroundColor: "white"
     },
 
@@ -84,7 +85,8 @@ const styles = StyleSheet.create({
         color: "black",
         marginStart: 10,
         marginBottom: 5,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        width: "83%"
     }
 })
 
