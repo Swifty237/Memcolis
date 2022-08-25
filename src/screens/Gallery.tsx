@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { StyleSheet, Text, View, SafeAreaView, FlatList, Image, StatusBar, TouchableOpacity } from "react-native"
 import storage from "@react-native-firebase/storage"
 import auth from "@react-native-firebase/auth"
@@ -11,23 +11,22 @@ import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 type GalleryProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "Gallery"> }
 
 const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
-    const [databaseImagesList, setDatabaseImagesList] = useState<string[]>([])
     const user = auth().currentUser
     const imagesListRef = storage().ref("images" + "_" + user?.uid + "/")
-
+    const [databaseList, setDatabaseList] = useState<string[]>([])
 
     useEffect(() => {
+
         imagesListRef.list()
             .then(imagesList => {
 
                 imagesList.items.forEach((image) => {
-
                     storage()
                         .ref(image.fullPath)
                         .getDownloadURL()
                         .then(snap => {
-                            if (databaseImagesList.indexOf(snap) == -1) {
-                                setDatabaseImagesList([...databaseImagesList, snap])
+                            if (databaseList.indexOf(snap) == -1) {
+                                setDatabaseList(prev => [...prev, snap])
                             }
                         })
                         .catch(err => console.error(err))
@@ -36,7 +35,6 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
             .catch(err => console.error(err))
     }, [])
 
-    // console.log("databaseImagesList: ", databaseImagesList.length)
 
     const renderItem = ({ item }: { item: string }) => {
 
@@ -49,6 +47,7 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
     }
 
     return (
+
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
 
@@ -58,7 +57,7 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
             </TouchableOpacity>
 
             <FlatList
-                data={databaseImagesList}
+                data={databaseList}
                 numColumns={3}
                 initialNumToRender={20}
                 renderItem={renderItem}

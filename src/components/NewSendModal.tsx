@@ -1,18 +1,38 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { StyleSheet, Text, SafeAreaView, View, Modal, ScrollView } from "react-native"
 import Input from "./Input"
 import Btn from "./Btn"
 import { Picker } from "@react-native-picker/picker"
 import { NewSendContext } from "../utils/UserContext"
+import { RadioButton } from "react-native-paper"
 
 
 
 const NewSendModal: React.FunctionComponent = () => {
 
-    const { visible, setVisible, destination, setDestination, destinataire, setDestinataire, adresse, setAdresse, tel, setTel, weight, setWeight, numberArticle, setNumberArticle } = useContext(NewSendContext)
+    const {
+        visible,
+        setVisible,
+        destination,
+        setDestination,
+        destinataire,
+        setDestinataire,
+        adress,
+        setAdress,
+        tel,
+        setTel,
+        weight,
+        setWeight,
+        numberArticle,
+        setNumberArticle,
+        travel,
+        setTravel,
+        transport,
+        setTransport
+    } = useContext(NewSendContext)
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView>
             <Modal visible={visible}>
                 <Text style={{ color: "black", fontWeight: "bold", marginTop: 25, marginBottom: 7, paddingStart: 25 }}>Destination</Text>
                 <View style={styles.pickerBox}>
@@ -29,7 +49,7 @@ const NewSendModal: React.FunctionComponent = () => {
                     </Picker>
                 </View>
 
-                <ScrollView contentContainerStyle={{ height: 500, width: "100%", paddingHorizontal: 15 }}>
+                <ScrollView contentContainerStyle={{ width: "95%", alignSelf: "center" }}>
                     <Input
                         label="Destinataire"
                         placeholder="Entrer le nom et prénom du destinataire"
@@ -41,8 +61,8 @@ const NewSendModal: React.FunctionComponent = () => {
                     <Input
                         label="Adresse"
                         placeholder="Entrer l'adresse du destinataire"
-                        value={adresse}
-                        onChangeText={(text) => setAdresse(text)}
+                        value={adress}
+                        onChangeText={(text) => setAdress(text)}
                         onBlur={() => { }}
                         error="" />
 
@@ -72,9 +92,59 @@ const NewSendModal: React.FunctionComponent = () => {
                         onBlur={() => { }}
                         keyBoardNumeric
                         error="" />
+
+                    <Text style={styles.labelStyle}>Avec voyage</Text>
+                    <View style={styles.radioContainer}>
+                        <View style={styles.radioBox}>
+                            <RadioButton
+                                value="Oui"
+                                status={travel === "Oui" ? "checked" : "unchecked"}
+                                onPress={() => { setTravel("Oui") }}
+                            />
+                            <View style={styles.selectedTextBox}>
+                                <Text style={travel === "Oui" ? styles.selected : styles.unselected}>Oui</Text>
+                            </View>
+                        </View>
+                        <View style={styles.radioBox}>
+                            <RadioButton
+                                value="Non"
+                                status={travel === "Non" ? "checked" : "unchecked"}
+                                onPress={() => setTravel("Non")}
+                            />
+
+                            <View style={styles.selectedTextBox}>
+                                <Text style={travel === "Non" ? styles.selected : styles.unselected}>Non</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <Text style={styles.labelStyle}>Avec transport</Text>
+                    <View style={styles.radioContainer}>
+                        <View style={styles.radioBox}>
+                            <RadioButton
+                                value="Oui"
+                                status={transport === "Oui" ? "checked" : "unchecked"}
+                                onPress={() => { setTransport("Oui") }}
+                            />
+                            <View style={styles.selectedTextBox}>
+                                <Text style={transport === "Oui" ? styles.selected : styles.unselected}>Oui</Text>
+                            </View>
+                        </View>
+                        <View style={styles.radioBox}>
+                            <RadioButton
+                                value="Non"
+                                status={transport === "Non" ? "checked" : "unchecked"}
+                                onPress={() => setTransport("Non")}
+                            />
+
+                            <View style={styles.selectedTextBox}>
+                                <Text style={transport === "Non" ? styles.selected : styles.unselected}>Non</Text>
+                            </View>
+                        </View>
+                    </View>
                 </ScrollView>
 
-                <View style={{ flexDirection: "row", width: "100%", height: 122, justifyContent: "space-around", alignItems: "center", marginTop: 30, backgroundColor: "white", borderTopWidth: 4, borderColor: "#2c3e50", borderRadius: 15 }}>
+                <View style={styles.containerButton}>
                     <View>
                         <Btn
                             label="Terminer"
@@ -90,10 +160,12 @@ const NewSendModal: React.FunctionComponent = () => {
                         onPress={() => {
                             setDestination("")
                             setDestinataire("")
-                            setAdresse("")
+                            setAdress("")
                             setTel("")
                             setNumberArticle("")
                             setWeight("")
+                            setTravel("Oui")
+                            setTransport("Oui")
                             setVisible(false)
                         }} />
                 </View>
@@ -104,8 +176,17 @@ const NewSendModal: React.FunctionComponent = () => {
 
 
 const styles = StyleSheet.create({
-    container: {
-
+    containerButton: {
+        flexDirection: "row",
+        width: "100%",
+        height: 122,
+        justifyContent: "space-around",
+        alignItems: "center",
+        marginTop: 30,
+        backgroundColor: "white",
+        borderTopWidth: 4,
+        borderColor: "#2c3e50",
+        borderRadius: 15
     },
 
     pickerBox: {
@@ -156,6 +237,39 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+
+    radioBox: {
+        flexDirection: "row"
+    },
+
+    selected: {
+        color: "black",
+        fontSize: 15
+    },
+
+    unselected: {
+        color: "grey",
+        fontSize: 12
+    },
+
+    selectedTextBox: {
+        height: 40,
+        justifyContent: "center"
+    },
+
+    radioContainer: {
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
+
+    labelStyle: {
+        color: "black",
+        marginStart: 10,
+        marginBottom: 5,
+        fontWeight: "bold",
+        width: "83%",
+        marginTop: 20
+    }
 })
 
 export default NewSendModal

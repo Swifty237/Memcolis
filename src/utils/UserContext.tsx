@@ -33,16 +33,18 @@ export type NewSendContextType = {
     setDestination: (param: string) => void
     destinataire: string
     setDestinataire: (param: string) => void
-    adresse: string
-    setAdresse: (param: string) => void
+    adress: string
+    setAdress: (param: string) => void
     tel: string
     setTel: (param: string) => void
     weight: string
     setWeight: (param: string) => void
     numberArticle: string
     setNumberArticle: (param: string) => void
-    databaseImagesList: string[]
-    setDatabaseImagesList: (param: string[]) => void
+    travel: "Oui" | "Non"
+    setTravel: (param: "Oui" | "Non") => void
+    transport: "Oui" | "Non"
+    setTransport: (param: "Oui" | "Non") => void
 }
 
 export const NewSendContext = createContext<NewSendContextType>({
@@ -52,16 +54,18 @@ export const NewSendContext = createContext<NewSendContextType>({
     setDestination: () => { },
     destinataire: "",
     setDestinataire: () => { },
-    adresse: "",
-    setAdresse: () => { },
+    adress: "",
+    setAdress: () => { },
     tel: "",
     setTel: () => { },
     weight: "",
     setWeight: () => { },
+    travel: "Oui",
+    setTravel: () => { },
+    transport: "Oui",
+    setTransport: () => { },
     numberArticle: "",
-    setNumberArticle: () => { },
-    databaseImagesList: [],
-    setDatabaseImagesList: () => { }
+    setNumberArticle: () => { }
 })
 
 export type NewSaleContextType = {
@@ -99,6 +103,8 @@ export type EditerContextType = {
     setEditProofOfAdress: (param: boolean) => void
     editRib: boolean
     setEditRib: (param: boolean) => void
+    editBankCard: boolean
+    setEditBankCard: (param: boolean) => void
 }
 
 export const EditerContext = createContext<EditerContextType>({
@@ -109,5 +115,7 @@ export const EditerContext = createContext<EditerContextType>({
     editProofOfAdress: false,
     setEditProofOfAdress: () => { },
     editRib: false,
-    setEditRib: () => { }
+    setEditRib: () => { },
+    editBankCard: false,
+    setEditBankCard: () => { }
 })

@@ -1,79 +1,126 @@
-import React, { useContext } from "react"
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native"
+import React, { useContext, useState } from "react"
+import { StyleSheet, Text, View, SafeAreaView } from "react-native"
 import { EditerContext } from "../utils/UserContext"
 import Btn from "./Btn"
 import Input from "./Input"
 import DatePicker from "./DatePicker"
+import { Formik } from "formik"
+import { addDocumentId } from "../utils/Functions"
+import firestore from "@react-native-firebase/firestore"
+
+
 
 const EditerProfile = () => {
 
     const { setEditProfile } = useContext(EditerContext)
+    const [firstname, setFirstname] = useState<string>("")
+    const [name, setName] = useState<string>("")
+    const [birthdate, setBirthdate] = useState<string>("")
+    const [adress, setAdress] = useState<string>("")
+    const [postalCode, setPostalCode] = useState<string>("")
+    const [city, setCity] = useState<string>("")
+    const [tel, setTel] = useState<string>("")
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Input
-                label="Prénom"
-                placeholder=""
-                value=""
-                onChangeText={() => { }}
-                onBlur={() => { }}
-                error="" />
+        <Formik
+            enableReinitialize={true}
+            initialValues={{ firstname: "", name: "", birthdate: "", adress: "", postalCode: "", city: "", tel: "", sender: false, transporter: false, traveler: false }}
+            onSubmit={(values, { resetForm }) => {
+                console.log("=> onSubmit (EditerProfile)")
 
-            <Input
-                label="Nom"
-                placeholder=""
-                value=""
-                onChangeText={() => { }}
-                onBlur={() => { }}
-                error="" />
+                firestore()
+                    .collection("users")
+                    .add({
+                        id: "", // Vide à la création
+                        firstname: firstname,
+                        name: name,
+                        birthdate: birthdate,
+                        adress: adress,
+                        postalCode: postalCode,
+                        city: city,
+                        tel: tel,
+                        subscriptionDate: "",
+                        sender: false,
+                        transporter: false,
+                        traveler: false
+                    })
+                addDocumentId() // Permet de remplir le champ id vide
+                resetForm() // Permet de vider le formulaire après la soumission
 
-            <DatePicker label="Date de naissance" date="" onChangeDate={() => { }} error="" />
+                console.log("=> exit onSubmit (EditerProfile)")
+            }}>
 
-            <Input
-                label="Adresse"
-                placeholder=""
-                value=""
-                onChangeText={() => { }}
-                onBlur={() => { }}
-                error="" />
+            {({ handleSubmit, errors }) => (
 
-            <View style={{ flexDirection: "row" }}>
-                <Input
-                    label="Code postal"
-                    containerBox={styles.box}
-                    inputContainerStyle={styles.inputContainer}
-                    placeholder=""
-                    value=""
-                    onChangeText={() => { }}
-                    onBlur={() => { }}
-                    keyBoardNumeric
-                    error="" />
+                <SafeAreaView style={styles.container}>
+                    <Input
+                        label="Prénom"
+                        placeholder=""
+                        value={firstname}
+                        onChangeText={(text) => setFirstname(text)}
+                        onBlur={() => { }}
+                        error={errors.firstname} />
 
-                <Input
-                    label="Ville"
-                    containerBox={styles.box2}
-                    inputContainerStyle={styles.inputContainer}
-                    placeholder=""
-                    value=""
-                    onChangeText={() => { }}
-                    onBlur={() => { }}
-                    error="" />
-            </View>
+                    <Input
+                        label="Nom"
+                        placeholder=""
+                        value={name}
+                        onChangeText={(text) => setName(text)}
+                        onBlur={() => { }}
+                        error={errors.name} />
 
-            <Input
-                label="Tel"
-                placeholder=""
-                value=""
-                onChangeText={() => { }}
-                onBlur={() => { }}
-                keyBoardNumeric
-                error="" />
+                    <DatePicker label="Date de naissance" date={birthdate} onChangeDate={(date) => setBirthdate(date)} error="" />
 
-            <View style={styles.buttonsBox}>
-                <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditProfile(false)} />
-                <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditProfile(false)} />
-            </View>
-        </SafeAreaView>
+                    <Input
+                        label="Adresse"
+                        placeholder=""
+                        value={adress}
+                        onChangeText={(text) => setAdress(text)}
+                        onBlur={() => { }}
+                        error={errors.adress} />
+
+                    <View style={{ flexDirection: "row" }}>
+                        <Input
+                            label="Code postal"
+                            containerBox={styles.box}
+                            inputContainerStyle={styles.inputContainer}
+                            placeholder=""
+                            value={postalCode}
+                            onChangeText={(text) => setPostalCode(text)}
+                            onBlur={() => { }}
+                            keyBoardNumeric
+                            error={errors.postalCode} />
+
+                        <Input
+                            label="Ville"
+                            containerBox={styles.box2}
+                            inputContainerStyle={styles.inputContainer}
+                            placeholder=""
+                            value={city}
+                            onChangeText={(text) => setCity(text)}
+                            onBlur={() => { }}
+                            error={errors.city} />
+                    </View>
+
+                    <Input
+                        label="Tel"
+                        placeholder=""
+                        value={tel}
+                        onChangeText={(text) => setTel(text)}
+                        onBlur={() => { }}
+                        keyBoardNumeric
+                        error={errors.tel} />
+
+                    <View style={styles.buttonsBox}>
+                        <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => {
+                            handleSubmit()
+                            setEditProfile(false)
+                        }} />
+                        <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditProfile(false)} />
+                    </View>
+                </SafeAreaView>
+            )}
+        </Formik>
     )
 }
 

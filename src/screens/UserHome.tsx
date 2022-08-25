@@ -80,7 +80,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
 
                 <View style={styles.logoTxtBox}>
                     <TouchableOpacity style={styles.exportButton} onPress={() => {
-                        navigation.navigate("Settings", { idCard: true })
+                        navigation.navigate("Settings", { idCard: true, bankCard: true })
                     }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
                         <Text style={styles.btnLabel2}>Devenir expéditeur</Text>

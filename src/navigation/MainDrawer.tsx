@@ -20,7 +20,7 @@ import HelpCenter from "../screens/HelpCenter"
 export type MainDrawerParamList = {
     Summary: { email: string, userID: string }
     UserHome: { email: string, userID: string }
-    Settings: { profile?: boolean, idCard?: boolean, proofOfAdress?: boolean, rib?: boolean }
+    Settings: { profile?: boolean, idCard?: boolean, proofOfAdress?: boolean, rib?: boolean, bankCard?: boolean }
     History: { email: string, userID: string }
     SendPackage: undefined
     MakeTransport: undefined
