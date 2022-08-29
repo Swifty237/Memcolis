@@ -6,7 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import NewSendModal from "../components/NewSendModal"
-import { NewSendContext } from "../utils/UserContext"
+import { NewSendContext, UserContext } from "../utils/UserContext"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import auth from "@react-native-firebase/auth"
@@ -15,8 +15,9 @@ import uuid from "react-native-uuid"
 import Entypo from "react-native-vector-icons/Entypo"
 import DatePicker from "../components/DatePicker"
 import { Formik } from "formik"
-import { addColisId } from "../utils/Functions"
+import { addColisIdAndRef } from "../utils/Functions"
 import firestore from "@react-native-firebase/firestore"
+import ModalInfos from "../components/ModalInfos"
 
 
 type SendPackageProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "SendPackage"> }
@@ -34,8 +35,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     const [transport, setTransport] = useState<"Oui" | "Non">("Oui")
     const [numberArticle, setNumberArticle] = useState<string>("")
     const user = auth().currentUser
-    const imagesListRef = storage().ref("images" + "_" + user?.uid + "/")
-    const [databaseImages, setDatabaseImages] = useState<string[]>([])
+    const [databaseList, setDatabaseList] = useState<string[]>([])
+    const { databaseImagesList, setDatabaseImagesList } = useContext(UserContext)
+    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
+    const [infos, setInfos] = useState<string>("En attente d'un voyageur et d'un transporteur")
+
+
 
     const takePhotoFromFolder = () => {
         ImagePicker.openPicker({
@@ -45,7 +50,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
         }).then(image => {
             console.log(image)
-            setPhoto([...photo, image])
+            setPhoto(prev => [...prev, image])
 
         }).catch(err => console.error(err))
     }
@@ -58,54 +63,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
         }).then(image => {
             console.log(image)
-            setPhoto([...photo, image])
+            setPhoto(prev => [...prev, image])
 
         }).catch(err => console.error(err))
     }
     // console.log("photosFromCamera", photosFromCamera)
 
-
-    const uploadImagesToStorage = (path: string, imageName: string) => {
-
-
-        const imagesRef = storage().ref("images" + "_" + user?.uid + "/" + imageName)
-        const task = imagesRef.putFile(path)
-
-        task.then(() => {
-            console.log('Images uploaded to the bucket!')
-
-        }).catch(err => console.error(err))
-    }
-
-    const storeImages = () => {
-
-        if (photo != []) {
-            photo.forEach(image => {
-                let path = image.path
-                let imageName = image.modificationDate?.toString() + "_" + uuid.v4().toString()
-
-                uploadImagesToStorage(path, imageName)
-            })
-        }
-    }
-
-    // const getImgColis = () => {
-    //     imagesListRef.list()
-    //         .then(imagesList => {
-    //             imagesList.items.forEach((image) => {
-    //                 storage()
-    //                     .ref(image.fullPath)
-    //                     .getDownloadURL()
-    //                     .then(snap => {
-    //                         if (databaseImagesList.indexOf(snap) == -1) {
-    //                             setDatabaseImagesList([...databaseImagesList, snap])
-    //                         }
-    //                     })
-    //                     .catch(err => console.error(err))
-    //             })
-    //         })
-    //         .catch(err => console.error(err))
-    // }
 
 
     const renderItem = ({ item }: { item: ImageOrVideo }) => {
@@ -172,11 +135,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 recipientAdress: adress,
                                 weight: weight,
                                 numberArticle: numberArticle,
-                                dateOfDemand: "",
-                                imgColis: imagesListRef
+                                dateOfDemand: Date(),
+                                imgColis: ""
                             })
-                        addColisId() // Permet de remplir le champ id vide
+                        addColisIdAndRef(photo) // permet d'ajouter l'id, la ref vers les images du colis et d'enregistrer les images du colis 
                         resetForm() // Permet de vider le formulaire après la soumission
+                        setInfos("En attente d'un voyageur et d'un transporteur")
                         setDestination("")
                         setDestinataire("")
                         setAdress("")
@@ -199,11 +163,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 recipientAdress: adress,
                                 weight: weight,
                                 numberArticle: numberArticle,
-                                dateOfDemand: "",
+                                dateOfDemand: Date(),
                                 imgColis: ""
                             })
-                        addColisId()
+                        addColisIdAndRef(photo)
                         resetForm()
+                        setInfos("En attente d'un voyageur")
                         setDestination("")
                         setDestinataire("")
                         setAdress("")
@@ -227,11 +192,13 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 recipientAdress: adress,
                                 weight: weight,
                                 numberArticle: numberArticle,
-                                dateOfDemand: "",
+                                dateOfDemand: Date(),
                                 imgColis: ""
                             })
-                        addColisId()
+
+                        addColisIdAndRef(photo)
                         resetForm()
+                        setInfos("En attente d'un transporteur")
                         setDestination("")
                         setDestinataire("")
                         setAdress("")
@@ -257,6 +224,13 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                     <SafeAreaView>
                         <ScrollView contentContainerStyle={styles.container}>
                             <StatusBar backgroundColor="#2c3e50" />
+                            <ModalInfos
+                                visibleInfos={visibleInfos}
+                                status="Demande d'envoie enregistrée"
+                                infos={infos}
+                                getVisibleInfos={(param) => setVisibleInfos(param)}
+                            />
+
                             <TouchableOpacity style={styles.annulation} onPress={navigation.goBack}>
                                 <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
                                 <Text style={styles.btnLabel2}>Accueil</Text>
@@ -359,10 +333,8 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
                             <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
                                 <Btn label="Valider" textStyle={styles.btnLabel2} buttonStyle={styles.validation} onPress={() => {
-                                    storeImages()
-                                    setPhoto([])
-                                    // navigation.navigate("Gallery")
                                     // handleSubmit()
+                                    setVisibleInfos(true)
                                 }} />
 
                                 <Btn label="Annuler" textStyle={styles.btnLabel2} buttonStyle={styles.annulation} onPress={() => {

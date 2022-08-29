@@ -9,18 +9,21 @@ import { MainDrawerParamList } from "../navigation/MainDrawer"
 // import type { RouteProp } from "@react-navigation/native"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage"
 
 
 type SummaryProp = NativeStackScreenProps<MainDrawerParamList, "Summary">
 
 const Summary: React.FunctionComponent<SummaryProp> = ({ navigation, route }) => {
-    const [profil, setProfil] = useState<"expéditeur" | "transporteur" | "voyageur">("expéditeur")
     const { userEmail, userUID } = useContext(UserContext)
     const { email, userID } = route.params
+    const storage = new MMKVLoader().initialize()
+    const [mode, setMode] = useMMKVStorage<"expéditeur" | "transporteur" | "voyageur">("mode", storage, "expéditeur")
 
 
-    const getProfil = (profil: string) => {
-        switch (profil) {
+
+    const getMode = (mode: string) => {
+        switch (mode) {
             case "expéditeur":
                 return <Sender email={email ? email : userEmail} userID={userID ? userID : userUID} />
                 break
@@ -67,8 +70,8 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ navigation, route }) =>
                 <View style={styles.pickerBox}>
                     <Picker
                         dropdownIconColor="white"
-                        selectedValue={profil}
-                        onValueChange={(e) => setProfil(e)}>
+                        selectedValue={mode}
+                        onValueChange={(e) => setMode(e)}>
 
                         <Picker.Item style={{ color: "#f39c12" }} label="Mode expéditeur" value="expéditeur" />
                         <Picker.Item style={{ color: "#f39c12" }} label="Mode transporteur" value="transporteur" />
@@ -86,7 +89,7 @@ const Summary: React.FunctionComponent<SummaryProp> = ({ navigation, route }) =>
 
                 </View>
 
-                {getProfil(profil)}
+                {getMode(mode)}
 
                 {/* <View style={styles.footer}></View> */}
             </ScrollView>

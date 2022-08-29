@@ -1,23 +1,22 @@
-
 import React, { useState } from "react"
 import { StyleSheet, TextInput, View, Text, TouchableOpacity } from "react-native"
 import Moment from "moment"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import Icon from "react-native-vector-icons/Entypo"
 
-
 type Props = {
     label: string,
     date: string,
+    time: string,
     onChangeDate: (date: string) => void,
     error?: string,
 }
 
-const DatePicker = ({ label, date, onChangeDate, error }: Props) => {
+const TimePicker = ({ label, time, onChangeDate, error }: Props) => {
     const [show, setShow] = useState<boolean>(false)
-    const onSubmit = (date: Date) => {
+    const onSubmit = (time: Date) => {
         setShow(false)
-        onChangeDate(Moment(date).format("DD/MM/YYYY"))
+        onChangeDate(Moment(time).format("hh:mm a"))
     }
     return (
         <View style={styles.container}>
@@ -25,18 +24,18 @@ const DatePicker = ({ label, date, onChangeDate, error }: Props) => {
                 <Text style={styles.labelStyle}>{label}</Text>
             </View>
             <View style={styles.inputBox}>
-                <TextInput style={styles.input} value={date} editable={false} />
+                <TextInput style={styles.input} value={time} editable={false} />
                 <TouchableOpacity onPress={() => setShow(true)} style={styles.icon}>
-                    <Icon name="calendar" size={25} color="#2c3e50" />
+                    <Icon name="clock" size={25} color="#2c3e50" />
                 </TouchableOpacity>
             </View>
 
             {show && <DateTimePicker
-                mode="date"
+                mode="time"
                 value={new Date()}
-                onChange={(event, date) => {
-                    if (date != undefined) {
-                        onSubmit(date)
+                onChange={(event, time) => {
+                    if (time != undefined) {
+                        onSubmit(time)
                     }
                 }}
             // dateFormat="day month year"
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 20,
-        marginEnd: 5
+        marginStart: 5
     },
     inputBox: {
         flex: 1,
@@ -94,4 +93,5 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     }
 })
-export default DatePicker
+
+export default TimePicker

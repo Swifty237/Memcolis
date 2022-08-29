@@ -19,11 +19,12 @@ export type MainStackParamList = {
     HelpCenter: undefined
 }
 
-const storage = new MMKVLoader().initialize()
+
 
 const Main: React.FunctionComponent<MainStackParamList> = () => {
 
     console.log("-------------------------------------------------------------- Main ----------------------------------------------------------------")
+    const storage = new MMKVLoader().initialize()
 
     enum STACKCHOICE { SIGN_IN, LOGGED }
     const { Navigator, Screen, Group } = createNativeStackNavigator<MainStackParamList>()
@@ -31,11 +32,12 @@ const Main: React.FunctionComponent<MainStackParamList> = () => {
     const [userEmail, setUserEmail] = useMMKVStorage<string>("Email", storage, "")
     const [userPassword, setUserPassword] = useMMKVStorage<string>("Password", storage, "")
     const [userUID, setUserUID] = useMMKVStorage<string>("UID", storage, "")
+    const [databaseImagesList, setDatabaseImagesList] = useState<string[]>([])
 
     console.log("isLoggedIn: ", isLoggedIn)
 
     return (
-        <UserContext.Provider value={{ isLoggedIn, setIsLoggedIn, userEmail, setUserEmail, userPassword, setUserPassword, userUID, setUserUID }}>
+        <UserContext.Provider value={{ isLoggedIn, setIsLoggedIn, userEmail, setUserEmail, userPassword, setUserPassword, userUID, setUserUID, databaseImagesList, setDatabaseImagesList }}>
             <Navigator initialRouteName={isLoggedIn === STACKCHOICE.LOGGED ? "MainDrawer" : "Connection"}>
                 {isLoggedIn === STACKCHOICE.LOGGED ?
                     <Screen name="MainDrawer" component={MainDrawer} options={{ headerShown: false }} />

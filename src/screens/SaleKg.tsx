@@ -9,22 +9,43 @@ import NewSaleModal from "../components/NewSaleModal"
 import { NewSaleContext } from "../utils/UserContext"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
+import { Formik } from "formik"
+import auth from "@react-native-firebase/auth"
+import firestore from "@react-native-firebase/firestore"
+import Entypo from "react-native-vector-icons/Entypo"
+import { addTravelIdAndRef } from "../utils/Functions"
+import ModalInfos from "../components/ModalInfos"
 
 
 type SaleKgProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "SaleKg"> }
 
 const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
-    const [photosFromCamera, setPhotosFromCamera] = useState<ImageOrVideo>()
+    const [photo, setPhoto] = useState<ImageOrVideo | undefined>(undefined)
     const [visible, setVisible] = useState<boolean>(false)
     const [destination, setDestination] = useState<string>("")
     const [departureDate, setDepartureDate] = useState<string>("")
     const [arrivalDate, setArrivalDate] = useState<string>("")
+    const [departureTime, setDepartureTime] = useState<string>("")
+    const [arrivalTime, setArrivalTime] = useState<string>("")
     const [weight, setWeight] = useState<string>("")
+    const user = auth().currentUser
+    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
 
 
+    const takePhotoFromFolder = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 300,
+            cropping: true
+
+        }).then(image => {
+            console.log(image)
+            setPhoto(image)
+
+        }).catch(err => console.error(err))
+    }
 
     const takePhotoFromCamera = () => {
-
         ImagePicker.openCamera({
             width: 300,
             height: 300,
@@ -32,100 +53,183 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
 
         }).then(image => {
             console.log(image)
-            setPhotosFromCamera(image)
+            setPhoto(image)
 
         }).catch(err => console.error(err))
     }
 
     return (
-        <NewSaleContext.Provider value={{ visible, setVisible, destination, setDestination, departureDate, setDepartureDate, arrivalDate, setArrivalDate, weight, setWeight }}>
-            <SafeAreaView>
-                <ScrollView contentContainerStyle={styles.container}>
-                    <StatusBar backgroundColor="#2c3e50" />
+        <NewSaleContext.Provider value={{
+            visible,
+            setVisible,
+            destination,
+            setDestination,
+            departureDate,
+            setDepartureDate,
+            departureTime,
+            setDepartureTime,
+            arrivalDate,
+            setArrivalDate,
+            arrivalTime,
+            setArrivalTime,
+            weight,
+            setWeight
+        }}>
+            <Formik
+                enableReinitialize={true}
+                initialValues={{
+                    id: "",
+                    traveler: "",
+                    destination: "",
+                    departureDate: "",
+                    departureTime: "",
+                    arrivalDate: "",
+                    arrivalTime: "",
+                    availableWeight: "",
+                    dateOfProposition: "",
+                    imgPlaneTicket: ""
+                }}
+                onSubmit={(values, { resetForm }) => {
+                    console.log("=> Enter onSubmit (SaleKg)")
 
-                    <TouchableOpacity style={styles.annulation} onPress={navigation.goBack}>
-                        <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
-                        <Text style={styles.btnLabel2}>Accueil</Text>
-                    </TouchableOpacity>
+                    firestore()
+                        .collection("travel")
+                        .add({
+                            id: "",
+                            traveler: user?.uid,
+                            destination: destination,
+                            departureDate: departureDate,
+                            departureTime: departureTime,
+                            arrivalDate: arrivalDate,
+                            arrivalTime: arrivalTime,
+                            availableWeight: weight,
+                            dateOfProposition: Date(),
+                            planeTicket: ""
+                        })
 
-                    {destination != "" || departureDate != "" || weight != "" || arrivalDate ?
-                        <Btn
-                            label="Modifier"
-                            textStyle={styles.btnLabel2}
-                            buttonStyle={styles.modifButton}
-                            onPress={() => {
+                    addTravelIdAndRef(photo)
+                    resetForm()
+                    setDestination("")
+                    setDepartureDate("")
+                    setDepartureTime("")
+                    setArrivalDate("")
+                    setArrivalTime("")
+                    setWeight("")
+                    setPhoto(undefined)
+
+                    console.log("=> Exit onSubmit (SaleKg)")
+                }}>
+
+                {({ handleSubmit, errors }) => (
+
+                    <SafeAreaView>
+                        <ScrollView contentContainerStyle={styles.container}>
+                            <StatusBar backgroundColor="#2c3e50" />
+                            <ModalInfos
+                                visibleInfos={visibleInfos}
+                                status="Proposition de vente bien enregistrée"
+                                infos="Pour trouvez un expéditeur, allez dans 'demandes d'expéditions'"
+                                getVisibleInfos={(param) => setVisibleInfos(param)}
+                            />
+
+                            <TouchableOpacity style={styles.annulation} onPress={navigation.goBack}>
+                                <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
+                                <Text style={styles.btnLabel2}>Accueil</Text>
+                            </TouchableOpacity>
+
+                            {destination != "" || departureDate != "" || weight != "" || arrivalDate || departureTime != "" || arrivalTime != "" ?
+                                <Btn
+                                    label="Modifier"
+                                    textStyle={styles.btnLabel2}
+                                    buttonStyle={styles.modifButton}
+                                    onPress={() => {
+                                        setVisible(true)
+                                    }} />
+                                :
+                                null
+                            }
+
+                            <TouchableOpacity style={styles.sendButton} onPress={() => {
+                                setDestination("")
+                                setDepartureDate("")
+                                setArrivalDate("")
+                                setWeight("")
                                 setVisible(true)
-                            }} />
-                        :
-                        null
-                    }
+                                setDepartureTime("")
+                                setArrivalTime("")
+                                setPhoto(undefined)
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={20} color="#2c3e50" />
+                                <Text style={styles.btnLabel}>Poster un annonce</Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.sendButton} onPress={() => {
-                        setDestination("")
-                        setDepartureDate("")
-                        setArrivalDate("")
-                        setWeight("")
-                        setVisible(true)
-                    }}>
-                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={20} color="#2c3e50" />
-                        <Text style={styles.btnLabel}>Poster un annonce</Text>
-                    </TouchableOpacity>
+                            <NewSaleModal />
 
-                    <NewSaleModal />
-
-                    <View style={styles.separator}>
-                        <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
-                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
-                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
-                        </View>
+                            <View style={styles.separator}>
+                                <View style={{ flexDirection: "row", width: "90%", marginTop: 25 }}>
+                                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Destination: </Text>
+                                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{destination}</Text>
+                                </View>
 
 
-                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Date/heure de départ: </Text>
-                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{departureDate}</Text>
-                            {/* <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Nom et prénom)</Text> */}
-                        </View>
+                                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Départ: </Text>
+                                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{departureDate} - {departureTime}</Text>
+                                    {/* <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Nom et prénom)</Text> */}
+                                </View>
 
-                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Date/heure d'arrivée: </Text>
-                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{arrivalDate}</Text>
-                        </View>
+                                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Arrivée: </Text>
+                                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{arrivalDate} - {arrivalTime}</Text>
+                                </View>
 
-                        <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
-                            <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Nombre de kg à vendre: </Text>
-                            <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
-                        </View>
+                                <View style={{ flexDirection: "row", width: "90%", marginTop: 15 }}>
+                                    <Text style={{ color: "black", fontWeight: "bold", paddingStart: 20, textAlignVertical: "center" }}>Nombre de kg à vendre: </Text>
+                                    <Text style={{ color: "black", marginLeft: 25, fontSize: 17, textAlignVertical: "center" }}>{weight} kg</Text>
+                                </View>
 
-                        <View style={{ marginBottom: 7, width: "90%" }}>
-                            <Text style={styles.destination}>Image billet: </Text>
-                            {/* <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Minimum 1 images par billet)</Text> */}
-                        </View>
+                                <View style={{ marginBottom: 7, width: "90%" }}>
+                                    <Text style={styles.destination}>Image billet: </Text>
+                                    {/* <Text style={{ color: "grey", fontSize: 11, fontStyle: "italic", paddingStart: 20 }}>(* Minimum 1 images par billet)</Text> */}
+                                </View>
 
-                        <View style={styles.photoBox}>
-                            <View>
-                                <Image source={{ uri: photosFromCamera?.path }} style={photosFromCamera != undefined ? styles.photo : styles.noPhoto} />
+                                <View style={styles.photoBox}>
+                                    <View>
+                                        <Image source={{ uri: photo?.path }} style={photo != undefined ? styles.photo : styles.noPhoto} />
+                                    </View>
+                                </View>
+
+                                <View style={{ width: "80%", flexDirection: "row", justifyContent: "space-around" }}>
+                                    <TouchableOpacity style={styles.button2} onPress={() => takePhotoFromFolder()}>
+                                        <Entypo name="download" size={22} color="#2c3e50" />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={styles.button2} onPress={() => takePhotoFromCamera()}>
+                                        <Icon name="photo-camera" size={22} color="#2c3e50" />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
 
-                        <TouchableOpacity style={styles.button} onPress={() => takePhotoFromCamera()}>
-                            <Icon style={{ marginEnd: 10 }} name="photo-camera" size={20} color="#2c3e50" />
-                            <Text style={styles.btnLabel}>Prendre une photo</Text>
-                        </TouchableOpacity>
-                    </View>
+                            <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
+                                <Btn label="Valider" textStyle={styles.btnLabel2} buttonStyle={styles.validation} onPress={() => {
+                                    // handleSubmit()
+                                    setVisibleInfos(true)
+                                }} />
 
-                    <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
-                        <Btn label="Valider" textStyle={styles.btnLabel2} buttonStyle={styles.validation} onPress={() => { }} />
-
-                        <Btn label="Annuler" textStyle={styles.btnLabel2} buttonStyle={styles.annulation} onPress={() => {
-                            setDestination("")
-                            setDepartureDate("")
-                            setArrivalDate("")
-                            setWeight("")
-                            setPhotosFromCamera(undefined)
-                        }} />
-                    </View>
-                </ScrollView>
-            </SafeAreaView>
+                                <Btn label="Annuler" textStyle={styles.btnLabel2} buttonStyle={styles.annulation} onPress={() => {
+                                    setDestination("")
+                                    setDepartureDate("")
+                                    setArrivalDate("")
+                                    setWeight("")
+                                    setDepartureTime("")
+                                    setArrivalTime("")
+                                    setPhoto(undefined)
+                                }} />
+                            </View>
+                        </ScrollView>
+                    </SafeAreaView>
+                )}
+            </Formik>
         </NewSaleContext.Provider>
     )
 }
@@ -160,6 +264,16 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         flexDirection: "row",
         justifyContent: "center"
+    },
+
+    button2: {
+        backgroundColor: "#f39c12",
+        marginVertical: 25,
+        width: 110,
+        height: 40,
+        borderRadius: 30,
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     sendButton: {

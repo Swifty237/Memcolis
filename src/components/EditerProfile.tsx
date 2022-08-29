@@ -1,17 +1,18 @@
 import React, { useContext, useState } from "react"
 import { StyleSheet, Text, View, SafeAreaView } from "react-native"
-import { EditerContext } from "../utils/UserContext"
+import { EditerContext, UserContext } from "../utils/UserContext"
 import Btn from "./Btn"
 import Input from "./Input"
 import DatePicker from "./DatePicker"
 import { Formik } from "formik"
-import { addDocumentId } from "../utils/Functions"
 import firestore from "@react-native-firebase/firestore"
+import auth from "@react-native-firebase/auth"
 
 
 
 const EditerProfile = () => {
 
+    const user = auth().currentUser
     const { setEditProfile } = useContext(EditerContext)
     const [firstname, setFirstname] = useState<string>("")
     const [name, setName] = useState<string>("")
@@ -21,6 +22,7 @@ const EditerProfile = () => {
     const [city, setCity] = useState<string>("")
     const [tel, setTel] = useState<string>("")
 
+
     return (
         <Formik
             enableReinitialize={true}
@@ -29,9 +31,9 @@ const EditerProfile = () => {
                 console.log("=> onSubmit (EditerProfile)")
 
                 firestore()
-                    .collection("users")
+                    .collection("user")
                     .add({
-                        id: "", // Vide à la création
+                        id: user?.uid, // Vide à la création
                         firstname: firstname,
                         name: name,
                         birthdate: birthdate,
@@ -39,12 +41,11 @@ const EditerProfile = () => {
                         postalCode: postalCode,
                         city: city,
                         tel: tel,
-                        subscriptionDate: "",
+                        subscriptionDate: user?.metadata.creationTime,
                         sender: false,
                         transporter: false,
                         traveler: false
                     })
-                addDocumentId() // Permet de remplir le champ id vide
                 resetForm() // Permet de vider le formulaire après la soumission
 
                 console.log("=> exit onSubmit (EditerProfile)")

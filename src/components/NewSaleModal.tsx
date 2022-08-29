@@ -5,9 +5,24 @@ import Btn from "./Btn"
 import { Picker } from "@react-native-picker/picker"
 import { NewSaleContext } from "../utils/UserContext"
 import DatePicker from "./DatePicker"
+import TimePicker from "./TimePicker"
 
 const NewSaleModal: React.FunctionComponent = () => {
-    const { visible, setVisible, destination, setDestination, departureDate, setDepartureDate, arrivalDate, setArrivalDate, weight, setWeight } = useContext(NewSaleContext)
+    const {
+        visible,
+        setVisible,
+        destination,
+        setDestination,
+        departureDate,
+        setDepartureDate,
+        departureTime,
+        setDepartureTime,
+        arrivalDate,
+        setArrivalDate,
+        arrivalTime,
+        setArrivalTime,
+        weight,
+        setWeight } = useContext(NewSaleContext)
 
     return (
         <SafeAreaView>
@@ -27,14 +42,20 @@ const NewSaleModal: React.FunctionComponent = () => {
                     </Picker>
                 </View>
 
-                <ScrollView contentContainerStyle={{ height: 320, width: "100%", paddingHorizontal: 15 }}>
+                <ScrollView contentContainerStyle={{ width: "95%", alignSelf: "center" }}>
 
-                    <DatePicker label="Date/heure départ" date={departureDate} onChangeDate={(date) => setDepartureDate(date)} error="" />
+                    <View style={{ flexDirection: "row" }}>
+                        <DatePicker label="Date/heure départ" date={departureDate} onChangeDate={(date) => setDepartureDate(date)} error="" />
+                        <TimePicker label="" date={departureDate} time={departureTime} onChangeDate={(time) => setDepartureTime(time)} error="" />
+                    </View>
 
-                    <DatePicker label="Date/heure arrivée" date={arrivalDate} onChangeDate={(date) => setArrivalDate(date)} error="" />
+                    <View style={{ flexDirection: "row" }}>
+                        <DatePicker label="Date/heure arrivée" date={arrivalDate} onChangeDate={(date) => setArrivalDate(date)} error="" />
+                        <TimePicker label="" date={arrivalDate} time={arrivalTime} onChangeDate={(time) => setArrivalTime(time)} error="" />
+                    </View>
 
                     <Input
-                        label="Numbre de kg à vendre"
+                        label="Nombre de kg à vendre"
                         placeholder="Entrer le poids à vendre ici !"
                         value={weight}
                         onChangeText={(text) => setWeight(text)}

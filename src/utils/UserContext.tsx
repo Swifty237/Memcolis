@@ -12,6 +12,8 @@ export type contextType = {
     setUserPassword: (param: string) => void
     userUID: string
     setUserUID: (param: string) => void
+    databaseImagesList: string[]
+    setDatabaseImagesList: (param: string[]) => void
 }
 
 export const UserContext = createContext<contextType>({
@@ -22,7 +24,9 @@ export const UserContext = createContext<contextType>({
     userPassword: "",
     setUserPassword: () => { },
     userUID: "",
-    setUserUID: () => { }
+    setUserUID: () => { },
+    databaseImagesList: [],
+    setDatabaseImagesList: () => { }
 })
 
 
@@ -77,6 +81,10 @@ export type NewSaleContextType = {
     setDepartureDate: (param: string) => void
     arrivalDate: string
     setArrivalDate: (param: string) => void
+    departureTime: string
+    setDepartureTime: (param: string) => void
+    arrivalTime: string
+    setArrivalTime: (param: string) => void
     weight: string
     setWeight: (param: string) => void
 }
@@ -90,6 +98,10 @@ export const NewSaleContext = createContext<NewSaleContextType>({
     setDepartureDate: () => { },
     arrivalDate: "",
     setArrivalDate: () => { },
+    departureTime: "",
+    setDepartureTime: () => { },
+    arrivalTime: "",
+    setArrivalTime: () => { },
     weight: "",
     setWeight: () => { }
 })

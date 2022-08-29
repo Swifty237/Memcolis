@@ -5,6 +5,7 @@ import auth from "@react-native-firebase/auth"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
+import { UserContext } from "../utils/UserContext"
 
 
 
@@ -14,20 +15,28 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
     const user = auth().currentUser
     const imagesListRef = storage().ref("images" + "_" + user?.uid + "/")
     const [databaseList, setDatabaseList] = useState<string[]>([])
+    const { databaseImagesList } = useContext(UserContext)
+
+    console.log(databaseList)
 
     useEffect(() => {
 
         imagesListRef.list()
-            .then(imagesList => {
-
-                imagesList.items.forEach((image) => {
-                    storage()
-                        .ref(image.fullPath)
-                        .getDownloadURL()
-                        .then(snap => {
-                            if (databaseList.indexOf(snap) == -1) {
-                                setDatabaseList(prev => [...prev, snap])
-                            }
+            .then(foldersList => {
+                foldersList.prefixes.forEach(folder => {
+                    folder.list()
+                        .then(imagesList => {
+                            imagesList.items.forEach(image => {
+                                storage()
+                                    .ref(image.fullPath)
+                                    .getDownloadURL()
+                                    .then(snap => {
+                                        if (databaseList.indexOf(snap) == -1) {
+                                            setDatabaseList(prev => [...prev, snap])
+                                        }
+                                    })
+                                    .catch(err => console.error(err))
+                            })
                         })
                         .catch(err => console.error(err))
                 })
@@ -35,6 +44,7 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
             .catch(err => console.error(err))
     }, [])
 
+    console.log(databaseList)
 
     const renderItem = ({ item }: { item: string }) => {
 
@@ -57,7 +67,7 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
             </TouchableOpacity>
 
             <FlatList
-                data={databaseList}
+                data={databaseImagesList.length > 0 ? databaseImagesList : databaseList}
                 numColumns={3}
                 initialNumToRender={20}
                 renderItem={renderItem}

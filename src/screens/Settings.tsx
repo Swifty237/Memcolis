@@ -101,7 +101,6 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                     items.push(snapshot.data() as UserType)
                 })
                 setUserData(items)
-                // refresh ? setRefresh(false) : null
 
             }).catch(error => console.log(error))
 
