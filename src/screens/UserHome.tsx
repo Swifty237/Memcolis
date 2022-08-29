@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar, TouchableOpacity } from "react-native"
 import type { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
@@ -9,6 +9,10 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 import { EditerContext } from "../utils/UserContext"
+import firestore from "@react-native-firebase/firestore"
+import auth from "@react-native-firebase/auth"
+import ModalInfos from "../components/ModalInfos"
+import Moment from "moment"
 
 
 
@@ -16,10 +20,52 @@ type UserHomeProps = NativeStackScreenProps<MainDrawerParamList, "UserHome">
 
 const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route }) => {
     const { email, userID } = route.params
+    const [complete, setComplete] = useState<boolean>(false)
+    const user = auth().currentUser
+    const [visible, setVisible] = useState<boolean>(false)
+    const [firstname, setFirstname] = useState<string>("")
+    const [dateSubscription, setDateSubscription] = useState<string>("")
+    const [birthdate, setBirthdate] = useState<string>("")
+    const [tel, setTel] = useState<string>("")
+    const [adress, setAdress] = useState<string>("")
+
+
+    useEffect(() => {
+        console.log("in getProfile")
+
+        firestore()
+            .collection("user")
+            .doc(user?.uid)
+            .get()
+            .then(snapShot => {
+
+                if (snapShot.exists && snapShot.data()?.completeProfile == true) {
+                    setComplete(true)
+                    setFirstname(snapShot.data()?.firstname)
+                    setDateSubscription(snapShot.data()?.subscriptionDate)
+                    setBirthdate(snapShot.data()?.birthdate)
+                    setTel(snapShot.data()?.tel)
+                    setAdress(snapShot.data()?.adress)
+                }
+
+                else {
+                    setComplete(false)
+                }
+            })
+            .catch(err => console.error(err))
+        console.log("out getProfile")
+    }, [])
+
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
+            <ModalInfos
+                visibleInfos={visible}
+                status="Profile incomplet"
+                infos="Vous devez completer votre profil avant de devenir expéditeur"
+                getVisibleInfos={(param) => setVisible(param)}
+            />
 
             <ScrollView>
                 <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
@@ -31,8 +77,8 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                     <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
 
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                        <Text style={styles.userName}>The username here !</Text>
-                        <Text style={styles.dateSubscription}>Inscris depuis le...</Text>
+                        <Text style={styles.userName}>{firstname != "" ? firstname : email}</Text>
+                        <Text style={styles.dateSubscription}>{Moment(dateSubscription).format("DD/MM/YYYY")}</Text>
 
                         <View style={{ flexDirection: "row", justifyContent: "space-around", width: "80%", marginTop: 10 }}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -54,15 +100,15 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                 <View style={styles.infosBox}>
                     <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <FontAwesome style={{ marginEnd: 10 }} name="birthday-cake" size={18} color="#2c3e50" />
-                        <Text style={styles.text3}>Birthdate here !</Text>
+                        <Text style={styles.text3}>{birthdate}</Text>
                     </View>
                     <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <Entypo style={{ marginEnd: 10 }} name="location" size={18} color="#2c3e50" />
-                        <Text style={styles.text3}>Adresse here !</Text>
+                        <Text style={styles.text3}>{adress}</Text>
                     </View>
                     <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="phone" size={18} color="#2c3e50" />
-                        <Text style={styles.text3}>Phone here !</Text>
+                        <Text style={styles.text3}>{tel}</Text>
                     </View>
 
                     <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
@@ -80,7 +126,12 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
 
                 <View style={styles.logoTxtBox}>
                     <TouchableOpacity style={styles.exportButton} onPress={() => {
-                        navigation.navigate("Settings", { idCard: true, bankCard: true })
+                        if (complete) {
+                            navigation.navigate("Settings", { idCard: true, bankCard: true })
+                        }
+                        else {
+                            setVisible(true)
+                        }
                     }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
                         <Text style={styles.btnLabel2}>Devenir expéditeur</Text>

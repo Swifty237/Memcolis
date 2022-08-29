@@ -26,13 +26,14 @@ const EditerProfile = () => {
     return (
         <Formik
             enableReinitialize={true}
-            initialValues={{ firstname: "", name: "", birthdate: "", adress: "", postalCode: "", city: "", tel: "", sender: false, transporter: false, traveler: false }}
+            initialValues={{ firstname: "", name: "", birthdate: "", adress: "", postalCode: "", city: "", completeProfile: null, tel: "", idCard: "", bankCard: "", rib: "" }}
             onSubmit={(values, { resetForm }) => {
                 console.log("=> onSubmit (EditerProfile)")
 
                 firestore()
                     .collection("user")
-                    .add({
+                    .doc(user?.uid)
+                    .set({
                         id: user?.uid, // Vide à la création
                         firstname: firstname,
                         name: name,
@@ -42,10 +43,12 @@ const EditerProfile = () => {
                         city: city,
                         tel: tel,
                         subscriptionDate: user?.metadata.creationTime,
-                        sender: false,
-                        transporter: false,
-                        traveler: false
+                        completeProfile: firstname != "" && name != "" && birthdate != "" && adress != "" && postalCode != "" && city != "" && tel != "" ? true : false,
+                        idCard: "",
+                        bankCard: "",
+                        rib: ""
                     })
+
                 resetForm() // Permet de vider le formulaire après la soumission
 
                 console.log("=> exit onSubmit (EditerProfile)")

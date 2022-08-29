@@ -5,6 +5,7 @@ import auth from "@react-native-firebase/auth"
 import storage from "@react-native-firebase/storage"
 import uuid from "react-native-uuid"
 import { ImageOrVideo } from "react-native-image-crop-picker"
+import { boolean } from "yup/lib/locale"
 
 
 
@@ -15,21 +16,21 @@ export const addDocumentId = (): void => {
     console.log("addDocumentId (UserHome function)")
 
     firestore()
-        .collection("users")
+        .collection("user")
         .get()
         .then(querySnapshot => {
             querySnapshot.forEach((snapshot) => {
 
                 if (snapshot.exists) {
                     firestore()
-                        .collection("users")
+                        .collection("user")
                         .doc(snapshot.id)
                         .onSnapshot((documentSnapshot) => {
 
                             if (documentSnapshot.exists && documentSnapshot.data()?.id == "") {
 
                                 firestore()
-                                    .collection("users")
+                                    .collection("user")
                                     .doc(snapshot.id)
                                     .update({ id: snapshot.id })
                                     .then(() => {

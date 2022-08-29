@@ -6,13 +6,19 @@ import Input from "./Input"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import Entypo from "react-native-vector-icons/Entypo"
+import { CreditCardInput } from "react-native-credit-card-input"
 
 const EditerBankCard = () => {
     const { setEditBankCard } = useContext(EditerContext)
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.text}>EditerBankCard component</Text>
+            <CreditCardInput
+                autoFocus
+                requireName
+                requirePostalcode
+                labelStyle={{ color: "black" }}
+                onChange={() => { }} />
             <View style={styles.buttonsBox}>
                 <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditBankCard(false)} />
                 <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditBankCard(false)} />
@@ -26,7 +32,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: "95%"
-
     },
 
     text: {
