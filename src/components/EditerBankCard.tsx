@@ -7,23 +7,56 @@ import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import Entypo from "react-native-vector-icons/Entypo"
 import { CreditCardInput } from "react-native-credit-card-input"
+import { Formik } from "formik"
+import firestore from "@react-native-firebase/firestore"
+import auth from "@react-native-firebase/auth"
 
 const EditerBankCard = () => {
     const { setEditBankCard } = useContext(EditerContext)
+    const [bankCardInfos, setBankCardInfos] = useState<object>()
+    const user = auth().currentUser
+
 
     return (
-        <SafeAreaView style={styles.container}>
-            <CreditCardInput
-                autoFocus
-                requireName
-                requirePostalcode
-                labelStyle={{ color: "black" }}
-                onChange={() => { }} />
-            <View style={styles.buttonsBox}>
-                <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditBankCard(false)} />
-                <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditBankCard(false)} />
-            </View>
-        </SafeAreaView>
+        <Formik
+            enableReinitialize={true}
+            initialValues={{}}
+            onSubmit={(values, { resetForm }) => {
+                console.log("=> onSubmit (EditerBankCard)")
+
+                firestore()
+                    .collection("user")
+                    .doc(user?.uid)
+                    .update({ bankCard: bankCardInfos })
+
+                resetForm() // Permet de vider le formulaire après la soumission
+
+                console.log("=> exit onSubmit (EditerBankCard)")
+            }}>
+
+            {({ handleSubmit, errors }) => (
+
+                <SafeAreaView style={styles.container}>
+                    <View style={{ flex: 1 }}>
+                        <CreditCardInput
+                            inputContainerStyle={{ backgroundColor: "white", borderRadius: 5 }}
+                            requiresName
+                            autoFocus
+                            labelStyle={{ color: "black" }}
+                            placeholderColor="gray"
+                            onChange={(param: object) => setBankCardInfos(param)} />
+                    </View>
+
+                    <View style={styles.buttonsBox}>
+                        <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => {
+                            handleSubmit()
+                            setEditBankCard(false)
+                        }} />
+                        <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditBankCard(false)} />
+                    </View>
+                </SafeAreaView>
+            )}
+        </Formik>
     )
 }
 
@@ -31,7 +64,8 @@ const EditerBankCard = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: "95%"
+        width: "95%",
+        alignItems: "center"
     },
 
     text: {

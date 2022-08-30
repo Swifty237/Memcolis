@@ -185,8 +185,7 @@ const styles = StyleSheet.create({
     },
 
     btnContainer: {
-        alignItems: "center",
-        justifyContent: "center"
+        alignItems: "center"
     },
 
     infosContainer: {
@@ -212,7 +211,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         flexDirection: "row",
         justifyContent: "space-around",
-        marginVertical: 15,
+        marginVertical: 10,
         borderWidth: 2,
         borderColor: "#f39c12",
         alignItems: "center"
