@@ -38,7 +38,10 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     const [databaseList, setDatabaseList] = useState<string[]>([])
     const { databaseImagesList, setDatabaseImagesList } = useContext(UserContext)
     const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
-    const [infos, setInfos] = useState<string>("En attente d'un voyageur et d'un transporteur")
+    const [status, setStatus] = useState<string>("")
+    const [infos, setInfos] = useState<string>("")
+    const [test, setTest] = useState<boolean>(false)
+    const validSender = "Vous devez valider le mode expéditeur pour pouvoir effectuer un envoi de colis"
 
 
 
@@ -69,6 +72,33 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     }
     // console.log("photosFromCamera", photosFromCamera)
 
+    const testStatus = () => {
+        console.log("Enter TestStatus")
+
+        firestore()
+            .collection("user")
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach((snapshot) => {
+                    if (snapshot.id == user?.uid) {
+                        firestore()
+                            .collection("user")
+                            .doc(snapshot.id)
+                            .onSnapshot(documentSnapshot => {
+                                if (documentSnapshot.exists && documentSnapshot.data()?.completeProfile && documentSnapshot.data()?.idCard != "" && documentSnapshot.data()?.bankCard.valid) {
+                                    setTest(true)
+                                }
+                            })
+                    }
+                })
+
+                console.log("3")
+            })
+
+        console.log("=> Exit testStatus")
+    }
+
+    testStatus()
 
 
     const renderItem = ({ item }: { item: ImageOrVideo }) => {
@@ -140,6 +170,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             })
                         addColisIdAndRef(photo) // permet d'ajouter l'id, la ref vers les images du colis et d'enregistrer les images du colis 
                         resetForm() // Permet de vider le formulaire après la soumission
+                        setStatus("Demande d'envoi enregistrée")
                         setInfos("En attente d'un voyageur et d'un transporteur")
                         setDestination("")
                         setDestinataire("")
@@ -168,6 +199,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             })
                         addColisIdAndRef(photo)
                         resetForm()
+                        setStatus("Demande d'envoi enregistrée")
                         setInfos("En attente d'un voyageur")
                         setDestination("")
                         setDestinataire("")
@@ -198,6 +230,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
                         addColisIdAndRef(photo)
                         resetForm()
+                        setStatus("Demande d'envoi enregistrée")
                         setInfos("En attente d'un transporteur")
                         setDestination("")
                         setDestinataire("")
@@ -226,7 +259,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             <StatusBar backgroundColor="#2c3e50" />
                             <ModalInfos
                                 visibleInfos={visibleInfos}
-                                status="Demande d'envoie enregistrée"
+                                status={status}
                                 infos={infos}
                                 getVisibleInfos={(param) => setVisibleInfos(param)}
                             />
@@ -245,13 +278,21 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             }
 
                             <TouchableOpacity style={styles.sendButton} onPress={() => {
-                                setDestination("")
-                                setDestinataire("")
-                                setAdress("")
-                                setTel("")
-                                setNumberArticle("")
-                                setWeight("")
-                                setVisible(true)
+                                if (test) {
+                                    setDestination("")
+                                    setDestinataire("")
+                                    setAdress("")
+                                    setTel("")
+                                    setNumberArticle("")
+                                    setWeight("")
+                                    setVisible(true)
+                                }
+
+                                else {
+                                    setStatus("")
+                                    setInfos(validSender)
+                                    setVisibleInfos(true)
+                                }
                             }}>
                                 <MaterialCommunityIcons style={{ marginEnd: 10 }} name="send" size={20} color="#2c3e50" />
                                 <Text style={styles.btnLabel}>Nouvel envoi</Text>
@@ -320,11 +361,29 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                     />
                                 </View>
                                 <View style={{ width: "80%", flexDirection: "row", justifyContent: "space-around" }}>
-                                    <TouchableOpacity style={styles.button} onPress={() => takePhotoFromFolder()}>
+                                    <TouchableOpacity style={styles.button} onPress={() => {
+                                        if (test) {
+                                            takePhotoFromFolder()
+                                        }
+                                        else {
+                                            setStatus("")
+                                            setInfos(validSender)
+                                            setVisibleInfos(true)
+                                        }
+                                    }}>
                                         <Entypo name="download" size={22} color="#2c3e50" />
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity style={styles.button} onPress={() => takePhotoFromCamera()}>
+                                    <TouchableOpacity style={styles.button} onPress={() => {
+                                        if (test) {
+                                            takePhotoFromCamera()
+                                        }
+                                        else {
+                                            setStatus("")
+                                            setInfos(validSender)
+                                            setVisibleInfos(true)
+                                        }
+                                    }}>
                                         <Icon name="photo-camera" size={22} color="#2c3e50" />
                                     </TouchableOpacity>
                                 </View>

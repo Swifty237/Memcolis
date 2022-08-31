@@ -13,6 +13,7 @@ import { DrawerContext, EditerContext } from "../utils/UserContext"
 import auth from "@react-native-firebase/auth"
 import firestore from "@react-native-firebase/firestore"
 import EditerBankCard from "../components/EditerBankCard"
+// import { testStatus } from "../utils/Functions"
 
 
 
@@ -35,13 +36,12 @@ export type userType = {
 
 const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) => {
 
-    const { profile, idCard, proofOfAdress, rib, bankCard } = useContext(DrawerContext)
+    const { profile, setProfile, idCard, setIdCard, proofOfAdress, setProofOfAdress, rib, setRib, bankCard, setBankCard } = useContext(DrawerContext)
     const [editProfile, setEditProfile] = useState<boolean>(false)
     const [editIdCard, setEditIdCard] = useState<boolean>(false)
     const [editProofOfAdress, setEditProofOfAdress] = useState<boolean>(false)
     const [editBankCard, setEditBankCard] = useState<boolean>(false)
     const [editRib, setEditRib] = useState<boolean>(false)
-    const [complete, setComplete] = useState<boolean>(false)
     const user = auth().currentUser
     const [userData, setUserData] = useState<userType[]>([])
 
@@ -106,23 +106,36 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#2c3e50" />
 
-                <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("UserHome")}>
+                <TouchableOpacity style={styles.backButton} onPress={() => {
+                    profile && setProfile(!profile)
+                    idCard && setIdCard(!idCard)
+                    bankCard && setBankCard(!bankCard)
+                    proofOfAdress && setProofOfAdress(!proofOfAdress)
+                    rib && setRib(!rib)
+                    navigation.navigate("UserHome")
+                }}>
                     <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
-                    <Text style={styles.btnLabel2}>Profil</Text>
+                    <Text style={styles.dropButtonLabel}>Profil</Text>
                 </TouchableOpacity>
 
                 <ScrollView>
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setEditProfile(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Informations profil</Text>
+                        <TouchableOpacity style={styles.dropDownButton} onPress={() => {
+                            profile && setProfile(!profile)
+                            setEditProfile(prev => !prev)
+                        }}>
+                            <Text style={styles.dropButtonLabel}>Informations profil</Text>
                             <SimpleLineIcons name={editProfile ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editProfile && <EditerProfile />}
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setEditIdCard(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Pièce d'identité</Text>
+                        <TouchableOpacity style={styles.dropDownButton} onPress={() => {
+                            idCard && setIdCard(!idCard)
+                            setEditIdCard(prev => !prev)
+                        }}>
+                            <Text style={styles.dropButtonLabel}>Pièce d'identité</Text>
                             <SimpleLineIcons name={editIdCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editIdCard && <EditerIdCard />}
@@ -130,24 +143,33 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setEditBankCard(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Carte bancaire</Text>
+                        <TouchableOpacity style={styles.dropDownButton} onPress={() => {
+                            bankCard && setBankCard(!bankCard)
+                            setEditBankCard(prev => !prev)
+                        }}>
+                            <Text style={styles.dropButtonLabel}>Carte bancaire</Text>
                             <SimpleLineIcons name={editBankCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editBankCard && <EditerBankCard />}
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setEditProofOfAdress(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Justificatif de domicile</Text>
+                        <TouchableOpacity style={styles.dropDownButton} onPress={() => {
+                            proofOfAdress && setProofOfAdress(!proofOfAdress)
+                            setEditProofOfAdress(prev => !prev)
+                        }}>
+                            <Text style={styles.dropButtonLabel}>Justificatif de domicile</Text>
                             <SimpleLineIcons name={editProofOfAdress ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editProofOfAdress && <EditerProofOfAdress />}
                     </View>
 
                     <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.annulation} onPress={() => setEditRib(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Rib</Text>
+                        <TouchableOpacity style={styles.dropDownButton} onPress={() => {
+                            rib && setRib(!rib)
+                            setEditRib(prev => !prev)
+                        }}>
+                            <Text style={styles.dropButtonLabel}>Rib</Text>
                             <SimpleLineIcons name={editRib ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editRib && <EditerRib />}
@@ -187,7 +209,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
 
-    annulation: {
+    dropDownButton: {
         backgroundColor: "#2c3e50",
         width: 350,
         height: 50,
@@ -200,7 +222,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
 
-    btnLabel2: {
+    dropButtonLabel: {
         color: "#f39c12",
         textAlign: "center"
     },

@@ -14,7 +14,7 @@ const EditerProfile = () => {
 
     const user = auth().currentUser
     const { setEditProfile } = useContext(EditerContext)
-    const { setProfile } = useContext(DrawerContext)
+    const { profile, setProfile } = useContext(DrawerContext)
     const [firstname, setFirstname] = useState<string>("")
     const [name, setName] = useState<string>("")
     const [birthdate, setBirthdate] = useState<string>("")
@@ -75,9 +75,9 @@ const EditerProfile = () => {
                         tel: tel,
                         subscriptionDate: user?.metadata.creationTime,
                         completeProfile: firstname != "" && name != "" && birthdate != "" && adress != "" && postalCode != "" && city != "" && tel != "" ? true : false,
+                        bankCard: cardEmpty,
                         proofOfAdress: "",
                         idCard: "",
-                        bankCard: cardEmpty,
                         rib: ""
                     })
 
@@ -105,7 +105,7 @@ const EditerProfile = () => {
                         onBlur={() => { }}
                         error={errors.name} />
 
-                    <DatePicker label="Date de naissance" date={birthdate} onChangeDate={(date) => setBirthdate(date)} error="" />
+                    <DatePicker label="Date de naissance" date={birthdate} onChangeDate={(date) => setBirthdate(date)} error={errors.birthdate} />
 
                     <Input
                         label="Adresse"
@@ -150,9 +150,11 @@ const EditerProfile = () => {
                     <View style={styles.buttonsBox}>
                         <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => {
                             handleSubmit()
+                            setProfile(false)
                             setEditProfile(false)
                         }} />
                         <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => {
+                            setProfile(!profile)
                             setEditProfile(false)
                         }} />
                     </View>

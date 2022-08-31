@@ -30,6 +30,12 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
     const [weight, setWeight] = useState<string>("")
     const user = auth().currentUser
     const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
+    const [test, setTest] = useState<boolean>(false)
+    const [status, setStatus] = useState<string>("")
+    const [infos, setInfos] = useState<string>("")
+    const validTravelerFolder = "Vous devez valider le mode voyageur pour télécharger"
+    const validTravelerCamera = "Vous devez valider le mode voyageur pour prendre une photo"
+    const validTravelerPost = "Pour trouvez un expéditeur, allez dans 'demandes d'expéditions'"
 
 
     const takePhotoFromFolder = () => {
@@ -57,6 +63,34 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
 
         }).catch(err => console.error(err))
     }
+
+    const testStatus = () => {
+        console.log("Enter TestStatus")
+
+        firestore()
+            .collection("user")
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach((snapshot) => {
+                    if (snapshot.id == user?.uid) {
+                        firestore()
+                            .collection("user")
+                            .doc(snapshot.id)
+                            .onSnapshot(documentSnapshot => {
+                                if (documentSnapshot.exists && documentSnapshot.data()?.completeProfile && documentSnapshot.data()?.idCard != "" && documentSnapshot.data()?.bankCard.valid) {
+                                    setTest(true)
+                                }
+                            })
+                    }
+                })
+
+                console.log("3")
+            })
+
+        console.log("=> Exit testStatus")
+    }
+
+    testStatus()
 
     return (
         <NewSaleContext.Provider value={{
@@ -115,6 +149,8 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
                     setArrivalDate("")
                     setArrivalTime("")
                     setWeight("")
+                    setStatus("Proposition de vente enregistrée")
+                    setInfos(validTravelerPost)
                     setPhoto(undefined)
 
                     console.log("=> Exit onSubmit (SaleKg)")
@@ -127,8 +163,8 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
                             <StatusBar backgroundColor="#2c3e50" />
                             <ModalInfos
                                 visibleInfos={visibleInfos}
-                                status="Proposition de vente bien enregistrée"
-                                infos="Pour trouvez un expéditeur, allez dans 'demandes d'expéditions'"
+                                status={status}
+                                infos={infos}
                                 getVisibleInfos={(param) => setVisibleInfos(param)}
                             />
 
@@ -150,14 +186,21 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
                             }
 
                             <TouchableOpacity style={styles.sendButton} onPress={() => {
-                                setDestination("")
-                                setDepartureDate("")
-                                setArrivalDate("")
-                                setWeight("")
-                                setVisible(true)
-                                setDepartureTime("")
-                                setArrivalTime("")
-                                setPhoto(undefined)
+                                if (test) {
+                                    setDestination("")
+                                    setDepartureDate("")
+                                    setArrivalDate("")
+                                    setWeight("")
+                                    setVisible(true)
+                                    setDepartureTime("")
+                                    setArrivalTime("")
+                                    setPhoto(undefined)
+                                }
+                                else {
+                                    setStatus("")
+                                    setInfos("Vous devez valider le mode voyageur pour poster une annonce")
+                                    setVisibleInfos(true)
+                                }
                             }}>
                                 <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={20} color="#2c3e50" />
                                 <Text style={styles.btnLabel}>Poster un annonce</Text>
@@ -200,11 +243,29 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
                                 </View>
 
                                 <View style={{ width: "80%", flexDirection: "row", justifyContent: "space-around" }}>
-                                    <TouchableOpacity style={styles.button2} onPress={() => takePhotoFromFolder()}>
+                                    <TouchableOpacity style={styles.button2} onPress={() => {
+                                        if (test) {
+                                            takePhotoFromFolder()
+                                        }
+                                        else {
+                                            setStatus("")
+                                            setInfos(validTravelerFolder)
+                                            setVisibleInfos(true)
+                                        }
+                                    }}>
                                         <Entypo name="download" size={22} color="#2c3e50" />
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity style={styles.button2} onPress={() => takePhotoFromCamera()}>
+                                    <TouchableOpacity style={styles.button2} onPress={() => {
+                                        if (test) {
+                                            takePhotoFromCamera()
+                                        }
+                                        else {
+                                            setStatus("")
+                                            setInfos(validTravelerCamera)
+                                            setVisibleInfos(true)
+                                        }
+                                    }}>
                                         <Icon name="photo-camera" size={22} color="#2c3e50" />
                                     </TouchableOpacity>
                                 </View>

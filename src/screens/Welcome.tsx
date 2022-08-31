@@ -47,8 +47,7 @@ const Welcome: React.FunctionComponent<WelcomeProps> = ({ navigation, route }) =
                     label="Continuer"
                     buttonStyle={styles.button}
                     onPress={() => navigation.navigate("MainDrawer", {
-                        screen: "UserHome",
-                        params: { email: email, userID: userID }
+                        screen: "UserHome"
                     })}
                     textStyle={styles.label} />
             </ScrollView>

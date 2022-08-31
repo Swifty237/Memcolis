@@ -15,6 +15,7 @@ import ModalInfos from "../components/ModalInfos"
 import Moment from "moment"
 
 
+
 type creditCardType = {
     status: {
         cvc: string
@@ -134,7 +135,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
 
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                         <Text style={styles.userName}>{firstname != "" ? firstname : user?.email}</Text>
-                        <Text style={styles.dateSubscription}>inscris depuis le: {Moment(dateSubscription).format("DD/MM/YYYY")}</Text>
+                        <Text style={styles.dateSubscription}>inscris depuis le: {Moment(user?.metadata.creationTime).format("DD/MM/YYYY")}</Text>
 
                         <View style={{ flexDirection: "row", justifyContent: "space-around", width: "80%", marginTop: 10 }}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
