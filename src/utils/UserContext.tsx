@@ -3,7 +3,7 @@ import React, { createContext } from "react"
 
 enum STACKCHOICE { SIGN_IN, LOGGED }
 
-export type contextType = {
+type contextType = {
     isLoggedIn: STACKCHOICE.SIGN_IN | STACKCHOICE.LOGGED
     setIsLoggedIn: (param: number) => void
     userEmail: string
@@ -29,8 +29,33 @@ export const UserContext = createContext<contextType>({
     setDatabaseImagesList: () => { }
 })
 
+type DrawerContextType = {
+    profile: boolean
+    setProfile: (param: boolean) => void
+    idCard: boolean
+    setIdCard: (param: boolean) => void
+    proofOfAdress: boolean
+    setProofOfAdress: (param: boolean) => void
+    rib: boolean
+    setRib: (param: boolean) => void
+    bankCard: boolean
+    setBankCard: (param: boolean) => void
+}
 
-export type NewSendContextType = {
+export const DrawerContext = createContext<DrawerContextType>({
+    profile: false,
+    setProfile: () => { },
+    idCard: false,
+    setIdCard: () => { },
+    proofOfAdress: false,
+    setProofOfAdress: () => { },
+    rib: false,
+    setRib: () => { },
+    bankCard: false,
+    setBankCard: () => { }
+})
+
+type NewSendContextType = {
     visible: boolean
     setVisible: (param: boolean) => void
     destination: string
@@ -72,7 +97,7 @@ export const NewSendContext = createContext<NewSendContextType>({
     setNumberArticle: () => { }
 })
 
-export type NewSaleContextType = {
+type NewSaleContextType = {
     visible: boolean
     setVisible: (param: boolean) => void
     destination: string
@@ -106,7 +131,7 @@ export const NewSaleContext = createContext<NewSaleContextType>({
     setWeight: () => { }
 })
 
-export type EditerContextType = {
+type EditerContextType = {
     editProfile: boolean
     setEditProfile: (param: boolean) => void
     editIdCard: boolean

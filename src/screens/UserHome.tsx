@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, Image, StatusBar, TouchableOpacity } from "react-native"
-import type { NativeStackScreenProps } from "@react-navigation/native-stack"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import Btn from "../components/Btn"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
@@ -8,18 +8,53 @@ import Entypo from "react-native-vector-icons/Entypo"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
-import { EditerContext } from "../utils/UserContext"
+import { DrawerContext } from "../utils/UserContext"
 import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
 import ModalInfos from "../components/ModalInfos"
 import Moment from "moment"
 
 
+type creditCardType = {
+    status: {
+        cvc: string
+        expiry: string
+        name: string
+        number: string
+    }
 
-type UserHomeProps = NativeStackScreenProps<MainDrawerParamList, "UserHome">
+    valid: boolean
+    values: {
+        cvc: string
+        expiry: string
+        name: string
+        number: string
+    }
+}
 
-const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route }) => {
-    const { email, userID } = route.params
+type UserHomeProps = { navigation: NativeStackNavigationProp<MainDrawerParamList, "UserHome"> }
+
+const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
+
+    const { setProfile, setIdCard, setProofOfAdress, setRib, setBankCard } = useContext(DrawerContext)
+
+    const cardEmpty = {
+        status: {
+            cvc: "",
+            expiry: "",
+            name: "",
+            number: ""
+        },
+
+        valid: false,
+        values: {
+            cvc: "",
+            expiry: "",
+            name: "",
+            number: ""
+        }
+    }
+
     const [complete, setComplete] = useState<boolean>(false)
     const user = auth().currentUser
     const [visible, setVisible] = useState<boolean>(false)
@@ -28,10 +63,13 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
     const [birthdate, setBirthdate] = useState<string>("")
     const [tel, setTel] = useState<string>("")
     const [adress, setAdress] = useState<string>("")
+    const [bankCardInfos, setBankCardInfos] = useState<creditCardType>(cardEmpty)
+    const [idCardRef, setIdCardRef] = useState<string>("")
+    const [ribRef, setRibRef] = useState<string>("")
+    const [adressProof, setAdressProof] = useState<string>("")
 
 
     useEffect(() => {
-        console.log("in getProfile")
 
         firestore()
             .collection("user")
@@ -46,6 +84,10 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                     setBirthdate(snapShot.data()?.birthdate)
                     setTel(snapShot.data()?.tel)
                     setAdress(snapShot.data()?.adress)
+                    setBankCardInfos(snapShot.data()?.bankCard)
+                    setIdCardRef(snapShot.data()?.idCard)
+                    setRibRef(snapShot.data()?.rib)
+                    setAdressProof(snapShot.data()?.proofOfAdress)
                 }
 
                 else {
@@ -53,8 +95,22 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                 }
             })
             .catch(err => console.error(err))
-        console.log("out getProfile")
     }, [])
+
+    const cardHideNumbers = (card: string): string => {
+
+        let hideNum = []
+
+        for (let i = 0; i < card.length; i++) {
+            if (i < card.length - 4) {
+                hideNum.push("*")
+            } else {
+                hideNum.push(card[i])
+            }
+        }
+
+        return hideNum.join("")
+    }
 
 
     return (
@@ -77,8 +133,8 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                     <Image source={require("../assets/user.jpg")} style={styles.userLogo} />
 
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                        <Text style={styles.userName}>{firstname != "" ? firstname : email}</Text>
-                        <Text style={styles.dateSubscription}>{Moment(dateSubscription).format("DD/MM/YYYY")}</Text>
+                        <Text style={styles.userName}>{firstname != "" ? firstname : user?.email}</Text>
+                        <Text style={styles.dateSubscription}>inscris depuis le: {Moment(dateSubscription).format("DD/MM/YYYY")}</Text>
 
                         <View style={{ flexDirection: "row", justifyContent: "space-around", width: "80%", marginTop: 10 }}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -113,11 +169,12 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
 
                     <View style={{ flexDirection: "row", marginBottom: 20, width: 300 }}>
                         <FontAwesome style={{ marginEnd: 10 }} name="credit-card-alt" size={18} color="#2c3e50" />
-                        <Text style={styles.text3}>Credit card infos number here !</Text>
+                        <Text style={styles.text3}>{cardHideNumbers(bankCardInfos.values.number)}</Text>
                     </View>
 
                     <TouchableOpacity style={styles.profileSettings} onPress={() => {
-                        navigation.navigate("Settings", { profile: true })
+                        setProfile(true)
+                        navigation.navigate("Settings", {})
                     }}>
                         <FontAwesome5 style={{ marginEnd: 10 }} name="user-cog" size={15} color="#f39c12" />
                         <Text style={styles.text2}>Réglages profil</Text>
@@ -125,27 +182,59 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation, route })
                 </View>
 
                 <View style={styles.logoTxtBox}>
-                    <TouchableOpacity style={styles.exportButton} onPress={() => {
-                        if (complete) {
-                            navigation.navigate("Settings", { idCard: true, bankCard: true })
-                        }
-                        else {
-                            setVisible(true)
-                        }
-                    }}>
-                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
-                        <Text style={styles.btnLabel2}>Devenir expéditeur</Text>
-                    </TouchableOpacity>
+                    {idCardRef == "" && bankCardInfos.valid == false &&
 
-                    <TouchableOpacity style={styles.transportButton} onPress={() => {
-                        navigation.navigate("Settings", { proofOfAdress: true })
-                    }}>
-                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
-                        <Text style={styles.btnLabel2}>Devenir transporteur</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.exportButton} onPress={() => {
+                            if (complete) {
+                                setIdCard(true)
+                                setBankCard(true)
+                                navigation.navigate("Settings", {})
+                            }
+                            else {
+                                setVisible(true)
+                            }
+                        }}>
+                            <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
+                            <Text style={styles.btnLabel2}>Devenir expéditeur</Text>
+                        </TouchableOpacity>
+                    }
+
+                    {idCardRef == "" && bankCardInfos.valid == true &&
+
+                        <TouchableOpacity style={styles.exportButton} onPress={() => {
+                            if (complete) {
+                                setIdCard(true)
+                                navigation.navigate("Settings", {})
+                            }
+                            else {
+                                setVisible(true)
+                            }
+                        }}>
+                            <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
+                            <Text style={styles.btnLabel2}>Devenir expéditeur</Text>
+                        </TouchableOpacity>
+                    }
+
+                    {idCardRef != "" && bankCardInfos.valid == true &&
+                        <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut expéditeur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
+                    }
+
+                    {adressProof == "" ?
+                        <TouchableOpacity style={styles.transportButton} onPress={() => {
+                            setProofOfAdress(true)
+                            navigation.navigate("Settings", {})
+                        }}>
+                            <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
+                            <Text style={styles.btnLabel2}>Devenir transporteur</Text>
+                        </TouchableOpacity>
+                        :
+                        <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut transporteur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
+                    }
+
 
                     <TouchableOpacity style={styles.saleButton} onPress={() => {
-                        navigation.navigate("Settings", { rib: true })
+                        setRib(true)
+                        navigation.navigate("Settings", {})
                     }}>
                         <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
                         <Text style={styles.btnLabel2}>Devenir voyageur</Text>
@@ -168,8 +257,8 @@ const styles = StyleSheet.create({
     },
 
     userLogo: {
-        width: 150,
-        height: 150,
+        width: 140,
+        height: 140,
         marginTop: 15,
         marginLeft: 15,
         borderWidth: 1,
@@ -211,7 +300,7 @@ const styles = StyleSheet.create({
 
     transportButton: {
         backgroundColor: "#f39c12",
-        marginBottom: 10,
+        marginTop: 25,
         width: "85%",
         height: 50,
         borderRadius: 30,
@@ -222,7 +311,7 @@ const styles = StyleSheet.create({
 
     saleButton: {
         backgroundColor: "#f39c12",
-        marginBottom: 10,
+        marginVertical: 25,
         width: "85%",
         height: 50,
         borderRadius: 30,

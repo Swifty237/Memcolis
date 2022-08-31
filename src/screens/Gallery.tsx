@@ -17,8 +17,6 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
     const [databaseList, setDatabaseList] = useState<string[]>([])
     const { databaseImagesList } = useContext(UserContext)
 
-    console.log(databaseList)
-
     useEffect(() => {
 
         imagesListRef.list()
@@ -43,8 +41,6 @@ const Gallery: React.FunctionComponent<GalleryProp> = ({ navigation }) => {
             })
             .catch(err => console.error(err))
     }, [])
-
-    console.log(databaseList)
 
     const renderItem = ({ item }: { item: string }) => {
 

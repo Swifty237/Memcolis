@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react"
 import { StyleSheet, Text, View, SafeAreaView } from "react-native"
-import { EditerContext, UserContext } from "../utils/UserContext"
+import { EditerContext, DrawerContext } from "../utils/UserContext"
 import Btn from "./Btn"
 import Input from "./Input"
 import DatePicker from "./DatePicker"
@@ -14,6 +14,7 @@ const EditerProfile = () => {
 
     const user = auth().currentUser
     const { setEditProfile } = useContext(EditerContext)
+    const { setProfile } = useContext(DrawerContext)
     const [firstname, setFirstname] = useState<string>("")
     const [name, setName] = useState<string>("")
     const [birthdate, setBirthdate] = useState<string>("")
@@ -21,12 +22,42 @@ const EditerProfile = () => {
     const [postalCode, setPostalCode] = useState<string>("")
     const [city, setCity] = useState<string>("")
     const [tel, setTel] = useState<string>("")
+    const cardEmpty = {
+        status: {
+            cvc: "",
+            expiry: "",
+            name: "",
+            number: ""
+        },
+
+        valid: false,
+        values: {
+            cvc: "",
+            expiry: "",
+            name: "",
+            number: ""
+        }
+    }
 
 
     return (
         <Formik
             enableReinitialize={true}
-            initialValues={{ firstname: "", name: "", birthdate: "", adress: "", postalCode: "", city: "", completeProfile: null, tel: "", idCard: "", bankCard: "", rib: "" }}
+            initialValues={{
+                firstname: "",
+                name: "",
+                birthdate: "",
+                adress: "",
+                postalCode: "",
+                city: "",
+                completeProfile: null,
+                proofOfAdress: "",
+                tel: "",
+                idCard: "",
+                bankCard: cardEmpty,
+                rib: ""
+            }}
+
             onSubmit={(values, { resetForm }) => {
                 console.log("=> onSubmit (EditerProfile)")
 
@@ -44,8 +75,9 @@ const EditerProfile = () => {
                         tel: tel,
                         subscriptionDate: user?.metadata.creationTime,
                         completeProfile: firstname != "" && name != "" && birthdate != "" && adress != "" && postalCode != "" && city != "" && tel != "" ? true : false,
+                        proofOfAdress: "",
                         idCard: "",
-                        bankCard: "",
+                        bankCard: cardEmpty,
                         rib: ""
                     })
 
@@ -120,7 +152,9 @@ const EditerProfile = () => {
                             handleSubmit()
                             setEditProfile(false)
                         }} />
-                        <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditProfile(false)} />
+                        <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => {
+                            setEditProfile(false)
+                        }} />
                     </View>
                 </SafeAreaView>
             )}

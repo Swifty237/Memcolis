@@ -9,7 +9,7 @@ import EditerProfile from "../components/EditerProfile"
 import EditerIdCard from "../components/EditerIdCard"
 import EditerProofOfAdress from "../components/EditerProofOfAdress"
 import EditerRib from "../components/EditerRib"
-import { EditerContext } from "../utils/UserContext"
+import { DrawerContext, EditerContext } from "../utils/UserContext"
 import auth from "@react-native-firebase/auth"
 import firestore from "@react-native-firebase/firestore"
 import EditerBankCard from "../components/EditerBankCard"
@@ -17,7 +17,7 @@ import EditerBankCard from "../components/EditerBankCard"
 
 
 type SettingsProp = NativeStackScreenProps<MainDrawerParamList, "Settings">
-export type UserType = {
+export type userType = {
     id: string | null
     firstname: string
     name: string
@@ -26,6 +26,7 @@ export type UserType = {
     postalCode: string
     city: string
     tel: string
+    proofOfAdress: string
     subscriptionDate: string
     sender: boolean
     transporter: boolean
@@ -34,7 +35,7 @@ export type UserType = {
 
 const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) => {
 
-    let { profile, idCard, proofOfAdress, rib, bankCard } = route.params
+    const { profile, idCard, proofOfAdress, rib, bankCard } = useContext(DrawerContext)
     const [editProfile, setEditProfile] = useState<boolean>(false)
     const [editIdCard, setEditIdCard] = useState<boolean>(false)
     const [editProofOfAdress, setEditProofOfAdress] = useState<boolean>(false)
@@ -42,7 +43,7 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
     const [editRib, setEditRib] = useState<boolean>(false)
     const [complete, setComplete] = useState<boolean>(false)
     const user = auth().currentUser
-    const [userData, setUserData] = useState<UserType[]>([])
+    const [userData, setUserData] = useState<userType[]>([])
 
 
     useEffect(() => {
@@ -53,10 +54,6 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             setEditProofOfAdress(false)
             setEditBankCard(false)
             setEditRib(false)
-            idCard = false
-            bankCard = false
-            proofOfAdress = false
-            rib = false
         }
         if (idCard && bankCard) {
             setEditIdCard(true)
@@ -64,9 +61,13 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             setEditProfile(false)
             setEditProofOfAdress(false)
             setEditRib(false)
-            profile = false
-            proofOfAdress = false
-            rib = false
+        }
+        if (idCard) {
+            setEditIdCard(true)
+            setEditBankCard(false)
+            setEditProfile(false)
+            setEditProofOfAdress(false)
+            setEditRib(false)
         }
         if (proofOfAdress) {
             setEditIdCard(false)
@@ -74,10 +75,6 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             setEditProfile(false)
             setEditProofOfAdress(true)
             setEditRib(false)
-            profile = false
-            idCard = false
-            bankCard = false
-            rib = false
         }
         if (rib) {
             setEditIdCard(false)
@@ -85,20 +82,16 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             setEditProfile(false)
             setEditProofOfAdress(false)
             setEditRib(true)
-            profile = false
-            idCard = false
-            bankCard = false
-            proofOfAdress = false
         }
 
-        let items: UserType[] = []
+        let items: userType[] = []
 
         firestore()
             .collection("users")
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach((snapshot) => {
-                    items.push(snapshot.data() as UserType)
+                    items.push(snapshot.data() as userType)
                 })
                 setUserData(items)
 
@@ -107,31 +100,21 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
     }, [profile, idCard, proofOfAdress, rib, bankCard, user])
 
 
-    // console.log("profile", profile)
-    // console.log("---------------------------------")
-    // console.log("idCard", idCard)
-    // console.log("---------------------------------")
-    // console.log("proofOfAdress", proofOfAdress)
-    // console.log("---------------------------------")
-    // console.log("rib", rib)
-    // console.log("=================================")
-
-
     return (
 
         <EditerContext.Provider value={{ editProfile, setEditProfile, editIdCard, setEditIdCard, editProofOfAdress, setEditProofOfAdress, editRib, setEditRib, editBankCard, setEditBankCard }}>
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#2c3e50" />
 
-                <TouchableOpacity style={styles.backButton} onPress={navigation.goBack}>
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("UserHome")}>
                     <SimpleLineIcons style={{ marginEnd: 10 }} name="arrow-left" size={20} color="#f39c12" />
-                    <Text style={styles.btnLabel2}>Accueil</Text>
+                    <Text style={styles.btnLabel2}>Profil</Text>
                 </TouchableOpacity>
 
                 <ScrollView>
                     <View style={styles.btnContainer}>
                         <TouchableOpacity style={styles.annulation} onPress={() => setEditProfile(prev => !prev)}>
-                            <Text style={styles.btnLabel2}>Profil</Text>
+                            <Text style={styles.btnLabel2}>Informations profil</Text>
                             <SimpleLineIcons name={editProfile ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editProfile && <EditerProfile />}
