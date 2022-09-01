@@ -58,7 +58,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
 
     const [complete, setComplete] = useState<boolean>(false)
     const user = auth().currentUser
-    const [visible, setVisible] = useState<boolean>(false)
+    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
     const [firstname, setFirstname] = useState<string>("")
     const [dateSubscription, setDateSubscription] = useState<string>("")
     const [birthdate, setBirthdate] = useState<string>("")
@@ -68,6 +68,8 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
     const [idCardRef, setIdCardRef] = useState<string>("")
     const [ribRef, setRibRef] = useState<string>("")
     const [adressProof, setAdressProof] = useState<string>("")
+    const [status, setStatus] = useState<string>("")
+    const [infos, setInfos] = useState<string>("")
 
 
     useEffect(() => {
@@ -118,10 +120,10 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#2c3e50" />
             <ModalInfos
-                visibleInfos={visible}
-                status="Profile incomplet"
-                infos="Vous devez completer votre profil avant de devenir expéditeur"
-                getVisibleInfos={(param) => setVisible(param)}
+                visibleInfos={visibleInfos}
+                status={status}
+                infos={infos}
+                getVisibleInfos={(param) => setVisibleInfos(param)}
             />
 
             <ScrollView>
@@ -192,7 +194,9 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
                                 navigation.navigate("Settings", {})
                             }
                             else {
-                                setVisible(true)
+                                setStatus("Profil incomplet")
+                                setInfos("Vous devez completer votre profil avant de devenir expéditeur")
+                                setVisibleInfos(true)
                             }
                         }}>
                             <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
@@ -208,7 +212,9 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
                                 navigation.navigate("Settings", {})
                             }
                             else {
-                                setVisible(true)
+                                setStatus("Profil incomplet")
+                                setInfos("Vous devez completer votre profil avant de devenir expéditeur")
+                                setVisibleInfos(true)
                             }
                         }}>
                             <MaterialCommunityIcons style={{ marginEnd: 10 }} name="cube-send" size={22} color="#2c3e50" />
@@ -216,30 +222,121 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
                         </TouchableOpacity>
                     }
 
-                    {idCardRef != "" && bankCardInfos.valid == true &&
+                    {idCardRef != "" && bankCardInfos.valid == true && complete &&
                         <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut expéditeur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
                     }
 
-                    {adressProof == "" ?
-                        <TouchableOpacity style={styles.transportButton} onPress={() => {
-                            setProofOfAdress(true)
-                            navigation.navigate("Settings", {})
-                        }}>
-                            <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
-                            <Text style={styles.btnLabel2}>Devenir transporteur</Text>
-                        </TouchableOpacity>
-                        :
-                        <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut transporteur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
+                    {adressProof == "" && ribRef == "" &&
+                        <View style={{ width: "100%", alignItems: "center" }}>
+                            <TouchableOpacity style={styles.transportButton} onPress={() => {
+                                if (complete) {
+                                    setProofOfAdress(true)
+                                    setRib(true)
+                                    navigation.navigate("Settings", {})
+                                }
+                                else {
+                                    setStatus("Profil incomplet")
+                                    setInfos("Vous devez completer votre profil avant de devenir transporteur")
+                                    setVisibleInfos(true)
+                                }
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
+                                <Text style={styles.btnLabel2}>Devenir transporteur</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.saleButton} onPress={() => {
+                                if (complete) {
+                                    setProofOfAdress(true)
+                                    setRib(true)
+                                    navigation.navigate("Settings", {})
+                                }
+
+                                else {
+                                    setStatus("Profil incomplet")
+                                    setInfos("Vous devez completer votre profil avant de devenir transporteur")
+                                    setVisibleInfos(true)
+                                }
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
+                                <Text style={styles.btnLabel2}>Devenir voyageur</Text>
+                            </TouchableOpacity>
+                        </View>
                     }
 
+                    {adressProof == "" && ribRef != "" &&
+                        <View style={{ width: "100%", alignItems: "center" }}>
+                            <TouchableOpacity style={styles.transportButton} onPress={() => {
+                                if (complete) {
+                                    setProofOfAdress(true)
+                                    navigation.navigate("Settings", {})
+                                }
+                                else {
+                                    setStatus("Profil incomplet")
+                                    setInfos("Vous devez completer votre profil avant de devenir transporteur")
+                                    setVisibleInfos(true)
+                                }
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
+                                <Text style={styles.btnLabel2}>Devenir transporteur</Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.saleButton} onPress={() => {
-                        setRib(true)
-                        navigation.navigate("Settings", {})
-                    }}>
-                        <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
-                        <Text style={styles.btnLabel2}>Devenir voyageur</Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.saleButton} onPress={() => {
+                                if (complete) {
+                                    setProofOfAdress(true)
+                                    navigation.navigate("Settings", {})
+                                }
+                                else {
+                                    setStatus("Profil incomplet")
+                                    setInfos("Vous devez completer votre profil avant de devenir transporteur")
+                                    setVisibleInfos(true)
+                                }
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
+                                <Text style={styles.btnLabel2}>Devenir voyageur</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
+                    {adressProof != "" && ribRef == "" &&
+                        <View style={{ width: "100%", alignItems: "center" }}>
+                            <TouchableOpacity style={styles.transportButton} onPress={() => {
+                                if (complete) {
+                                    setRib(true)
+                                    navigation.navigate("Settings", {})
+                                }
+                                else {
+                                    setStatus("Profil incomplet")
+                                    setInfos("Vous devez completer votre profil avant de devenir transporteur")
+                                    setVisibleInfos(true)
+                                }
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="truck" size={22} color="#2c3e50" />
+                                <Text style={styles.btnLabel2}>Devenir transporteur</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.saleButton} onPress={() => {
+                                if (complete) {
+                                    setRib(true)
+                                    navigation.navigate("Settings", {})
+                                }
+                                else {
+                                    setStatus("Profil incomplet")
+                                    setInfos("Vous devez completer votre profil avant de devenir transporteur")
+                                    setVisibleInfos(true)
+                                }
+                            }}>
+                                <MaterialCommunityIcons style={{ marginEnd: 10 }} name="airplane-takeoff" size={22} color="#2c3e50" />
+                                <Text style={styles.btnLabel2}>Devenir voyageur</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
+                    {adressProof != "" && ribRef != "" && complete &&
+                        <View>
+                            <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut transporteur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
+                            <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut voyageur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
+                        </View>
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>

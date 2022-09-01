@@ -62,25 +62,11 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             setEditProofOfAdress(false)
             setEditRib(false)
         }
-        if (idCard) {
-            setEditIdCard(true)
-            setEditBankCard(false)
-            setEditProfile(false)
-            setEditProofOfAdress(false)
-            setEditRib(false)
-        }
-        if (proofOfAdress) {
+        if (proofOfAdress && rib) {
             setEditIdCard(false)
             setEditBankCard(false)
             setEditProfile(false)
             setEditProofOfAdress(true)
-            setEditRib(false)
-        }
-        if (rib) {
-            setEditIdCard(false)
-            setEditBankCard(false)
-            setEditProfile(false)
-            setEditProofOfAdress(false)
             setEditRib(true)
         }
 

@@ -11,6 +11,25 @@ import { boolean } from "yup/lib/locale"
 
 const user = auth().currentUser
 
+type uploadToStorageType = {
+    path: string
+    imageName: string
+    folderName: string
+    idColis?: string
+}
+
+type addIdAndImgRefType = {
+    photo: ImageOrVideo[] | undefined
+    collection: string
+    folderName: string
+}
+
+type addTravelIdAndImgRefType = {
+    photo: ImageOrVideo | undefined
+    collection: string
+    folderName: string
+}
+
 export const addDocumentId = (): void => {
 
     console.log("addDocumentId (UserHome function)")
@@ -120,9 +139,9 @@ export const addColisIdAndRef = (photo: ImageOrVideo[]): void => {
     console.log("=> exit addColisIdAndRef (SendPackage function)")
 }
 
-const uploadTicketToStorage = (path: string, imageName: string, idColis: string) => {
+const uploadToStorage = ({ path, folderName, imageName }: uploadToStorageType) => {
 
-    const imagesRef = storage().ref("images" + "_" + user?.uid + "/travel" + idColis + "/" + imageName)
+    const imagesRef = storage().ref(folderName + "_" + user?.uid + "/" + imageName)
     const task = imagesRef.putFile(path)
 
     task.then(() => {
@@ -132,30 +151,30 @@ const uploadTicketToStorage = (path: string, imageName: string, idColis: string)
 }
 
 
-export const addTravelIdAndRef = (photo: ImageOrVideo | undefined): void => {
+export const addTravelIdAndImgRef = ({ photo, collection, folderName }: addTravelIdAndImgRefType): void => {
 
-    console.log("Enter addTravelIdAndRef (SendPackage function)")
+    console.log("Enter addIdAndImgRef (SendPackage function)")
 
     firestore()
-        .collection("travel")
+        .collection(collection)
         .get()
         .then(querySnapshot => {
             querySnapshot.forEach((snapshot) => {
 
                 if (snapshot.exists) {
                     firestore()
-                        .collection("travel")
+                        .collection(collection)
                         .doc(snapshot.id)
                         .onSnapshot((documentSnapshot) => {
 
                             if (documentSnapshot.exists && documentSnapshot.data()?.id == "" && documentSnapshot.data()?.planeTicket == "") {
 
                                 firestore()
-                                    .collection("travel")
+                                    .collection(collection)
                                     .doc(snapshot.id)
                                     .update({
                                         id: snapshot.id,
-                                        planeTicket: "images" + "_" + user?.uid + "/travel" + snapshot.id + "/"
+                                        planeTicket: folderName + "_" + user?.uid + "/" + collection + snapshot.id + "/"
                                     })
                                     .then(() => {
 
@@ -165,7 +184,8 @@ export const addTravelIdAndRef = (photo: ImageOrVideo | undefined): void => {
 
                                                 let path = photo.path
                                                 let imageName = photo.modificationDate?.toString() + "_" + uuid.v4().toString()
-                                                uploadTicketToStorage(path, imageName, snapshot.id)
+
+                                                uploadToStorage({ path: path, folderName: folderName, imageName: imageName, idColis: snapshot.id })
 
                                             }
                                         }
@@ -186,5 +206,43 @@ export const addTravelIdAndRef = (photo: ImageOrVideo | undefined): void => {
             console.log("3")
         })
 
-    console.log("=> exit addTraveldAndRef (SendPackage function)")
+    console.log("=> exit  addIdAndImgRef  (SendPackage function)")
+}
+
+
+
+export const addIdCardImgRef = ({ photo, collection, folderName }: addIdAndImgRefType): void => {
+
+    console.log("Enter addIdAndImgRef (SendPackage function)")
+
+    firestore()
+        .collection(collection)
+        .doc(user?.uid)
+        .update({
+            idCard: folderName + "_" + user?.uid + "/"
+        })
+        .then(() => {
+
+            const storeImages = () => {
+
+                if (photo != undefined) {
+
+                    photo.forEach(image => {
+                        let path = image.path
+                        let imageName = image.modificationDate?.toString() + "_" + uuid.v4().toString()
+
+                        uploadToStorage({ path: path, folderName: folderName, imageName: imageName })
+                    })
+
+                }
+            }
+
+            storeImages()
+
+            console.log("id of travel added")
+            console.log("ref of planeTicket added")
+            console.log("image stored")
+        })
+
+    console.log("=> exit  addIdAndImgRef  (SendPackage function)")
 }

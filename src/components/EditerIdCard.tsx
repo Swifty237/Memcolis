@@ -6,10 +6,15 @@ import Input from "./Input"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import Entypo from "react-native-vector-icons/Entypo"
+import { addIdCardImgRef } from "../utils/Functions"
+import ModalInfos from "./ModalInfos"
 
 const EditerIdCard = () => {
     const { setEditIdCard } = useContext(EditerContext)
     const [photo, setPhoto] = useState<ImageOrVideo[]>([])
+    const [status, setStatus] = useState<string>("")
+    const [infos, setInfos] = useState<string>("")
+    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
 
 
     const takePhotoFromFolder = () => {
@@ -50,6 +55,13 @@ const EditerIdCard = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <ModalInfos
+                visibleInfos={visibleInfos}
+                status={status}
+                infos={infos}
+                getVisibleInfos={(param) => setVisibleInfos(param)}
+            />
+
             <View style={{ marginTop: 25, alignSelf: "center" }}>
                 <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic", marginBottom: 5 }}>Télécharger le recto et ensuite le verso de votre pièce d'identité</Text>
                 <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic" }}>Ou si vous préférez, vous pouvez la prendre en photo toujours le recto et le verso séparement</Text>
@@ -77,7 +89,17 @@ const EditerIdCard = () => {
             </View>
 
             <View style={styles.buttonsBox}>
-                <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditIdCard(false)} />
+                <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => {
+                    if (photo.length >= 2) {
+                        addIdCardImgRef({ photo: photo, collection: "user", folderName: "identity" })
+                        setEditIdCard(false)
+                    }
+                    else {
+                        setStatus("2 documents minimum requis")
+                        setInfos("Envoyer le recto et le verso de votre document d'identité")
+                        setVisibleInfos(true)
+                    }
+                }} />
                 <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditIdCard(false)} />
             </View>
         </SafeAreaView>

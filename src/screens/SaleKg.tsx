@@ -13,7 +13,7 @@ import { Formik } from "formik"
 import auth from "@react-native-firebase/auth"
 import firestore from "@react-native-firebase/firestore"
 import Entypo from "react-native-vector-icons/Entypo"
-import { addTravelIdAndRef } from "../utils/Functions"
+import { addTravelIdAndImgRef } from "../utils/Functions"
 import ModalInfos from "../components/ModalInfos"
 
 
@@ -33,7 +33,7 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
     const [test, setTest] = useState<boolean>(false)
     const [status, setStatus] = useState<string>("")
     const [infos, setInfos] = useState<string>("")
-    const validTravelerFolder = "Vous devez valider le mode voyageur pour télécharger"
+    const validTravelerFolder = "Vous devez valider le mode voyageur pour télécharger votre billet"
     const validTravelerCamera = "Vous devez valider le mode voyageur pour prendre une photo"
     const validTravelerPost = "Pour trouvez un expéditeur, allez dans 'demandes d'expéditions'"
 
@@ -121,7 +121,7 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
                     arrivalTime: "",
                     availableWeight: "",
                     dateOfProposition: "",
-                    imgPlaneTicket: ""
+                    planeTicket: ""
                 }}
                 onSubmit={(values, { resetForm }) => {
                     console.log("=> Enter onSubmit (SaleKg)")
@@ -137,11 +137,11 @@ const SaleKg: React.FunctionComponent<SaleKgProp> = ({ navigation }) => {
                             arrivalDate: arrivalDate,
                             arrivalTime: arrivalTime,
                             availableWeight: weight,
-                            dateOfProposition: Date(),
+                            dateOfProposition: new Date(),
                             planeTicket: ""
                         })
 
-                    addTravelIdAndRef(photo)
+                    addTravelIdAndImgRef({ photo: photo, collection: "travel", folderName: "images" })
                     resetForm()
                     setDestination("")
                     setDepartureDate("")

@@ -42,7 +42,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     const [infos, setInfos] = useState<string>("")
     const [test, setTest] = useState<boolean>(false)
     const validSender = "Vous devez valider le mode expéditeur pour pouvoir effectuer un envoi de colis"
-
+    const validSenderFolder = "Vous devez valider le mode expéditeur pour télécharger un image"
+    const validSenderCamera = "Vous devez valider le mode expéditeur pour prendre une photo"
+    const storeStatus = "Demande d'envoi enregistrée"
+    const waitTraveler = "En attente d'un voyageur"
+    const waitTransporter = "En attente d'un transporteur"
+    const waitBoth = "En attente d'un voyageur et d'un transporteur"
 
 
     const takePhotoFromFolder = () => {
@@ -170,8 +175,8 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             })
                         addColisIdAndRef(photo) // permet d'ajouter l'id, la ref vers les images du colis et d'enregistrer les images du colis 
                         resetForm() // Permet de vider le formulaire après la soumission
-                        setStatus("Demande d'envoi enregistrée")
-                        setInfos("En attente d'un voyageur et d'un transporteur")
+                        setStatus(storeStatus)
+                        setInfos(waitBoth)
                         setDestination("")
                         setDestinataire("")
                         setAdress("")
@@ -199,8 +204,8 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             })
                         addColisIdAndRef(photo)
                         resetForm()
-                        setStatus("Demande d'envoi enregistrée")
-                        setInfos("En attente d'un voyageur")
+                        setStatus(storeStatus)
+                        setInfos(waitTraveler)
                         setDestination("")
                         setDestinataire("")
                         setAdress("")
@@ -230,8 +235,8 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
                         addColisIdAndRef(photo)
                         resetForm()
-                        setStatus("Demande d'envoi enregistrée")
-                        setInfos("En attente d'un transporteur")
+                        setStatus(storeStatus)
+                        setInfos(waitTransporter)
                         setDestination("")
                         setDestinataire("")
                         setAdress("")
@@ -367,7 +372,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                         }
                                         else {
                                             setStatus("")
-                                            setInfos(validSender)
+                                            setInfos(validSenderFolder)
                                             setVisibleInfos(true)
                                         }
                                     }}>
@@ -380,7 +385,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                         }
                                         else {
                                             setStatus("")
-                                            setInfos(validSender)
+                                            setInfos(validSenderCamera)
                                             setVisibleInfos(true)
                                         }
                                     }}>
