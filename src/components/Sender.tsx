@@ -23,6 +23,7 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
     const [name, setName] = useState<string>("")
     const user = auth().currentUser
 
+
     useEffect(() => {
         let items: dataType[] = []
         firestore()
@@ -81,15 +82,22 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.propositionText}>Propositions des voyageurs</Text>
-            <View style={styles.propositionContent}>
-                <FlatList
-                    data={data}
-                    horizontal
-                    initialNumToRender={20}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                />
-            </View>
+            {data != [] ?
+                <View style={styles.propositionContent}>
+                    <FlatList
+                        data={data}
+                        horizontal
+                        initialNumToRender={20}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                    />
+                </View>
+                :
+                <View style={styles.propositionContent}>
+                    <Text style={{ color: "#2c3e50" }}>Pas de proposoitions pour le moment</Text>
+                </View>
+            }
+
 
             <Text style={styles.previsionText}>Evolution prix du kg voyageur</Text>
             <TouchableOpacity style={styles.previsionContent}>

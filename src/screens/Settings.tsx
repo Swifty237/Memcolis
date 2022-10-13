@@ -155,7 +155,7 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             rib && setRib(!rib)
                             setEditRib(prev => !prev)
                         }}>
-                            <Text style={styles.dropButtonLabel}>Rib</Text>
+                            <Text style={styles.dropButtonLabel}>IBAN</Text>
                             <SimpleLineIcons name={editRib ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editRib && <EditerRib />}

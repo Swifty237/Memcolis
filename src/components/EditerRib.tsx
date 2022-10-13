@@ -9,72 +9,22 @@ import Entypo from "react-native-vector-icons/Entypo"
 
 const EditerRib = () => {
     const { setEditRib } = useContext(EditerContext)
-    const [photo, setPhoto] = useState<ImageOrVideo[]>([])
-
-
-    const takePhotoFromFolder = () => {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 300,
-            cropping: true
-
-        }).then(image => {
-            console.log(image)
-            setPhoto([...photo, image])
-
-        }).catch(err => console.error(err))
-    }
-
-
-    const takePhotoFromCamera = () => {
-        ImagePicker.openCamera({
-            width: 300,
-            height: 300,
-            cropping: true
-
-        }).then(image => {
-            console.log(image)
-            setPhoto([...photo, image])
-
-        }).catch(err => console.error(err))
-    }
-
-    const renderItem = ({ item }: { item: ImageOrVideo }) => {
-
-        return (
-            <View style={{ marginTop: 25 }}>
-                <Image source={{ uri: item.path }} style={styles.photo} />
-            </View>
-        )
-    }
+    const [iban, setIban] = useState<string>("")
 
     return (
         <SafeAreaView style={styles.container}>
+
             <View style={{ marginTop: 25, alignSelf: "center" }}>
-                <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic", marginBottom: 5 }}>Télécharger votre rib</Text>
-                <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic" }}>Ou si vous préférez, vous pouvez la prendre en photo</Text>
+                <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic", marginBottom: 5 }}>Entrez votre IBAN</Text>
             </View>
 
-            <View style={styles.photoBox}>
-                <FlatList
-                    data={photo}
-                    horizontal
-                    initialNumToRender={2}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.path}
-                    ItemSeparatorComponent={() => (<View style={styles.flatListSeparator} />)}
-                />
-            </View>
-
-            <View style={{ width: "80%", flexDirection: "row", justifyContent: "space-around", alignSelf: "center" }}>
-                <TouchableOpacity style={styles.button} onPress={() => takePhotoFromFolder()}>
-                    <Entypo name="download" size={20} color="#2c3e50" />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={() => takePhotoFromCamera()}>
-                    <Icon name="photo-camera" size={20} color="#2c3e50" />
-                </TouchableOpacity>
-            </View>
+            <Input label=""
+                containerBox={styles.ibanInput}
+                placeholder=""
+                value={iban}
+                onChangeText={(text) => setIban(text)}
+                onBlur={() => { }}
+                error="" />
 
             <View style={styles.buttonsBox}>
                 <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditRib(false)} />
@@ -166,6 +116,10 @@ const styles = StyleSheet.create({
     btnLabel: {
         color: "#2c3e50",
         textAlign: "center"
+    },
+
+    ibanInput: {
+        flex: 1
     }
 })
 
