@@ -14,8 +14,10 @@ L'application est entièrement développée en React-native et utilse https://fi
 
 ### Le mode expéditeur
 
-![Connection](https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg) 
-![Inscription](https://user-images.githubusercontent.com/77479967/195925539-1e36ddaa-c840-4bbe-a9db-7081af71f18f.jpg)
+<div>
+<img src = "https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg" width = "300" height ="700"/>
+<img src = "https://user-images.githubusercontent.com/77479967/195925539-1e36ddaa-c840-4bbe-a9db-7081af71f18f.jpg" width = "300" height ="700"/>
+</div>
 
 
 ### Le mode transporteur
