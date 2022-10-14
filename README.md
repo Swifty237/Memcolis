@@ -14,7 +14,7 @@ L'application est entièrement développée en React-native et utilse https://fi
 
 ### Le mode expéditeur
 
-![alt text] (https://github.com/Swifty237/Memcolis/blob/main/src/assets/photos_appli/Screenshot_2022-10-14-19-46-11-94_cde467923fbe0374a1eeee4422271e25.jpg "Text here !")
+![alt text] (https://github.com/Swifty237/Memcolis/blob/main/src/assets/photos_appli/Screenshot_2022-10-14-19-46-11-94_cde467923fbe0374a1eeee4422271e25.jpg? raw=true "Text here !")
 
 ### Le mode transporteur
 
