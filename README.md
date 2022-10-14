@@ -19,7 +19,6 @@ L'application est entièrement développée en React-native et utilse https://fi
 <img src = "https://user-images.githubusercontent.com/77479967/195925539-1e36ddaa-c840-4bbe-a9db-7081af71f18f.jpg" width = "300" height ="700"/>
 </div>
 
-
 ### Le mode transporteur
 
 ### Le mode voyageur
