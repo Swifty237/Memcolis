@@ -14,10 +14,20 @@ L'application est entièrement développée en React-native et utilse https://fi
 
 ### Le mode expéditeur
 
-<div>
+L'utilisation de l'application recquière une inscription au préalable
+
+| Ecran de connection   | Ecran d'inscription |
+|----------|------|
+| <img src = "https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg" width = "300" height ="700"/> | <img src = "https://user-images.githubusercontent.com/77479967/195925539-1e36ddaa-c840-4bbe-a9db-7081af71f18f.jpg" width = "300" height ="700"/> |
+
+Une fois l'inscription effectuer, l'utilisateur doit fournir les documents demandé pour validé le mode qu'il souhaite utilisé.
+
 <img src = "https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg" width = "300" height ="700"/>
-<img src = "https://user-images.githubusercontent.com/77479967/195925539-1e36ddaa-c840-4bbe-a9db-7081af71f18f.jpg" width = "300" height ="700"/>
-</div>
+
+Dans le cas du mode expéditeur cela donnera accès aux écran suivant:
+
+| Ecran mode expéditeur   | Ecran d'inscription | Ecran d'inscription |
+|----------|------|----------|
 
 ### Le mode transporteur
 
