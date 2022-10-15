@@ -28,7 +28,7 @@ Dans le cas du mode expéditeur cela donnera accès aux écran suivant:
 
 | Ecran mode expéditeur   | Suite écran d'inscription |
 |----------|----------|
-| <img src = "https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg" width = "300" height ="700"/> | <img src = "https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg" width = "300" height ="700"/> |
+| <img src = "https://user-images.githubusercontent.com/77479967/195982014-b9d92827-38a9-476d-a4f9-7dde6de9514b.jpg" width = "300" height ="700"/> | <img src = "https://user-images.githubusercontent.com/77479967/195982092-06c7df47-f4c4-46b5-a2e5-5aadb8340473.jpg" width = "300" height ="700"/> |
 
 
 ### Le mode transporteur
