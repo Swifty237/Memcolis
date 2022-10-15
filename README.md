@@ -10,7 +10,7 @@ L'application possède 3 modes d'utilisation possible:
 
 * Le mode voyageur: il donne la possiblité à l'utilisateur de proposé de la place dans ces bagages lorsqu'il doit se déplacer en avion, pour ainsi acheminé le colis vers une destination plus lointaine
 
-L'application est entièrement développée en React-native et utilse https://firebase.google.com pour la base de donnée et la gestion des accès utilisateurs.
+L'application est entièrement développée en React-native, Typescript et utilse https://firebase.google.com pour la base de donnée et la gestion des accès utilisateurs.
 
 L'utilisation de l'application recquière une inscription au préalable
 
