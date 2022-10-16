@@ -64,7 +64,7 @@ Le mode voyageur donne accès aux écrans suivant:
 
 ## Démarrage
 
-Environement de travail pour tester l'application, cliquer sur le lien qui suit pour voir la documentation https://reactnative.dev/docs/environment-setup.
+Installer l'environement de travail pour tester l'application avec Typescript, cliquer sur le lien qui suit pour voir la documentation https://reactnative.dev/docs/environment-setup
 
 Installer les nodes_modules avec la commande *npm install*
 
