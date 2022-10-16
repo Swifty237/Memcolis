@@ -18,13 +18,17 @@ L'utilisation de l'application recquière une inscription au préalable
 |----------|------|
 | <img src = "https://user-images.githubusercontent.com/77479967/195923882-5c122c1a-0c20-436c-b0e8-2c03edfc8a25.jpg" width = "300" height ="700"/> | <img src = "https://user-images.githubusercontent.com/77479967/195925539-1e36ddaa-c840-4bbe-a9db-7081af71f18f.jpg" width = "300" height ="700"/> |
 
+Pour naviguer dans l'application on utilisera principalement le Drawer
+
+<img src = "https://user-images.githubusercontent.com/77479967/196013252-aedf62b9-5ede-4f32-af5e-9e582c244bb9.jpg" width = "300" height ="700"/> 
+
 ### Le mode expéditeur
 
 Une fois l'inscription effectuer, l'utilisateur doit fournir les documents demandés pour valider le mode qu'il souhaite utiliser.
 
 <img src = "https://user-images.githubusercontent.com/77479967/195981781-66013826-049d-498c-8eca-090d6480180f.jpg" width = "300" height ="700"/>
 
-Dans le cas du mode expéditeur cela donnera accès aux écrans suivant:
+Dans le cas du mode expéditeur cela donnera accès à l'écran suivant:
 
 | Ecran mode expéditeur | Fin écran mode expéditeur |
 |----------|----------|
@@ -32,7 +36,7 @@ Dans le cas du mode expéditeur cela donnera accès aux écrans suivant:
 
 ### Le mode transporteur
 
-Le mode transporteur donne accès aux écrans suivant:
+Le mode transporteur donne accès à l'écran suivant:
 
 | Ecran mode transporteur | Suite écran transporteur | Suite et fin écran transporteur |
 |----------|----------|----------|
@@ -40,7 +44,7 @@ Le mode transporteur donne accès aux écrans suivant:
 
 ### Le mode voyageur
 
-Le mode transporteur donne accès aux écrans suivant:
+Le mode transporteur donne accès à l'écran suivant:
 
 | Ecran mode transporteur | Suite écran transporteur |
 |----------|----------|
@@ -48,4 +52,8 @@ Le mode transporteur donne accès aux écrans suivant:
 
 ## Démarrage
 
+Une fois le dossier télécharger en local, installer les nodes_modules.
+
 ## Auteur
+
+Yannick Kamdem Kouam - <br> https://yannickkamdemkouam.fr/ <br> https://www.linkedin.com/in/yannick-kamdem-kouam-5b9874b7/
