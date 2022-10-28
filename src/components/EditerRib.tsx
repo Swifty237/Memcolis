@@ -3,13 +3,62 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Touc
 import { EditerContext } from "../utils/UserContext"
 import Btn from "./Btn"
 import Input from "./Input"
-import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
-import Icon from "react-native-vector-icons/MaterialIcons"
-import Entypo from "react-native-vector-icons/Entypo"
+
+
 
 const EditerRib = () => {
     const { setEditRib } = useContext(EditerContext)
     const [iban, setIban] = useState<string>("")
+
+    const format = (iban: string) => {
+        if (!iban) {
+            return ''
+        }
+
+        const cleanIban = iban
+            .replace(/\s\s+/g, ' ')
+            .replace(/[^0-9a-zA-Z]/gi, '')
+            .toLocaleUpperCase()
+
+        const parts: string[] = []
+
+        if (cleanIban.length > 0) {
+            parts.push(cleanIban.substring(0, 4))
+            // console.log("length > 0", parts)
+        }
+
+        if (cleanIban.length > 4) {
+            parts.push(cleanIban.substring(4, 8))
+            // console.log("length > 4", parts)
+        }
+
+        if (cleanIban.length > 8) {
+            parts.push(cleanIban.substring(8, 12))
+            // console.log("length > 8", parts)
+        }
+
+        if (cleanIban.length > 12) {
+            parts.push(cleanIban.substring(12, 16))
+            // console.log("length > 12", parts)
+        }
+
+        if (cleanIban.length > 16) {
+            parts.push(cleanIban.substring(16, 20))
+            // console.log("length > 16", parts)
+        }
+
+        if (cleanIban.length > 20) {
+            parts.push(cleanIban.substring(20, 24))
+            // console.log("length > 20", parts)
+        }
+
+        if (cleanIban.length > 24) {
+            parts.push(cleanIban.substring(24, 28))
+            // console.log("length > 24", parts)
+        }
+
+        return parts.join(' ')
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -22,7 +71,7 @@ const EditerRib = () => {
                 containerBox={styles.ibanInput}
                 placeholder=""
                 value={iban}
-                onChangeText={(text) => setIban(text)}
+                onChangeText={(iban) => setIban(format(iban))}
                 onBlur={() => { }}
                 error="" />
 

@@ -90,7 +90,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             .collection("user")
                             .doc(snapshot.id)
                             .onSnapshot(documentSnapshot => {
-                                if (documentSnapshot.exists && documentSnapshot.data()?.completeProfile && documentSnapshot.data()?.idCard != "" && documentSnapshot.data()?.bankCard.valid) {
+                                if (documentSnapshot && documentSnapshot.exists && documentSnapshot.data()?.completeProfile && documentSnapshot.data()?.idCard != "" && documentSnapshot.data()?.bankCard.valid) {
                                     setTest(true)
                                 }
                             })

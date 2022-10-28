@@ -31,10 +31,10 @@ const CustomDrawer = (props: any) => {
 
             <View style={styles.btn}>
                 <TouchableOpacity style={{ flexDirection: "row" }} onPress={() => {
+                    isLoggedIn === STACKCHOICE.LOGGED && setIsLoggedIn(STACKCHOICE.SIGN_IN)
                     auth()
                         .signOut()
                         .then(() => {
-                            isLoggedIn === STACKCHOICE.LOGGED && setIsLoggedIn(STACKCHOICE.SIGN_IN)
                             setUserEmail("")
                             setUserPassword("")
                             setUserUID("")
