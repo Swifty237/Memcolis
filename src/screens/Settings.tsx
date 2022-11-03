@@ -13,11 +13,27 @@ import { DrawerContext, EditerContext } from "../utils/UserContext"
 import auth from "@react-native-firebase/auth"
 import firestore from "@react-native-firebase/firestore"
 import EditerBankCard from "../components/EditerBankCard"
-// import { testStatus } from "../utils/Functions"
+import UpdateProfile from "../components/UpdateProfile"
 
 
 
 type SettingsProp = NativeStackScreenProps<MainDrawerParamList, "Settings">
+type bankCardType = {
+    status: {
+        cvc: string
+        expiry: string
+        name: string
+        number: string
+    },
+    valid: boolean
+    values: {
+        cvc: string
+        expiry: string
+        name: string
+        number: string
+    }
+}
+
 export type userType = {
     id: string | null
     firstname: string
@@ -32,6 +48,9 @@ export type userType = {
     sender: boolean
     transporter: boolean
     traveler: boolean
+    idCard: string
+    bankCard: bankCardType
+    rib: string
 }
 
 const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) => {
@@ -43,10 +62,12 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
     const [editBankCard, setEditBankCard] = useState<boolean>(false)
     const [editRib, setEditRib] = useState<boolean>(false)
     const user = auth().currentUser
-    const [userData, setUserData] = useState<userType[]>([])
+    const [userData, setUserData] = useState<userType>()
+    const [complete, setComplete] = useState<boolean>(false)
+    const [modifProfile, setModifProfile] = useState<boolean>(false)
 
 
-    useEffect(() => {
+    useEffect(() => { // Permet d'identifier l'onglet d'attérissage sur l'écran Settings et l'ouvrir automatique (Partant de l'écran UserHome)
 
         if (profile) {
             setEditProfile(true)
@@ -70,25 +91,22 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
             setEditRib(true)
         }
 
-        let items: userType[] = []
-
         firestore()
-            .collection("users")
+            .collection("user")
+            .doc(user?.uid)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach((snapshot) => {
-                    items.push(snapshot.data() as userType)
-                })
-                setUserData(items)
-
+            .then(snapshot => {
+                if (snapshot.exists && snapshot.data()?.completeProfile == true) {
+                    setComplete(true)
+                    setUserData(snapshot.data() as userType)
+                }
             }).catch(error => console.log(error))
 
     }, [profile, idCard, proofOfAdress, rib, bankCard, user])
 
-
     return (
 
-        <EditerContext.Provider value={{ editProfile, setEditProfile, editIdCard, setEditIdCard, editProofOfAdress, setEditProofOfAdress, editRib, setEditRib, editBankCard, setEditBankCard }}>
+        <EditerContext.Provider value={{ editProfile, setEditProfile, editIdCard, setEditIdCard, editProofOfAdress, setEditProofOfAdress, editRib, setEditRib, editBankCard, setEditBankCard, modifProfile, setModifProfile }}>
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#2c3e50" />
 
@@ -105,7 +123,7 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                 </TouchableOpacity>
 
                 <ScrollView>
-                    <View style={styles.btnContainer}>
+                    <View style={styles.btnContainer}><Text>Profil complet</Text>
                         <TouchableOpacity style={styles.dropDownButton} onPress={() => {
                             profile && setProfile(!profile)
                             setEditProfile(prev => !prev)
@@ -113,7 +131,27 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <Text style={styles.dropButtonLabel}>Informations profil</Text>
                             <SimpleLineIcons name={editProfile ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {editProfile && <EditerProfile />}
+                        {editProfile ?
+                            complete ?
+                                <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
+                                        Profil complet
+                                    </Text>
+                                    <Btn
+                                        label="Modifier"
+                                        textStyle={styles.btnLabel2}
+                                        buttonStyle={styles.saleButton}
+                                        onPress={() => {
+                                            !modifProfile && setModifProfile(true)
+                                            complete && setComplete(false)
+                                        }}
+                                    />
+                                </View>
+                                :
+                                modifProfile ?
+                                    <UpdateProfile /> : <EditerProfile />
+                            :
+                            <></>}
                     </View>
 
                     <View style={styles.btnContainer}>
@@ -124,7 +162,25 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <Text style={styles.dropButtonLabel}>Pièce d'identité</Text>
                             <SimpleLineIcons name={editIdCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {editIdCard && <EditerIdCard />}
+                        {editIdCard ?
+                            userData?.idCard != "" ?
+                                <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
+                                        Pièce enregistrée
+                                    </Text>
+                                    <Btn
+                                        label="Modifier"
+                                        textStyle={styles.btnLabel2}
+                                        buttonStyle={styles.saleButton}
+                                        onPress={() => {
+
+                                        }}
+                                    />
+                                </View>
+                                :
+                                <EditerIdCard />
+                            :
+                            <></>}
 
                     </View>
 
@@ -136,7 +192,25 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <Text style={styles.dropButtonLabel}>Carte bancaire</Text>
                             <SimpleLineIcons name={editBankCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {editBankCard && <EditerBankCard />}
+                        {editBankCard ?
+                            userData?.bankCard.valid ?
+                                <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
+                                        Carte enregistrée
+                                    </Text>
+                                    <Btn
+                                        label="Modifier"
+                                        textStyle={styles.btnLabel2}
+                                        buttonStyle={styles.saleButton}
+                                        onPress={() => {
+
+                                        }}
+                                    />
+                                </View>
+                                :
+                                <EditerBankCard />
+                            :
+                            <></>}
                     </View>
 
                     <View style={styles.btnContainer}>
@@ -147,7 +221,25 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <Text style={styles.dropButtonLabel}>Justificatif de domicile</Text>
                             <SimpleLineIcons name={editProofOfAdress ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {editProofOfAdress && <EditerProofOfAdress />}
+                        {editProofOfAdress ?
+                            userData?.proofOfAdress ?
+                                <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
+                                        Justificatif enregistrée
+                                    </Text>
+                                    <Btn
+                                        label="Modifier"
+                                        textStyle={styles.btnLabel2}
+                                        buttonStyle={styles.saleButton}
+                                        onPress={() => {
+
+                                        }}
+                                    />
+                                </View>
+                                :
+                                <EditerProofOfAdress />
+                            :
+                            <></>}
                     </View>
 
                     <View style={styles.btnContainer}>
@@ -158,7 +250,25 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <Text style={styles.dropButtonLabel}>IBAN</Text>
                             <SimpleLineIcons name={editRib ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
-                        {editRib && <EditerRib />}
+                        {editRib ?
+                            userData?.rib ?
+                                <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
+                                        IBAN enregistré
+                                    </Text>
+                                    <Btn
+                                        label="Modifier"
+                                        textStyle={styles.btnLabel2}
+                                        buttonStyle={styles.saleButton}
+                                        onPress={() => {
+
+                                        }}
+                                    />
+                                </View>
+                                :
+                                <EditerRib />
+                            :
+                            <></>}
                     </View>
 
                     <View style={{ margin: 20 }}></View>
@@ -244,8 +354,21 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "#f39c12",
         alignItems: "center"
-    }
+    },
 
+    btnLabel2: {
+        color: "#2c3e50",
+        textAlign: "center"
+    },
+
+    saleButton: {
+        backgroundColor: "#f39c12",
+        width: 120,
+        height: 50,
+        borderRadius: 30,
+        justifyContent: "center",
+        alignItems: "center"
+    },
 })
 
 export default Settings

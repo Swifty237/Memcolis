@@ -8,12 +8,13 @@ import Icon from "react-native-vector-icons/Entypo"
 
 type Props = {
     label: string,
-    date: string,
+    defaultValue?: string,
+    date?: string,
     onChangeDate: (date: string) => void,
     error?: string,
 }
 
-const DatePicker = ({ label, date, onChangeDate, error }: Props) => {
+const DatePicker = ({ label, defaultValue, date, onChangeDate, error }: Props) => {
     const [show, setShow] = useState<boolean>(false)
     const onSubmit = (date: Date) => {
         setShow(false)
@@ -25,7 +26,7 @@ const DatePicker = ({ label, date, onChangeDate, error }: Props) => {
                 <Text style={styles.labelStyle}>{label}</Text>
             </View>
             <View style={styles.inputBox}>
-                <TextInput style={styles.input} value={date} editable={false} />
+                <TextInput style={styles.input} defaultValue={defaultValue} value={date} editable={true} />
                 <TouchableOpacity onPress={() => setShow(true)} style={styles.icon}>
                     <Icon name="calendar" size={25} color="#2c3e50" />
                 </TouchableOpacity>

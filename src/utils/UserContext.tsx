@@ -142,6 +142,8 @@ type EditerContextType = {
     setEditRib: (param: boolean) => void
     editBankCard: boolean
     setEditBankCard: (param: boolean) => void
+    modifProfile: boolean
+    setModifProfile: (param: boolean) => void
 }
 
 export const EditerContext = createContext<EditerContextType>({
@@ -154,5 +156,7 @@ export const EditerContext = createContext<EditerContextType>({
     editRib: false,
     setEditRib: () => { },
     editBankCard: false,
-    setEditBankCard: () => { }
+    setEditBankCard: () => { },
+    modifProfile: false,
+    setModifProfile: () => { }
 })

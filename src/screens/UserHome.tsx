@@ -58,7 +58,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
 
     const [complete, setComplete] = useState<boolean>(false)
     const user = auth().currentUser
-    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
+    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)        // Permet d'afficher ou de réduire la modal d'infos (ou d'erreurs)
     const [firstname, setFirstname] = useState<string>("")
     const [dateSubscription, setDateSubscription] = useState<string>("")
     const [birthdate, setBirthdate] = useState<string>("")
@@ -72,7 +72,8 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
     const [infos, setInfos] = useState<string>("")
 
 
-    useEffect(() => {
+    useEffect(() => {       // Ici on vérifie si oui ou non l'utilisateur à entièrement compléter son profile
+        // Si le profile on récupère toutes les données de firestore
 
         firestore()
             .collection("user")
@@ -100,7 +101,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
             .catch(err => console.error(err))
     }, [])
 
-    const cardHideNumbers = (card: string): string => {
+    const cardHideNumbers = (card: string): string => {     // Cette fonction permet cacher le numéro de carte bancaire
 
         let hideNum = []
 
@@ -194,7 +195,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
                                 navigation.navigate("Settings", {})
                             }
                             else {
-                                setStatus("Profil incomplet")
+                                setStatus("Profile incomplet")
                                 setInfos("Vous devez completer votre profil avant de devenir expéditeur")
                                 setVisibleInfos(true)
                             }
@@ -212,7 +213,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
                                 navigation.navigate("Settings", {})
                             }
                             else {
-                                setStatus("Profil incomplet")
+                                setStatus("Profile incomplet")
                                 setInfos("Vous devez completer votre profil avant de devenir expéditeur")
                                 setVisibleInfos(true)
                             }

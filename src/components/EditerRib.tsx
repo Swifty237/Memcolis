@@ -24,37 +24,34 @@ const EditerRib = () => {
 
         if (cleanIban.length > 0) {
             parts.push(cleanIban.substring(0, 4))
-            // console.log("length > 0", parts)
         }
 
         if (cleanIban.length > 4) {
             parts.push(cleanIban.substring(4, 8))
-            // console.log("length > 4", parts)
         }
 
         if (cleanIban.length > 8) {
             parts.push(cleanIban.substring(8, 12))
-            // console.log("length > 8", parts)
         }
 
         if (cleanIban.length > 12) {
             parts.push(cleanIban.substring(12, 16))
-            // console.log("length > 12", parts)
+
         }
 
         if (cleanIban.length > 16) {
             parts.push(cleanIban.substring(16, 20))
-            // console.log("length > 16", parts)
+
         }
 
         if (cleanIban.length > 20) {
             parts.push(cleanIban.substring(20, 24))
-            // console.log("length > 20", parts)
+
         }
 
         if (cleanIban.length > 24) {
             parts.push(cleanIban.substring(24, 28))
-            // console.log("length > 24", parts)
+
         }
 
         return parts.join(' ')

@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 
 
 export type InputProps = {
-    placeholder: string
+    placeholder?: string
     value?: any
     label: string
     error: string | undefined
@@ -16,7 +16,7 @@ export type InputProps = {
     defaultValue?: string
     onFocus?: () => void
     containerBox?: {}
-    inputContainerStyle?: {}
+    inputContainerStyle?: {} // Permet d'appliquer un autre style à mon input au lieu du style par défaut
 }
 
 const Input: React.FunctionComponent<InputProps> = ({ label, placeholder, value, onChangeText, error, onBlur, keyBoardNumeric, icon, defaultValue, onFocus, inputContainerStyle, containerBox }) => {
