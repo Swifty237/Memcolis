@@ -5,7 +5,7 @@ import auth from "@react-native-firebase/auth"
 import storage from "@react-native-firebase/storage"
 import uuid from "react-native-uuid"
 import { ImageOrVideo } from "react-native-image-crop-picker"
-import { boolean } from "yup/lib/locale"
+
 
 
 
@@ -111,7 +111,7 @@ export const addColisIdAndRef = (photo: ImageOrVideo[]): void => {
 
                                         const storeImages = () => {
 
-                                            if (photo != []) {
+                                            if (photo != undefined) {
                                                 photo.forEach(image => {
                                                     let path = image.path
                                                     let imageName = image.modificationDate?.toString() + "_" + uuid.v4().toString()
@@ -149,7 +149,6 @@ const uploadToStorage = ({ path, folderName, imageName }: uploadToStorageType) =
 
     }).catch(err => console.error(err))
 }
-
 
 export const addTravelIdAndImgRef = ({ photo, collection, folderName }: addTravelIdAndImgRefType): void => {
 
@@ -213,13 +212,49 @@ export const addTravelIdAndImgRef = ({ photo, collection, folderName }: addTrave
 
 export const addIdCardImgRef = ({ photo, collection, folderName }: addIdAndImgRefType): void => {
 
-    console.log("Enter addIdAndImgRef (SendPackage function)")
+    console.log("Enter addIdCardAndImgRef (SendPackage function)")
 
     firestore()
         .collection(collection)
         .doc(user?.uid)
         .update({
             idCard: folderName + "_" + user?.uid + "/"
+        })
+        .then(() => {
+
+            const storeImages = () => {
+
+                if (photo != undefined) {
+
+                    photo.forEach(image => {
+                        let path = image.path
+                        let imageName = image.modificationDate?.toString() + "_" + uuid.v4().toString()
+
+                        uploadToStorage({ path: path, folderName: folderName, imageName: imageName })
+                    })
+
+                }
+            }
+
+            storeImages()
+
+            console.log("id of travel added")
+            console.log("ref of planeTicket added")
+            console.log("image stored")
+        })
+
+    console.log("=> exit  addIdAndImgRef  (SendPackage function)")
+}
+
+export const addAdressImgRef = ({ photo, collection, folderName }: addIdAndImgRefType): void => {
+
+    console.log("Enter addIdCardAndImgRef (SendPackage function)")
+
+    firestore()
+        .collection(collection)
+        .doc(user?.uid)
+        .update({
+            proofOfAdress: folderName + "_" + user?.uid + "/"
         })
         .then(() => {
 

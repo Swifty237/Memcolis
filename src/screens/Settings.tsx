@@ -14,6 +14,8 @@ import auth from "@react-native-firebase/auth"
 import firestore from "@react-native-firebase/firestore"
 import EditerBankCard from "../components/EditerBankCard"
 import UpdateProfile from "../components/UpdateProfile"
+import ModalSuppConfirm from "../components/ModalSuppConfirm"
+import storage from "@react-native-firebase/storage"
 
 
 
@@ -65,7 +67,11 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
     const [userData, setUserData] = useState<userType>()
     const [complete, setComplete] = useState<boolean>(false)
     const [modifProfile, setModifProfile] = useState<boolean>(false)
-
+    const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
+    const [itemToDelete, setItemToDelete] = useState<string>("")
+    const [infos, setInfos] = useState<string>("")
+    const identityListRef = storage().ref("identity" + "_" + user?.uid + "/")
+    const proofOfAdressListRef = storage().ref("adressProof" + "_" + user?.uid + "/")
 
     useEffect(() => { // Permet d'identifier l'onglet d'attérissage sur l'écran Settings et l'ouvrir automatique (Partant de l'écran UserHome)
 
@@ -104,11 +110,116 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
 
     }, [profile, idCard, proofOfAdress, rib, bankCard, user])
 
+    const getDeleteItem = (item: string) => {
+        switch (item) {
+            case "idCard":
+
+                identityListRef
+                    .list()
+                    .then(imagesList => {
+                        imagesList.items.forEach(image => {
+                            storage()
+                                .ref(image.fullPath)
+                                .delete()
+                                .then(() => {
+                                    console.log("image deleted")
+                                })
+                                .catch(err => console.error(err))
+                        })
+                        console.log("carte d'identité supprimée: " + identityListRef)
+
+                        firestore()
+                            .collection("user")
+                            .doc(user?.uid)
+                            .update({
+                                idCard: ""
+                            })
+                    })
+                    .catch(err => console.error(err))
+                break
+
+            case "bankCard":
+
+                firestore()
+                    .collection("user")
+                    .doc(user?.uid)
+                    .update({
+                        bankCard: {
+                            status: {
+                                cvc: "",
+                                expiry: "",
+                                name: "",
+                                number: "",
+                            },
+                            valid: false,
+                            values: {
+                                cvc: "",
+                                expiry: "",
+                                name: "",
+                                number: ""
+                            }
+                        }
+                    })
+
+                console.log("carte bancaire supprimée")
+                break
+
+            case "proofOfAdress":
+
+                proofOfAdressListRef
+                    .list()
+                    .then(imagesList => {
+                        imagesList.items.forEach(image => {
+                            storage()
+                                .ref(image.fullPath)
+                                .delete()
+                                .then(() => {
+                                    console.log("image deleted")
+                                })
+                                .catch(err => console.error(err))
+                        })
+                        console.log("Justif de domicile supprimé: " + proofOfAdressListRef)
+
+                        firestore()
+                            .collection("user")
+                            .doc(user?.uid)
+                            .update({
+                                proofOfAdress: ""
+                            })
+                    })
+                    .catch(err => console.error(err))
+                break
+
+            case "IBAN":
+
+                firestore()
+                    .collection("user")
+                    .doc(user?.uid)
+                    .update({
+                        rib: ""
+                    })
+
+                console.log("IBAN supprimé")
+
+                break
+
+            default:
+                console.log("Aucun élément à supprimer")
+        }
+    }
+
     return (
 
         <EditerContext.Provider value={{ editProfile, setEditProfile, editIdCard, setEditIdCard, editProofOfAdress, setEditProofOfAdress, editRib, setEditRib, editBankCard, setEditBankCard, modifProfile, setModifProfile }}>
             <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor="#2c3e50" />
+                <ModalSuppConfirm
+                    visibleInfos={visibleInfos}
+                    infos={infos}
+                    getVisibleInfos={(param) => setVisibleInfos(param)}
+                    getItemToDelete={(param) => setItemToDelete(param)}
+                    getDelete={() => getDeleteItem(itemToDelete)}
+                />
 
                 <TouchableOpacity style={styles.backButton} onPress={() => {
                     profile && setProfile(!profile)
@@ -123,7 +234,7 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                 </TouchableOpacity>
 
                 <ScrollView>
-                    <View style={styles.btnContainer}><Text>Profil complet</Text>
+                    <View style={styles.btnContainer}>
                         <TouchableOpacity style={styles.dropDownButton} onPress={() => {
                             profile && setProfile(!profile)
                             setEditProfile(prev => !prev)
@@ -163,17 +274,19 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <SimpleLineIcons name={editIdCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editIdCard ?
-                            userData?.idCard != "" ?
+                            userData && userData.idCard != "" ?
                                 <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                     <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
                                         Pièce enregistrée
                                     </Text>
                                     <Btn
-                                        label="Modifier"
+                                        label="Supprimer"
                                         textStyle={styles.btnLabel2}
                                         buttonStyle={styles.saleButton}
                                         onPress={() => {
-
+                                            setItemToDelete("idCard")
+                                            setInfos("Voulez vous vraiment supprimer cette pièce d'identité ?")
+                                            setVisibleInfos(true)
                                         }}
                                     />
                                 </View>
@@ -193,17 +306,19 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <SimpleLineIcons name={editBankCard ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editBankCard ?
-                            userData?.bankCard.valid ?
+                            userData && userData.bankCard.valid ?
                                 <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                     <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
                                         Carte enregistrée
                                     </Text>
                                     <Btn
-                                        label="Modifier"
+                                        label="Supprimer"
                                         textStyle={styles.btnLabel2}
                                         buttonStyle={styles.saleButton}
                                         onPress={() => {
-
+                                            setItemToDelete("bankCard")
+                                            setInfos("Voulez vous vraiment supprimer cette carte bancaire ?")
+                                            setVisibleInfos(true)
                                         }}
                                     />
                                 </View>
@@ -222,17 +337,19 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <SimpleLineIcons name={editProofOfAdress ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editProofOfAdress ?
-                            userData?.proofOfAdress ?
+                            userData && userData.proofOfAdress ?
                                 <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                     <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
                                         Justificatif enregistrée
                                     </Text>
                                     <Btn
-                                        label="Modifier"
+                                        label="Supprimer"
                                         textStyle={styles.btnLabel2}
                                         buttonStyle={styles.saleButton}
                                         onPress={() => {
-
+                                            setItemToDelete("proofOfAdress")
+                                            setInfos("Voulez vous vraiment supprimer ce justificatif de domicile ?")
+                                            setVisibleInfos(true)
                                         }}
                                     />
                                 </View>
@@ -251,17 +368,19 @@ const Settings: React.FunctionComponent<SettingsProp> = ({ navigation, route }) 
                             <SimpleLineIcons name={editRib ? "arrow-up" : "arrow-down"} size={20} color="#f39c12" />
                         </TouchableOpacity>
                         {editRib ?
-                            userData?.rib ?
+                            userData && userData.rib ?
                                 <View style={{ width: 300, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                     <Text style={{ color: "#1abc9c", fontWeight: "bold" }}>
                                         IBAN enregistré
                                     </Text>
                                     <Btn
-                                        label="Modifier"
+                                        label="Supprimer"
                                         textStyle={styles.btnLabel2}
                                         buttonStyle={styles.saleButton}
                                         onPress={() => {
-
+                                            setItemToDelete("IBAN")
+                                            setInfos("Voulez vous vraiment supprimer cette IBAN ?")
+                                            setVisibleInfos(true)
                                         }}
                                     />
                                 </View>

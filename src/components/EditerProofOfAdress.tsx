@@ -6,6 +6,7 @@ import Input from "./Input"
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import Entypo from "react-native-vector-icons/Entypo"
+import { addAdressImgRef } from "../utils/Functions"
 
 const EditerProofOfAdress = () => {
     const { setEditProofOfAdress } = useContext(EditerContext)
@@ -76,8 +77,22 @@ const EditerProofOfAdress = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonsBox}>
-                <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditProofOfAdress(false)} />
-                <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditProofOfAdress(false)} />
+                <Btn
+                    label="Valider"
+                    textStyle={styles.buttonLabel}
+                    buttonStyle={styles.validation}
+                    onPress={() => {
+                        addAdressImgRef({ photo: photo, collection: "user", folderName: "adressProof" })
+                        setEditProofOfAdress(false)
+                    }}
+                />
+
+                <Btn
+                    label="Annuler"
+                    textStyle={styles.buttonLabel2}
+                    buttonStyle={styles.annulation}
+                    onPress={() => setEditProofOfAdress(false)}
+                />
             </View>
         </SafeAreaView>
     )

@@ -3,12 +3,16 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Touc
 import { EditerContext } from "../utils/UserContext"
 import Btn from "./Btn"
 import Input from "./Input"
+import { Formik } from "formik"
+import firestore from "@react-native-firebase/firestore"
+import auth from "@react-native-firebase/auth"
 
 
 
 const EditerRib = () => {
     const { setEditRib } = useContext(EditerContext)
     const [iban, setIban] = useState<string>("")
+    const user = auth().currentUser
 
     const format = (iban: string) => {
         if (!iban) {
@@ -58,25 +62,64 @@ const EditerRib = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
 
-            <View style={{ marginTop: 25, alignSelf: "center" }}>
-                <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic", marginBottom: 5 }}>Entrez votre IBAN</Text>
-            </View>
+        <Formik
+            enableReinitialize={true}
+            initialValues={{
 
-            <Input label=""
-                containerBox={styles.ibanInput}
-                placeholder=""
-                value={iban}
-                onChangeText={(iban) => setIban(format(iban))}
-                onBlur={() => { }}
-                error="" />
+            }}
 
-            <View style={styles.buttonsBox}>
-                <Btn label="Valider" textStyle={styles.buttonLabel} buttonStyle={styles.validation} onPress={() => setEditRib(false)} />
-                <Btn label="Annuler" textStyle={styles.buttonLabel2} buttonStyle={styles.annulation} onPress={() => setEditRib(false)} />
-            </View>
-        </SafeAreaView>
+            onSubmit={(values, { resetForm }) => {
+                console.log("=> onSubmit (EditerIban)")
+
+                firestore()
+                    .collection("user")
+                    .doc(user?.uid)
+                    .update({
+                        rib: iban
+                    })
+
+                resetForm() // Permet de vider le formulaire après la soumission
+
+                console.log("=> exit onSubmit (EditerIban)")
+            }}>
+
+            {({ handleSubmit, errors }) => (
+
+                <SafeAreaView style={styles.container}>
+                    <View style={{ marginTop: 25, alignSelf: "center" }}>
+                        <Text style={{ color: "gray", fontSize: 12, fontStyle: "italic", marginBottom: 5 }}>Entrez votre IBAN</Text>
+                    </View>
+
+                    <Input label=""
+                        containerBox={styles.ibanInput}
+                        placeholder=""
+                        value={iban}
+                        onChangeText={(iban) => setIban(format(iban))}
+                        onBlur={() => { }}
+                        error="" />
+
+                    <View style={styles.buttonsBox}>
+                        <Btn
+                            label="Valider"
+                            textStyle={styles.buttonLabel}
+                            buttonStyle={styles.validation}
+                            onPress={() => {
+                                handleSubmit()
+                                setEditRib(false)
+                            }}
+                        />
+
+                        <Btn
+                            label="Annuler"
+                            textStyle={styles.buttonLabel2}
+                            buttonStyle={styles.annulation}
+                            onPress={() => setEditRib(false)}
+                        />
+                    </View>
+                </SafeAreaView>
+            )}
+        </Formik>
     )
 }
 
