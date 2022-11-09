@@ -7,7 +7,24 @@ import DatePicker from "./DatePicker"
 import { Formik } from "formik"
 import firestore from "@react-native-firebase/firestore"
 import auth from "@react-native-firebase/auth"
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
+import { GOOGLE_API_KEY } from "./GOOGLE_API_KEY"
 
+const GooglePlacesInput = () => {
+    return (
+        <GooglePlacesAutocomplete
+            placeholder="Search"
+            onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+            }}
+            query={{
+                key: { GOOGLE_API_KEY }, // Google API KEY here !!!
+                language: "fr",
+            }}
+        />
+    )
+}
 
 
 const EditerProfile = () => {

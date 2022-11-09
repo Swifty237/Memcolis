@@ -1,14 +1,74 @@
-import React from "react"
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from "react-native"
+import React, { useEffect, useState } from "react"
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from "react-native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
+import auth from "@react-native-firebase/auth"
+import firestore from "@react-native-firebase/firestore"
 
 
+type dataType = {
+    dateOfDemand: string
+    destination: string
+    id: string
+    imgColis: string
+    numberArticle: string
+    recipient: string
+    recipientAdress: string
+    recipientTel: string
+    sender: string
+    transport: {
+        transporter: string
+        withTransport: boolean
+        transportPrice: string
+    }
+    travel: {
+        traveler: string
+        withTravel: boolean
+        travelPrice: string
+    }
+    weight: string
+    totalPrice: string
+    position: {
+        latitude: number
+        longitude: number
+    }
+}
 
 type MakeTransportProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "MakeTransport"> }
 
 const MakeTransport: React.FunctionComponent<MakeTransportProp> = ({ navigation }) => {
+
+    const user = auth().currentUser
+    const [data, setData] = useState<dataType[]>([])
+
+    useEffect(() => {
+        let items: dataType[] = []
+        firestore()
+            .collection("colis")
+            .get()
+            .then(snapshot => {
+                snapshot.forEach(documentSnapshot => {
+
+                    if (documentSnapshot.data().traveler != user?.uid) {
+                        items.push(documentSnapshot.data() as dataType)
+                    }
+                })
+                setData(items)
+            })
+            .catch(err => console.error(err))
+        return (() => setData([]))
+    }, [])
+
+    const renderItem = ({ item }: { item: dataType }) => {
+
+        return (
+            <TouchableOpacity style={styles.box} onPress={() => { }}>
+                <Text style={styles.text1}>{item.destination}</Text>
+                <Text style={styles.text1}>{item.transport.transportPrice}</Text>
+            </TouchableOpacity>
+        )
+    }
 
 
     return (
@@ -21,73 +81,18 @@ const MakeTransport: React.FunctionComponent<MakeTransportProp> = ({ navigation 
 
             <Text style={{ color: "black", fontSize: 17, fontWeight: "bold", marginTop: 20, marginBottom: 5, textAlign: "center" }}>Demandes de transport</Text>
 
-            <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.box} onPress={() => { }}>
-                    <Text style={styles.text1}>Lieu ici !...</Text>
-                    <Text style={styles.text1}>...montant prévu ici !</Text>
-                </TouchableOpacity>
-            </ScrollView>
+            {data != undefined ?
+                <View>
+                    <FlatList
+                        data={data}
+                        initialNumToRender={20}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                    />
+                </View>
+                :
+                <Text style={{ color: "black" }}>Pas de propositions de transport pour le moment</Text>
+            }
         </View>
     )
 }
@@ -126,7 +131,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 7,
         borderTopWidth: 4,
-        borderColor: "#2c3e50"
+        borderColor: "#2c3e50",
+        alignSelf: "center"
     },
 
     validation: {

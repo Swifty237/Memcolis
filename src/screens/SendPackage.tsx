@@ -10,14 +10,15 @@ import { NewSendContext, UserContext } from "../utils/UserContext"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { MainDrawerParamList } from "../navigation/MainDrawer"
 import auth from "@react-native-firebase/auth"
-import storage from "@react-native-firebase/storage"
-import uuid from "react-native-uuid"
+// import storage from "@react-native-firebase/storage"
+// import uuid from "react-native-uuid"
+// import DatePicker from "../components/DatePicker"
 import Entypo from "react-native-vector-icons/Entypo"
-import DatePicker from "../components/DatePicker"
 import { Formik } from "formik"
 import { addColisIdAndRef } from "../utils/Functions"
 import firestore from "@react-native-firebase/firestore"
 import ModalInfos from "../components/ModalInfos"
+import Geolocation from "@react-native-community/geolocation"
 
 
 type SendPackageProp = { navigation: NativeStackNavigationProp<MainDrawerParamList, "SendPackage"> }
@@ -35,19 +36,28 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
     const [transport, setTransport] = useState<"Oui" | "Non">("Oui")
     const [numberArticle, setNumberArticle] = useState<string>("")
     const user = auth().currentUser
-    const [databaseList, setDatabaseList] = useState<string[]>([])
-    const { databaseImagesList, setDatabaseImagesList } = useContext(UserContext)
+    // const [databaseList, setDatabaseList] = useState<string[]>([])
+    // const { databaseImagesList, setDatabaseImagesList } = useContext(UserContext)
     const [visibleInfos, setVisibleInfos] = useState<boolean>(false)
     const [status, setStatus] = useState<string>("")
     const [infos, setInfos] = useState<string>("")
     const [test, setTest] = useState<boolean>(false)
-    const validSender = "Vous devez valider le mode expéditeur pour pouvoir effectuer un envoi de colis"
-    const validSenderFolder = "Vous devez valider le mode expéditeur pour télécharger un image"
-    const validSenderCamera = "Vous devez valider le mode expéditeur pour prendre une photo"
-    const storeStatus = "Demande d'envoi enregistrée"
-    const waitTraveler = "En attente d'un voyageur"
-    const waitTransporter = "En attente d'un transporteur"
-    const waitBoth = "En attente d'un voyageur et d'un transporteur"
+    const validSender = "Vous devez valider le mode expéditeur pour pouvoir effectuer un envoi de colis."
+    const validSenderFolder = "Vous devez valider le mode expéditeur pour télécharger un image."
+    const validSenderCamera = "Vous devez valider le mode expéditeur pour prendre une photo."
+    const storeStatus = "Demande d'envoi enregistrée."
+    const waitTraveler = "En attente d'un voyageur."
+    const waitTransporter = "En attente d'un transporteur."
+    const waitBoth = "En attente d'un voyageur et d'un transporteur."
+    const choice = "Choisissez avec transport ou avec voyageur."
+    const choiceInfos = "Si vous n'avez pas besoin de transporteur ni de voyageur, vous devez annuler votre demande."
+    const [latitude, setLatitude] = useState<number>()
+    const [longitude, setLongitude] = useState<number>()
+
+    Geolocation.getCurrentPosition(info => {
+        setLatitude(info.coords.latitude)
+        setLongitude(info.coords.longitude)
+    })
 
 
     const takePhotoFromFolder = () => {
@@ -142,8 +152,16 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                 enableReinitialize={true}
                 initialValues={{
                     sender: "",
-                    transporter: "",
-                    traveler: "",
+                    travel: {
+                        withTravel: true,
+                        traveler: "",
+                        travelPrice: ""
+                    },
+                    transport: {
+                        withTransport: true,
+                        transporter: "",
+                        transportPrice: ""
+                    },
                     destination: "",
                     recipient: "",
                     recipientTel: "",
@@ -151,7 +169,11 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                     numberArticle: "",
                     weight: "",
                     dateOfDemand: "",
-                    imgColis: ""
+                    imgColis: "",
+                    totalPrice: "",
+                    position: {
+
+                    }
                 }}
                 onSubmit={(values, { resetForm }) => {
                     console.log("=> onSubmit (SendPackage)")
@@ -162,7 +184,16 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             .add({
                                 id: "", // Vide à la création
                                 sender: user?.uid,
-                                transporter: "",// Vide à la création
+                                travel: {
+                                    withTravel: true,
+                                    traveler: "",
+                                    travelPrice: ""
+                                },
+                                transport: {
+                                    withTransport: true,
+                                    transporter: "",
+                                    transportPrice: "",
+                                },
                                 traveler: "", // Vide à la création
                                 destination: destination,
                                 recipient: destinataire,
@@ -171,7 +202,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 weight: weight,
                                 numberArticle: numberArticle,
                                 dateOfDemand: Date(),
-                                imgColis: ""
+                                imgColis: "",
+                                totalPrice: "",
+                                position: {
+                                    latitude: latitude,
+                                    longitude: longitude
+                                }
                             })
                         addColisIdAndRef(photo) // permet d'ajouter l'id, la ref vers les images du colis et d'enregistrer les images du colis 
                         resetForm() // Permet de vider le formulaire après la soumission
@@ -192,7 +228,16 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             .add({
                                 id: "", // Vide à la création
                                 sender: user?.uid,
-                                traveler: "", // Vide à la création
+                                travel: {
+                                    withTravel: true,
+                                    traveler: "",
+                                    travelPrice: ""
+                                },
+                                transport: {
+                                    withTransport: false,
+                                    transporter: "",
+                                    transportPrice: ""
+                                },
                                 destination: destination,
                                 recipient: destinataire,
                                 recipientTel: tel,
@@ -200,7 +245,12 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 weight: weight,
                                 numberArticle: numberArticle,
                                 dateOfDemand: Date(),
-                                imgColis: ""
+                                imgColis: "",
+                                totalPrice: "",
+                                position: {
+                                    latitude: latitude,
+                                    longitude: longitude
+                                }
                             })
                         addColisIdAndRef(photo)
                         resetForm()
@@ -222,7 +272,14 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                             .add({
                                 id: "", // Vide à la création
                                 sender: user?.uid,
-                                transporter: "", // Vide à la création
+                                travel: {
+                                    withTravel: false,
+                                    traveler: ""
+                                },
+                                transport: {
+                                    withTransport: true,
+                                    transporter: ""
+                                },
                                 destination: destination,
                                 recipient: destinataire,
                                 recipientTel: tel,
@@ -230,7 +287,11 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                                 weight: weight,
                                 numberArticle: numberArticle,
                                 dateOfDemand: Date(),
-                                imgColis: ""
+                                imgColis: "",
+                                position: {
+                                    latitude: latitude,
+                                    longitude: longitude
+                                }
                             })
 
                         addColisIdAndRef(photo)
@@ -248,12 +309,10 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
                     }
 
                     else {
-                        console.log("il vous manque un transporteur ou un voyageur pour finaliser la demande")
-                        setTravel("Oui")
-                        setTransport("Oui")
+                        setStatus(choice)
+                        setInfos(choiceInfos)
+                        setVisibleInfos(true)
                     }
-
-
                     console.log("=> exit onSubmit (SendPackage)")
                 }}>
 
@@ -397,7 +456,7 @@ const SendPackage: React.FunctionComponent<SendPackageProp> = ({ navigation }) =
 
                             <View style={{ width: "100%", justifyContent: "space-around", alignItems: "center" }}>
                                 <Btn label="Valider" textStyle={styles.btnLabel2} buttonStyle={styles.validation} onPress={() => {
-                                    // handleSubmit()
+                                    handleSubmit()
                                     setVisibleInfos(true)
                                 }} />
 

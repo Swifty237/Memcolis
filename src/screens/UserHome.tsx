@@ -73,7 +73,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
 
 
     useEffect(() => {       // Ici on vérifie si oui ou non l'utilisateur à entièrement compléter son profile
-        // Si le profile on récupère toutes les données de firestore
+        // Si le profile est complet on récupère toutes les données de firestore
 
         firestore()
             .collection("user")
@@ -335,7 +335,7 @@ const UserHome: React.FunctionComponent<UserHomeProps> = ({ navigation }) => {
                     {adressProof != "" && ribRef != "" && complete &&
                         <View>
                             <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut transporteur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
-                            <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, fontSize: 17 }}>Statut voyageur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
+                            <Text style={{ color: "#2c3e50", fontWeight: "bold", marginTop: 25, marginBottom: 25, fontSize: 17 }}>Statut voyageur <Text style={{ color: "#2ecc71", fontStyle: "italic" }}> valide</Text></Text>
                         </View>
                     }
                 </View>

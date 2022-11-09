@@ -73,7 +73,6 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
 
                 <Text style={{ color: "white" }}>Nombre de kg à vendre: <Text style={{ color: "#f39c12", fontSize: 15 }}>{item.availableWeight}</Text></Text>
                 <Text style={{ color: "white" }}>Date de la proposition: <Text style={{ color: "#f39c12", fontSize: 15 }}>{Moment(new Date(item.dateOfProposition)).format("DD/MM/YYYY")}</Text></Text>
-                {/* <Text style={{ color: "black" }}>{item.planeTicket}</Text> */}
             </TouchableOpacity>
         )
     }
@@ -82,7 +81,7 @@ const Sender = ({ email, userID }: { email: string, userID: string }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.propositionText}>Propositions des voyageurs</Text>
-            {data != [] ?
+            {data != undefined ?
                 <View style={styles.propositionContent}>
                     <FlatList
                         data={data}
